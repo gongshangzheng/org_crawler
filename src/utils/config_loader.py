@@ -75,16 +75,18 @@ def load_rule_config(rule_path: str, global_config: Dict = None) -> SiteConfig:
     # 替换环境变量
     rule_data = _replace_env_vars(rule_data)
     
-    # 如果规则文件中没有指定更新频率，使用全局配置的默认值
-    if 'update_frequency' not in rule_data or rule_data['update_frequency'] is None:
-        if global_config:
-            default_freq = global_config.get('scheduler', {}).get('default_update_frequency', 120)
-            rule_data['update_frequency'] = default_freq
-        else:
+    # 更新频率优先级：规则文件 > 全局配置默认值
+    # 只有当规则文件中没有指定 update_frequency 时，才使用全局配置的默认值
+    if 'update_frequency' not in rule_data:
+        # 规则文件中没有指定，使用全局配置的默认值
+        if global_config is None:
             # 如果没有提供全局配置，加载它
             global_config = load_global_config()
-            default_freq = global_config.get('scheduler', {}).get('default_update_frequency', 120)
-            rule_data['update_frequency'] = default_freq
+        
+        default_freq = global_config.get('scheduler', {}).get('default_update_frequency', 120)
+        rule_data['update_frequency'] = default_freq
+    # 如果规则文件中指定了 update_frequency（即使为 None 或 0），也使用规则文件的值
+    # 这样可以明确覆盖全局默认值
     
     return SiteConfig.from_dict(rule_data)
 

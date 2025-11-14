@@ -4,7 +4,8 @@
 name: "arxiv"
 url: "http://export.arxiv.org/rss/cs.AI"  # 计算机科学-人工智能分类的 RSS
 crawl_type: "rss"
-# update_frequency: 120  # 更新频率（分钟），如果未指定则使用全局配置的默认值
+update_frequency: 2400  # 更新频率（分钟），优先级高于全局配置, 2400分钟=40小时
+# 如果不指定，则使用全局配置 config/global_config.yaml 中的 default_update_frequency
 storage_path: "arxiv"
 enabled: true
 

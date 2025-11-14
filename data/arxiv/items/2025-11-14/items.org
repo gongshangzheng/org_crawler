@@ -1,0 +1,1337 @@
+#+TITLE: ARXIV 爬取结果 - 2025-11-14
+#+DATE: 2025-11-14
+#+AUTHOR: Org Crawler
+#+CREATED: 2025-11-14 21:46:47
+
+* 条目 1: SynthTools: A Framework for Scaling Synthetic Tools for Agent Development [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.09572
+:ID: oai:arXiv.org:2511.09572v1
+:ARXIV_ID: 2511.09572
+:CATEGORIES: cs.AI, cs.LG, cs.SE
+:END:
+
+** 标题
+SynthTools: A Framework for Scaling Synthetic Tools for Agent Development
+
+** 链接
+[[https://arxiv.org/abs/2511.09572][https://arxiv.org/abs/2511.09572]]
+
+** 摘要
+AI agents increasingly rely on external tools to solve complex, long-horizon tasks. Advancing such agents requires reproducible evaluation and large-scale training in controllable, diverse, and realistic tool-use environments. However, real-world APIs are limited in availability, domain coverage, and stability, often requiring access keys and imposing rate limits, which render them impractical for stable evaluation or scalable training. To address these challenges, we introduce SynthTools, a flexible and scalable framework for generating synthetic tool ecosystems. Our framework consists of three core components: Tool Generation for automatic and scalable creation of diverse tools, Tool Simulation to emulate realistic tool behaviors, and Tool Audit to ensure correctness and consistency of tool simulation. To illustrate its scalability, we show that SynthTools can readily produce toolsets that span twice as many domains and twice as many tools per domain as prior work. Furthermore, the tool simulation and tool audit components demonstrate strong reliability, achieving $94\%$ and $99\%$ accuracy respectively. Finally, we construct downstream tasks from the generated tools that even state-of-the-art models struggle to complete. By enabling scalable, diverse, and reliable tool ecosystems, SynthTools provides a practical path toward large-scale training and stable evaluation of tool-use agents. Our code is available at https://github.com/namkoong-lab/SynthTools.
+
+** 作者
+Tommaso Castellani, Naimeng Ye, Daksh Mittal, Thomson Yen, Hongseok Namkoong
+
+** 分类
+cs.AI, cs.LG, cs.SE
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.09572
+- 公告类型: new
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 2: Echoing: Identity Failures when LLM Agents Talk to Each Other [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.09710
+:ID: oai:arXiv.org:2511.09710v1
+:ARXIV_ID: 2511.09710
+:CATEGORIES: cs.AI
+:END:
+
+** 标题
+Echoing: Identity Failures when LLM Agents Talk to Each Other
+
+** 链接
+[[https://arxiv.org/abs/2511.09710][https://arxiv.org/abs/2511.09710]]
+
+** 摘要
+As large language model (LLM) based agents interact autonomously with one another, a new class of failures emerges that cannot be predicted from single agent performance: behavioral drifts in agent-agent conversations (AxA). Unlike human-agent interactions, where humans ground and steer conversations, AxA lacks such stabilizing signals, making these failures unique. We investigate one such failure, echoing, where agents abandon their assigned roles and instead mirror their conversational partners, undermining their intended objectives. Through experiments across $60$ AxA configurations, $3$ domains, and $2000+$ conversations, we demonstrate that echoing occurs across three major LLM providers, with echoing rates from $5\%$ to $70\%$ depending on the model and domain. Moreover, we find that echoing is persistent even in advanced reasoning models with substantial rates ($32.8\%$) that are not reduced by increased reasoning efforts. We analyze prompt impacts, conversation dynamics, showing that echoing arises as interaction grows longer ($7+$ turns in experiments) and is not merely an artifact of sub-optimal prompting. Finally, we introduce a protocol-level mitigation in which targeted use of structured responses reduces echoing to $9\%$.
+
+** 作者
+Sarath Shekkizhar, Romain Cosentino, Adam Earle, Silvio Savarese
+
+** 分类
+cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.09710
+- 公告类型: new
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 3: SlideBot: A Multi-Agent Framework for Generating Informative, Reliable, Multi-Modal Presentations [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.09804
+:ID: oai:arXiv.org:2511.09804v1
+:ARXIV_ID: 2511.09804
+:CATEGORIES: cs.AI
+:END:
+
+** 标题
+SlideBot: A Multi-Agent Framework for Generating Informative, Reliable, Multi-Modal Presentations
+
+** 链接
+[[https://arxiv.org/abs/2511.09804][https://arxiv.org/abs/2511.09804]]
+
+** 摘要
+Large Language Models (LLMs) have shown immense potential in education, automating tasks like quiz generation and content summarization. However, generating effective presentation slides introduces unique challenges due to the complexity of multimodal content creation and the need for precise, domain-specific information. Existing LLM-based solutions often fail to produce reliable and informative outputs, limiting their educational value. To address these limitations, we introduce SlideBot - a modular, multi-agent slide generation framework that integrates LLMs with retrieval, structured planning, and code generation. SlideBot is organized around three pillars: informativeness, ensuring deep and contextually grounded content; reliability, achieved by incorporating external sources through retrieval; and practicality, which enables customization and iterative feedback through instructor collaboration. It incorporates evidence-based instructional design principles from Cognitive Load Theory (CLT) and the Cognitive Theory of Multimedia Learning (CTML), using structured planning to manage intrinsic load and consistent visual macros to reduce extraneous load and enhance dual-channel learning. Within the system, specialized agents collaboratively retrieve information, summarize content, generate figures, and format slides using LaTeX, aligning outputs with instructor preferences through interactive refinement. Evaluations from domain experts and students in AI and biomedical education show that SlideBot consistently enhances conceptual accuracy, clarity, and instructional value. These findings demonstrate SlideBot's potential to streamline slide preparation while ensuring accuracy, relevance, and adaptability in higher education.
+
+** 作者
+Eric Xie, Danielle Waterfield, Michael Kennedy, Aidong Zhang
+
+** 分类
+cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.09804
+- 公告类型: new
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 4: CTRL-ALT-DECEIT: Sabotage Evaluations for Automated AI R&D [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.09904
+:ID: oai:arXiv.org:2511.09904v1
+:ARXIV_ID: 2511.09904
+:CATEGORIES: cs.AI
+:END:
+
+** 标题
+CTRL-ALT-DECEIT: Sabotage Evaluations for Automated AI R&D
+
+** 链接
+[[https://arxiv.org/abs/2511.09904][https://arxiv.org/abs/2511.09904]]
+
+** 摘要
+AI systems are increasingly able to autonomously conduct realistic software engineering tasks, and may soon be deployed to automate machine learning (ML) R&amp;D itself. Frontier AI systems may be deployed in safety-critical settings, including to help ensure the safety of future systems. Unfortunately, frontier and future systems may not be sufficiently trustworthy, and there is evidence that these systems may even be misaligned with their developers or users. Therefore, we investigate the capabilities of AI agents to act against the interests of their users when conducting ML engineering, by sabotaging ML models, sandbagging their performance, and subverting oversight mechanisms. First, we extend MLE-Bench, a benchmark for realistic ML tasks, with code-sabotage tasks such as implanting backdoors and purposefully causing generalisation failures. Frontier agents make meaningful progress on our sabotage tasks. In addition, we study agent capabilities to sandbag on MLE-Bench. Agents can calibrate their performance to specified target levels below their actual capability. To mitigate sabotage, we use LM monitors to detect suspicious agent behaviour, and we measure model capability to sabotage and sandbag without being detected by these monitors. Overall, monitors are capable at detecting code-sabotage attempts but our results suggest that detecting sandbagging is more difficult. Additionally, aggregating multiple monitor predictions works well, but monitoring may not be sufficiently reliable to mitigate sabotage in high-stakes domains. Our benchmark is implemented in the UK AISI's Inspect framework and we make our code publicly available at https://github.com/samm393/mlebench-subversion
+
+** 作者
+Francis Rhys Ward, Teun van der Weij, Hanna G\'abor, Sam Martin, Raja Mehta Moreno, Harel Lidar, Louis Makower, Thomas Jodrell, Lauren Robson
+
+** 分类
+cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.09904
+- 公告类型: new
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 5: SPAN: Benchmarking and Improving Cross-Calendar Temporal Reasoning of Large Language Models [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.09993
+:ID: oai:arXiv.org:2511.09993v1
+:ARXIV_ID: 2511.09993
+:CATEGORIES: cs.AI
+:END:
+
+** 标题
+SPAN: Benchmarking and Improving Cross-Calendar Temporal Reasoning of Large Language Models
+
+** 链接
+[[https://arxiv.org/abs/2511.09993][https://arxiv.org/abs/2511.09993]]
+
+** 摘要
+We introduce SPAN, a cross-calendar temporal reasoning benchmark, which requires LLMs to perform intra-calendar temporal reasoning and inter-calendar temporal conversion. SPAN features ten cross-calendar temporal reasoning directions, two reasoning types, and two question formats across six calendars. To enable time-variant and contamination-free evaluation, we propose a template-driven protocol for dynamic instance generation that enables assessment on a user-specified Gregorian date. We conduct extensive experiments on both open- and closed-source state-of-the-art (SOTA) LLMs over a range of dates spanning 100 years from 1960 to 2060. Our evaluations show that these LLMs achieve an average accuracy of only 34.5%, with none exceeding 80%, indicating that this task remains challenging. Through in-depth analysis of reasoning types, question formats, and temporal reasoning directions, we identify two key obstacles for LLMs: Future-Date Degradation and Calendar Asymmetry Bias. To strengthen LLMs' cross-calendar temporal reasoning capability, we further develop an LLM-powered Time Agent that leverages tool-augmented code generation. Empirical results show that Time Agent achieves an average accuracy of 95.31%, outperforming several competitive baselines, highlighting the potential of tool-augmented code generation to advance cross-calendar temporal reasoning. We hope this work will inspire further efforts toward more temporally and culturally adaptive LLMs.
+
+** 作者
+Zhongjian Miao, Hao Fu, Chen Wei
+
+** 分类
+cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.09993
+- 公告类型: new
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 6: Fixed-Persona SLMs with Modular Memory: Scalable NPC Dialogue on Consumer Hardware [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10277
+:ID: oai:arXiv.org:2511.10277v1
+:ARXIV_ID: 2511.10277
+:CATEGORIES: cs.AI, cs.IR
+:END:
+
+** 标题
+Fixed-Persona SLMs with Modular Memory: Scalable NPC Dialogue on Consumer Hardware
+
+** 链接
+[[https://arxiv.org/abs/2511.10277][https://arxiv.org/abs/2511.10277]]
+
+** 摘要
+Large Language Models (LLMs) have demonstrated remarkable capabilities in generating human-like text, yet their applicability to dialogue systems in computer games remains limited. This limitation arises from their substantial hardware requirements, latency constraints, and the necessity to maintain clearly defined knowledge boundaries within a game setting. In this paper, we propose a modular NPC dialogue system that leverages Small Language Models (SLMs), fine-tuned to encode specific NPC personas and integrated with runtime-swappable memory modules. These memory modules preserve character-specific conversational context and world knowledge, enabling expressive interactions and long-term memory without retraining or model reloading during gameplay. We comprehensively evaluate our system using three open-source SLMs: DistilGPT-2, TinyLlama-1.1B-Chat, and Mistral-7B-Instruct, trained on synthetic persona-aligned data and benchmarked on consumer-grade hardware. While our approach is motivated by applications in gaming, its modular design and persona-driven memory architecture hold significant potential for broader adoption in domains requiring expressive, scalable, and memory-rich conversational agents, such as virtual assistants, customer support bots, or interactive educational systems.
+
+** 作者
+Martin Braas, Lukas Esterle
+
+** 分类
+cs.AI, cs.IR
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10277
+- 公告类型: new
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 7: Explaining Decentralized Multi-Agent Reinforcement Learning Policies [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10409
+:ID: oai:arXiv.org:2511.10409v1
+:ARXIV_ID: 2511.10409
+:CATEGORIES: cs.AI
+:END:
+
+** 标题
+Explaining Decentralized Multi-Agent Reinforcement Learning Policies
+
+** 链接
+[[https://arxiv.org/abs/2511.10409][https://arxiv.org/abs/2511.10409]]
+
+** 摘要
+Multi-Agent Reinforcement Learning (MARL) has gained significant interest in recent years, enabling sequential decision-making across multiple agents in various domains. However, most existing explanation methods focus on centralized MARL, failing to address the uncertainty and nondeterminism inherent in decentralized settings. We propose methods to generate policy summarizations that capture task ordering and agent cooperation in decentralized MARL policies, along with query-based explanations for When, Why Not, and What types of user queries about specific agent behaviors. We evaluate our approach across four MARL domains and two decentralized MARL algorithms, demonstrating its generalizability and computational efficiency. User studies show that our summarizations and explanations significantly improve user question-answering performance and enhance subjective ratings on metrics such as understanding and satisfaction.
+
+** 作者
+Kayla Boggess, Sarit Kraus, Lu Feng
+
+** 分类
+cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10409
+- 公告类型: new
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 8: Strategic Opponent Modeling with Graph Neural Networks, Deep Reinforcement Learning and Probabilistic Topic Modeling [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10501
+:ID: oai:arXiv.org:2511.10501v1
+:ARXIV_ID: 2511.10501
+:CATEGORIES: cs.AI
+:END:
+
+** 标题
+Strategic Opponent Modeling with Graph Neural Networks, Deep Reinforcement Learning and Probabilistic Topic Modeling
+
+** 链接
+[[https://arxiv.org/abs/2511.10501][https://arxiv.org/abs/2511.10501]]
+
+** 摘要
+This paper provides a comprehensive review of mainly Graph Neural Networks, Deep Reinforcement Learning, and Probabilistic Topic Modeling methods with a focus on their potential incorporation in strategic multiagent settings. We draw interest in (i) Machine Learning methods currently utilized for uncovering unknown model structures adaptable to the task of strategic opponent modeling, and (ii) the integration of these methods with Game Theoretic concepts that avoid relying on assumptions often invalid in real-world scenarios, such as the Common Prior Assumption (CPA) and the Self-Interest Hypothesis (SIH). We analyze the ability to handle uncertainty and heterogeneity, two characteristics that are very common in real-world application cases, as well as scalability. As a potential answer to effectively modeling relationships and interactions in multiagent settings, we champion the use of Graph Neural Networks (GNN). Such approaches are designed to operate upon graph-structured data, and have been shown to be a very powerful tool for performing tasks such as node classification and link prediction. Next, we review the domain of Reinforcement Learning (RL), and in particular that of Multiagent Deep Reinforcement Learning (MADRL). Following, we describe existing relevant game theoretic solution concepts and consider properties such as fairness and stability. Our review comes complete with a note on the literature that utilizes PTM in domains other than that of document analysis and classification. The capability of PTM to estimate unknown underlying distributions can help with tackling heterogeneity and unknown agent beliefs. Finally, we identify certain open challenges specifically, the need to (i) fit non-stationary environments, (ii) balance the degrees of stability and adaptation, (iii) tackle uncertainty and heterogeneity, (iv) guarantee scalability and solution tractability.
+
+** 作者
+Georgios Chalkiadakis, Charilaos Akasiadis, Gerasimos Koresis, Stergios Plataniots, Leonidas Bakopoulos
+
+** 分类
+cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10501
+- 公告类型: new
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 9: Regular Games -- an Automata-Based General Game Playing Language [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10593
+:ID: oai:arXiv.org:2511.10593v1
+:ARXIV_ID: 2511.10593
+:CATEGORIES: cs.AI
+:END:
+
+** 标题
+Regular Games -- an Automata-Based General Game Playing Language
+
+** 链接
+[[https://arxiv.org/abs/2511.10593][https://arxiv.org/abs/2511.10593]]
+
+** 摘要
+We propose a new General Game Playing (GGP) system called Regular Games (RG). The main goal of RG is to be both computationally efficient and convenient for game design. The system consists of several languages. The core component is a low-level language that defines the rules by a finite automaton. It is minimal with only a few mechanisms, which makes it easy for automatic processing (by agents, analysis, optimization, etc.). The language is universal for the class of all finite turn-based games with imperfect information. Higher-level languages are introduced for game design (by humans or Procedural Content Generation), which are eventually translated to a low-level language. RG generates faster forward models than the current state of the art, beating other GGP systems (Regular Boardgames, Ludii) in terms of efficiency. Additionally, RG's ecosystem includes an editor with LSP, automaton visualization, benchmarking tools, and a debugger of game description transformations.
+
+** 作者
+Rados{\l}aw Miernik, Marek Szyku{\l}a, Jakub Kowalski, Jakub Cie\'sluk, {\L}ukasz Galas, Wojciech Pawlik
+
+** 分类
+cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10593
+- 公告类型: new
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 10: Scaling Environments for LLM Agents in the Era of Learning from Interaction: A Survey [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.09586
+:ID: oai:arXiv.org:2511.09586v1
+:ARXIV_ID: 2511.09586
+:CATEGORIES: cs.LG, cs.AI
+:END:
+
+** 标题
+Scaling Environments for LLM Agents in the Era of Learning from Interaction: A Survey
+
+** 链接
+[[https://arxiv.org/abs/2511.09586][https://arxiv.org/abs/2511.09586]]
+
+** 摘要
+LLM-based agents can autonomously accomplish complex tasks across various domains. However, to further cultivate capabilities such as adaptive behavior and long-term decision-making, training on static datasets built from human-level knowledge is insufficient. These datasets are costly to construct and lack both dynamism and realism. A growing consensus is that agents should instead interact directly with environments and learn from experience through reinforcement learning. We formalize this iterative process as the Generation-Execution-Feedback (GEF) loop, where environments generate tasks to challenge agents, return observations in response to agents' actions during task execution, and provide evaluative feedback on rollouts for subsequent learning. Under this paradigm, environments function as indispensable producers of experiential data, highlighting the need to scale them toward greater complexity, realism, and interactivity. In this survey, we systematically review representative methods for environment scaling from a pioneering environment-centric perspective and organize them along the stages of the GEF loop, namely task generation, task execution, and feedback. We further analyze benchmarks, implementation strategies, and applications, consolidating fragmented advances and outlining future research directions for agent intelligence.
+
+** 作者
+Yuchen Huang, Sijia Li, Minghao Liu, Wei Liu, Shijue Huang, Zhiyuan Fan, Hou Pong Chan, Yi R. Fung
+
+** 分类
+cs.LG, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.09586
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 11: SEBA: Sample-Efficient Black-Box Attacks on Visual Reinforcement Learning [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.09681
+:ID: oai:arXiv.org:2511.09681v1
+:ARXIV_ID: 2511.09681
+:CATEGORIES: cs.LG, cs.AI
+:END:
+
+** 标题
+SEBA: Sample-Efficient Black-Box Attacks on Visual Reinforcement Learning
+
+** 链接
+[[https://arxiv.org/abs/2511.09681][https://arxiv.org/abs/2511.09681]]
+
+** 摘要
+Visual reinforcement learning has achieved remarkable progress in visual control and robotics, but its vulnerability to adversarial perturbations remains underexplored. Most existing black-box attacks focus on vector-based or discrete-action RL, and their effectiveness on image-based continuous control is limited by the large action space and excessive environment queries. We propose SEBA, a sample-efficient framework for black-box adversarial attacks on visual RL agents. SEBA integrates a shadow Q model that estimates cumulative rewards under adversarial conditions, a generative adversarial network that produces visually imperceptible perturbations, and a world model that simulates environment dynamics to reduce real-world queries. Through a two-stage iterative training procedure that alternates between learning the shadow model and refining the generator, SEBA achieves strong attack performance while maintaining efficiency. Experiments on MuJoCo and Atari benchmarks show that SEBA significantly reduces cumulative rewards, preserves visual fidelity, and greatly decreases environment interactions compared to prior black-box and white-box methods.
+
+** 作者
+Tairan Huang, Yulin Jin, Junxu Liu, Qingqing Ye, Haibo Hu
+
+** 分类
+cs.LG, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.09681
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 12: Baby Sophia: A Developmental Approach to Self-Exploration through Self-Touch and Hand Regard [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.09727
+:ID: oai:arXiv.org:2511.09727v1
+:ARXIV_ID: 2511.09727
+:CATEGORIES: cs.RO, cs.AI, cs.LG
+:END:
+
+** 标题
+Baby Sophia: A Developmental Approach to Self-Exploration through Self-Touch and Hand Regard
+
+** 链接
+[[https://arxiv.org/abs/2511.09727][https://arxiv.org/abs/2511.09727]]
+
+** 摘要
+Inspired by infant development, we propose a Reinforcement Learning (RL) framework for autonomous self-exploration in a robotic agent, Baby Sophia, using the BabyBench simulation environment. The agent learns self-touch and hand regard behaviors through intrinsic rewards that mimic an infant's curiosity-driven exploration of its own body. For self-touch, high-dimensional tactile inputs are transformed into compact, meaningful representations, enabling efficient learning. The agent then discovers new tactile contacts through intrinsic rewards and curriculum learning that encourage broad body coverage, balance, and generalization. For hand regard, visual features of the hands, such as skin-color and shape, are learned through motor babbling. Then, intrinsic rewards encourage the agent to perform novel hand motions, and follow its hands with its gaze. A curriculum learning setup from single-hand to dual-hand training allows the agent to reach complex visual-motor coordination. The results of this work demonstrate that purely curiosity-based signals, with no external supervision, can drive coordinated multimodal learning, imitating an infant's progression from random motor babbling to purposeful behaviors.
+
+** 作者
+Stelios Zarifis, Ioannis Chalkiadakis, Artemis Chardouveli, Vasiliki Moutzouri, Aggelos Sotirchos, Katerina Papadimitriou, Panagiotis Filntisis, Niki Efthymiou, Petros Maragos, Katerina Pastra
+
+** 分类
+cs.RO, cs.AI, cs.LG
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.09727
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 13: Out-of-Distribution Generalization with a SPARC: Racing 100 Unseen Vehicles with a Single Policy [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.09737
+:ID: oai:arXiv.org:2511.09737v1
+:ARXIV_ID: 2511.09737
+:CATEGORIES: cs.LG, cs.AI
+:END:
+
+** 标题
+Out-of-Distribution Generalization with a SPARC: Racing 100 Unseen Vehicles with a Single Policy
+
+** 链接
+[[https://arxiv.org/abs/2511.09737][https://arxiv.org/abs/2511.09737]]
+
+** 摘要
+Generalization to unseen environments is a significant challenge in the field of robotics and control. In this work, we focus on contextual reinforcement learning, where agents act within environments with varying contexts, such as self-driving cars or quadrupedal robots that need to operate in different terrains or weather conditions than they were trained for. We tackle the critical task of generalizing to out-of-distribution (OOD) settings, without access to explicit context information at test time. Recent work has addressed this problem by training a context encoder and a history adaptation module in separate stages. While promising, this two-phase approach is cumbersome to implement and train. We simplify the methodology and introduce SPARC: single-phase adaptation for robust control. We test SPARC on varying contexts within the high-fidelity racing simulator Gran Turismo 7 and wind-perturbed MuJoCo environments, and find that it achieves reliable and robust OOD generalization.
+
+** 作者
+Bram Grooten, Patrick MacAlpine, Kaushik Subramanian, Peter Stone, Peter R. Wurman
+
+** 分类
+cs.LG, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.09737
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 14: EEGAgent: A Unified Framework for Automated EEG Analysis Using Large Language Models [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.09947
+:ID: oai:arXiv.org:2511.09947v1
+:ARXIV_ID: 2511.09947
+:CATEGORIES: cs.LG, cs.AI
+:END:
+
+** 标题
+EEGAgent: A Unified Framework for Automated EEG Analysis Using Large Language Models
+
+** 链接
+[[https://arxiv.org/abs/2511.09947][https://arxiv.org/abs/2511.09947]]
+
+** 摘要
+Scalable and generalizable analysis of brain activity is essential for advancing both clinical diagnostics and cognitive research. Electroencephalography (EEG), a non-invasive modality with high temporal resolution, has been widely used for brain states analysis. However, most existing EEG models are usually tailored for individual specific tasks, limiting their utility in realistic scenarios where EEG analysis often involves multi-task and continuous reasoning. In this work, we introduce EEGAgent, a general-purpose framework that leverages large language models (LLMs) to schedule and plan multiple tools to automatically complete EEG-related tasks. EEGAgent is capable of performing the key functions: EEG basic information perception, spatiotemporal EEG exploration, EEG event detection, interaction with users, and EEG report generation. To realize these capabilities, we design a toolbox composed of different tools for EEG preprocessing, feature extraction, event detection, etc. These capabilities were evaluated on public datasets, and our EEGAgent can support flexible and interpretable EEG analysis, highlighting its potential for real-world clinical applications.
+
+** 作者
+Sha Zhao, Mingyi Peng, Haiteng Jiang, Tao Li, Shijian Li, Gang Pan
+
+** 分类
+cs.LG, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.09947
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 15: EnvTrace: Simulation-Based Semantic Evaluation of LLM Code via Execution Trace Alignment -- Demonstrated at Synchrotron Beamlines [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.09964
+:ID: oai:arXiv.org:2511.09964v1
+:ARXIV_ID: 2511.09964
+:CATEGORIES: cs.SE, cs.AI, cs.PL
+:END:
+
+** 标题
+EnvTrace: Simulation-Based Semantic Evaluation of LLM Code via Execution Trace Alignment -- Demonstrated at Synchrotron Beamlines
+
+** 链接
+[[https://arxiv.org/abs/2511.09964][https://arxiv.org/abs/2511.09964]]
+
+** 摘要
+Evaluating large language models (LLMs) for instrument control requires methods that go beyond standard, stateless algorithmic benchmarks, since the behavior of physical systems cannot be fully captured by unit tests alone. Here we introduce EnvTrace, a simulation-based method that evaluates execution traces to assess semantic code equivalence. EnvTrace is demonstrated with a beamline control-logic digital twin to facilitate the evaluation of instrument control code, with the digital twin itself also enabling the pre-execution validation of live experiments. Over 30 LLMs were evaluated using trace alignment to generate a multi-faceted score for functional correctness across key behavioral dimensions, showing that many top-tier models can approach human-level performance in rapid control-code generation. This is a first step toward a broader vision where LLMs and digital twins work symbiotically: LLMs providing intuitive control and agentic orchestration, and digital twins offering safe and high-fidelity environments, paving the way towards autonomous embodied AI.
+
+** 作者
+Noah van der Vleuten, Anthony Flores, Shray Mathur, Max Rakitin, Thomas Hopkins, Kevin G. Yager, Esther H. R. Tsai
+
+** 分类
+cs.SE, cs.AI, cs.PL
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.09964
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 16: Improved Offline Reinforcement Learning via Quantum Metric Encoding [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10187
+:ID: oai:arXiv.org:2511.10187v1
+:ARXIV_ID: 2511.10187
+:CATEGORIES: cs.LG, cs.AI, quant-ph
+:END:
+
+** 标题
+Improved Offline Reinforcement Learning via Quantum Metric Encoding
+
+** 链接
+[[https://arxiv.org/abs/2511.10187][https://arxiv.org/abs/2511.10187]]
+
+** 摘要
+Reinforcement learning (RL) with limited samples is common in real-world applications. However, offline RL performance under this constraint is often suboptimal. We consider an alternative approach to dealing with limited samples by introducing the Quantum Metric Encoder (QME). In this methodology, instead of applying the RL framework directly on the original states and rewards, we embed the states into a more compact and meaningful representation, where the structure of the encoding is inspired by quantum circuits. For classical data, QME is a classically simulable, trainable unitary embedding and thus serves as a quantum-inspired module, on a classical device. For quantum data in the form of quantum states, QME can be implemented directly on quantum hardware, allowing for training without measurement or re-encoding.   We evaluated QME on three datasets, each limited to 100 samples. We use Soft-Actor-Critic (SAC) and Implicit-Q-Learning (IQL), two well-known RL algorithms, to demonstrate the effectiveness of our approach. From the experimental results, we find that training offline RL agents on QME-embedded states with decoded rewards yields significantly better performance than training on the original states and rewards. On average across the three datasets, for maximum reward performance, we achieve a 116.2% improvement for SAC and 117.6% for IQL.   We further investigate the $\Delta$-hyperbolicity of our framework, a geometric property of the state space known to be important for the RL training efficacy. The QME-embedded states exhibit low $\Delta$-hyperbolicity, suggesting that the improvement after embedding arises from the modified geometry of the state space induced by QME. Thus, the low $\Delta$-hyperbolicity and the corresponding effectiveness of QME could provide valuable information for developing efficient offline RL methods under limited-sample conditions.
+
+** 作者
+Outongyi Lv, Yewei Yuan, Nana Liu
+
+** 分类
+cs.LG, cs.AI, quant-ph
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10187
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 17: VISTA: A Vision and Intent-Aware Social Attention Framework for Multi-Agent Trajectory Prediction [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10203
+:ID: oai:arXiv.org:2511.10203v1
+:ARXIV_ID: 2511.10203
+:CATEGORIES: cs.CV, cs.AI, cs.RO
+:END:
+
+** 标题
+VISTA: A Vision and Intent-Aware Social Attention Framework for Multi-Agent Trajectory Prediction
+
+** 链接
+[[https://arxiv.org/abs/2511.10203][https://arxiv.org/abs/2511.10203]]
+
+** 摘要
+Multi-agent trajectory prediction is crucial for autonomous systems operating in dense, interactive environments. Existing methods often fail to jointly capture agents' long-term goals and their fine-grained social interactions, which leads to unrealistic multi-agent futures. We propose VISTA, a recursive goal-conditioned transformer for multi-agent trajectory forecasting. VISTA combines (i) a cross-attention fusion module that integrates long-horizon intent with past motion, (ii) a social-token attention mechanism for flexible interaction modeling across agents, and (iii) pairwise attention maps that make social influence patterns interpretable at inference time. Our model turns single-agent goal-conditioned prediction into a coherent multi-agent forecasting framework. Beyond standard displacement metrics, we evaluate trajectory collision rates as a measure of joint realism. On the high-density MADRAS benchmark and on SDD, VISTA achieves state-of-the-art accuracy and substantially fewer collisions. On MADRAS, it reduces the average collision rate of strong baselines from 2.14 to 0.03 percent, and on SDD it attains zero collisions while improving ADE, FDE, and minFDE. These results show that VISTA generates socially compliant, goal-aware, and interpretable trajectories, making it promising for safety-critical autonomous systems.
+
+** 作者
+Stephane Da Silva Martins, Emanuel Aldea, Sylvie Le H\'egarat-Mascle
+
+** 分类
+cs.CV, cs.AI, cs.RO
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10203
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 18: Simulating Misinformation Propagation in Social Networks using Large Language Models [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10384
+:ID: oai:arXiv.org:2511.10384v1
+:ARXIV_ID: 2511.10384
+:CATEGORIES: cs.SI, cs.AI, cs.CL, cs.CY
+:END:
+
+** 标题
+Simulating Misinformation Propagation in Social Networks using Large Language Models
+
+** 链接
+[[https://arxiv.org/abs/2511.10384][https://arxiv.org/abs/2511.10384]]
+
+** 摘要
+Misinformation on social media thrives on surprise, emotion, and identity-driven reasoning, often amplified through human cognitive biases. To investigate these mechanisms, we model large language model (LLM) personas as synthetic agents that mimic user-level biases, ideological alignments, and trust heuristics. Within this setup, we introduce an auditor--node framework to simulate and analyze how misinformation evolves as it circulates through networks of such agents. News articles are propagated across networks of persona-conditioned LLM nodes, each rewriting received content. A question--answering-based auditor then measures factual fidelity at every step, offering interpretable, claim-level tracking of misinformation drift. We formalize a misinformation index and a misinformation propagation rate to quantify factual degradation across homogeneous and heterogeneous branches of up to 30 sequential rewrites. Experiments with 21 personas across 10 domains reveal that identity- and ideology-based personas act as misinformation accelerators, especially in politics, marketing, and technology. By contrast, expert-driven personas preserve factual stability. Controlled-random branch simulations further show that once early distortions emerge, heterogeneous persona interactions rapidly escalate misinformation to propaganda-level distortion. Our taxonomy of misinformation severity -- spanning factual errors, lies, and propaganda -- connects observed drift to established theories in misinformation studies. These findings demonstrate the dual role of LLMs as both proxies for human-like biases and as auditors capable of tracing information fidelity. The proposed framework provides an interpretable, empirically grounded approach for studying, simulating, and mitigating misinformation diffusion in digital ecosystems.
+
+** 作者
+Raj Gaurav Maurya, Vaibhav Shukla, Raj Abhijit Dandekar, Rajat Dandekar, Sreedath Panat
+
+** 分类
+cs.SI, cs.AI, cs.CL, cs.CY
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10384
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 19: AgentEvolver: Towards Efficient Self-Evolving Agent System [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10395
+:ID: oai:arXiv.org:2511.10395v1
+:ARXIV_ID: 2511.10395
+:CATEGORIES: cs.LG, cs.AI, cs.CL
+:END:
+
+** 标题
+AgentEvolver: Towards Efficient Self-Evolving Agent System
+
+** 链接
+[[https://arxiv.org/abs/2511.10395][https://arxiv.org/abs/2511.10395]]
+
+** 摘要
+Autonomous agents powered by large language models (LLMs) have the potential to significantly enhance human productivity by reasoning, using tools, and executing complex tasks in diverse environments. However, current approaches to developing such agents remain costly and inefficient, as they typically require manually constructed task datasets and reinforcement learning (RL) pipelines with extensive random exploration. These limitations lead to prohibitively high data-construction costs, low exploration efficiency, and poor sample utilization. To address these challenges, we present AgentEvolver, a self-evolving agent system that leverages the semantic understanding and reasoning capabilities of LLMs to drive autonomous agent learning. AgentEvolver introduces three synergistic mechanisms: (i) self-questioning, which enables curiosity-driven task generation in novel environments, reducing dependence on handcrafted datasets; (ii) self-navigating, which improves exploration efficiency through experience reuse and hybrid policy guidance; and (iii) self-attributing, which enhances sample efficiency by assigning differentiated rewards to trajectory states and actions based on their contribution. By integrating these mechanisms into a unified framework, AgentEvolver enables scalable, cost-effective, and continual improvement of agent capabilities. Preliminary experiments indicate that AgentEvolver achieves more efficient exploration, better sample utilization, and faster adaptation compared to traditional RL-based baselines.
+
+** 作者
+Yunpeng Zhai, Shuchang Tao, Cheng Chen, Anni Zou, Ziqian Chen, Qingxu Fu, Shinji Mai, Li Yu, Jiaji Deng, Zouying Cao, Zhaoyang Liu, Bolin Ding, Jingren Zhou
+
+** 分类
+cs.LG, cs.AI, cs.CL
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10395
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 20: Rethinking the Reliability of Multi-agent System: A Perspective from Byzantine Fault Tolerance [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10400
+:ID: oai:arXiv.org:2511.10400v1
+:ARXIV_ID: 2511.10400
+:CATEGORIES: cs.MA, cs.AI, cs.CL
+:END:
+
+** 标题
+Rethinking the Reliability of Multi-agent System: A Perspective from Byzantine Fault Tolerance
+
+** 链接
+[[https://arxiv.org/abs/2511.10400][https://arxiv.org/abs/2511.10400]]
+
+** 摘要
+Ensuring the reliability of agent architectures and effectively identifying problematic agents when failures occur are crucial challenges in multi-agent systems (MAS). Advances in large language models (LLMs) have established LLM-based agents as a major branch of MAS, enabling major breakthroughs in complex problem solving and world modeling. However, the reliability implications of this shift remain largely unexplored. i.e., whether substituting traditional agents with LLM-based agents can effectively enhance the reliability of MAS. In this work, we investigate and quantify the reliability of LLM-based agents from the perspective of Byzantine fault tolerance. We observe that LLM-based agents demonstrate stronger skepticism when processing erroneous message flows, a characteristic that enables them to outperform traditional agents across different topological structures. Motivated by the results of the pilot experiment, we design CP-WBFT, a confidence probe-based weighted Byzantine Fault Tolerant consensus mechanism to enhance the stability of MAS with different topologies. It capitalizes on the intrinsic reflective and discriminative capabilities of LLMs by employing a probe-based, weighted information flow transmission method to improve the reliability of LLM-based agents. Extensive experiments demonstrate that CP-WBFT achieves superior performance across diverse network topologies under extreme Byzantine conditions (85.7\% fault rate). Notably, our approach surpasses traditional methods by attaining remarkable accuracy on various topologies and maintaining strong reliability in both mathematical reasoning and safety assessment tasks.
+
+** 作者
+Lifan Zheng, Jiawei Chen, Qinghong Yin, Jingyuan Zhang, Xinyi Zeng, Yu Tian
+
+** 分类
+cs.MA, cs.AI, cs.CL
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10400
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 21: nuPlan-R: A Closed-Loop Planning Benchmark for Autonomous Driving via Reactive Multi-Agent Simulation [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10403
+:ID: oai:arXiv.org:2511.10403v1
+:ARXIV_ID: 2511.10403
+:CATEGORIES: cs.RO, cs.AI
+:END:
+
+** 标题
+nuPlan-R: A Closed-Loop Planning Benchmark for Autonomous Driving via Reactive Multi-Agent Simulation
+
+** 链接
+[[https://arxiv.org/abs/2511.10403][https://arxiv.org/abs/2511.10403]]
+
+** 摘要
+Recent advances in closed-loop planning benchmarks have significantly improved the evaluation of autonomous vehicles. However, existing benchmarks still rely on rule-based reactive agents such as the Intelligent Driver Model (IDM), which lack behavioral diversity and fail to capture realistic human interactions, leading to oversimplified traffic dynamics. To address these limitations, we present nuPlan-R, a new reactive closed-loop planning benchmark that integrates learning-based reactive multi-agent simulation into the nuPlan framework. Our benchmark replaces the rule-based IDM agents with noise-decoupled diffusion-based reactive agents and introduces an interaction-aware agent selection mechanism to ensure both realism and computational efficiency. Furthermore, we extend the benchmark with two additional metrics to enable a more comprehensive assessment of planning performance. Extensive experiments demonstrate that our reactive agent model produces more realistic, diverse, and human-like traffic behaviors, leading to a benchmark environment that better reflects real-world interactive driving. We further reimplement a collection of rule-based, learning-based, and hybrid planning approaches within our nuPlan-R benchmark, providing a clearer reflection of planner performance in complex interactive scenarios and better highlighting the advantages of learning-based planners in handling complex and dynamic scenarios. These results establish nuPlan-R as a new standard for fair, reactive, and realistic closed-loop planning evaluation. We will open-source the code for the new benchmark.
+
+** 作者
+Mingxing Peng, Ruoyu Yao, Xusen Guo, Jun Ma
+
+** 分类
+cs.RO, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10403
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 22: Towards Emotionally Intelligent and Responsible Reinforcement Learning [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10573
+:ID: oai:arXiv.org:2511.10573v1
+:ARXIV_ID: 2511.10573
+:CATEGORIES: cs.LG, cs.AI, cs.CL, cs.HC, cs.MA
+:END:
+
+** 标题
+Towards Emotionally Intelligent and Responsible Reinforcement Learning
+
+** 链接
+[[https://arxiv.org/abs/2511.10573][https://arxiv.org/abs/2511.10573]]
+
+** 摘要
+Personalized decision systems in healthcare and behavioral support often rely on static rule-based or engagement-maximizing heuristics that overlook users' emotional context and ethical constraints. Such approaches risk recommending insensitive or unsafe interventions, especially in domains involving serious mental illness, substance use disorders, or depression. To address this limitation, we propose a Responsible Reinforcement Learning (RRL) framework that integrates emotional and contextual understanding with ethical considerations into the sequential decision-making process. RRL formulates personalization as a Constrained Markov Decision Process (CMDP), where the agent optimizes engagement and adherence while ensuring emotional alignment and ethical safety. We introduce a multi-objective reward function that explicitly balances short-term behavioral engagement with long-term user well-being, and define an emotion-informed state representation that captures fluctuations in emotional readiness, affect, and risk. The proposed architecture can be instantiated with any RL algorithm (e.g., DQN, PPO) augmented with safety constraints or Lagrangian regularization. Conceptually, this framework operationalizes empathy and responsibility within machine learning policy optimization, bridging safe RL, affective computing and responsible AI. We discuss the implications of this approach for human-centric domains such as behavioral health, education, and digital therapeutics, and outline simulation-based validation paths for future empirical work. This paper aims to initiate a methodological conversation about ethically aligned reinforcement learning for emotionally aware and trustworthy personalization systems.
+
+** 作者
+Garapati Keerthana, Manik Gupta
+
+** 分类
+cs.LG, cs.AI, cs.CL, cs.HC, cs.MA
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10573
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 23: Evaluating Prompting Strategies with MedGemma for Medical Order Extraction [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10583
+:ID: oai:arXiv.org:2511.10583v1
+:ARXIV_ID: 2511.10583
+:CATEGORIES: cs.CL, cs.AI
+:END:
+
+** 标题
+Evaluating Prompting Strategies with MedGemma for Medical Order Extraction
+
+** 链接
+[[https://arxiv.org/abs/2511.10583][https://arxiv.org/abs/2511.10583]]
+
+** 摘要
+The accurate extraction of medical orders from doctor-patient conversations is a critical task for reducing clinical documentation burdens and ensuring patient safety. This paper details our team submission to the MEDIQA-OE-2025 Shared Task. We investigate the performance of MedGemma, a new domain-specific open-source language model, for structured order extraction. We systematically evaluate three distinct prompting paradigms: a straightforward one-Shot approach, a reasoning-focused ReAct framework, and a multi-step agentic workflow. Our experiments reveal that while more complex frameworks like ReAct and agentic flows are powerful, the simpler one-shot prompting method achieved the highest performance on the official validation set. We posit that on manually annotated transcripts, complex reasoning chains can lead to "overthinking" and introduce noise, making a direct approach more robust and efficient. Our work provides valuable insights into selecting appropriate prompting strategies for clinical information extraction in varied data conditions.
+
+** 作者
+Abhinand Balachandran, Bavana Durgapraveen, Gowsikkan Sikkan Sudhagar, Vidhya Varshany J S, Sriram Rajkumar
+
+** 分类
+cs.CL, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10583
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 24: Textual understanding boost in the WikiRace [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10585
+:ID: oai:arXiv.org:2511.10585v1
+:ARXIV_ID: 2511.10585
+:CATEGORIES: cs.SI, cs.AI
+:END:
+
+** 标题
+Textual understanding boost in the WikiRace
+
+** 链接
+[[https://arxiv.org/abs/2511.10585][https://arxiv.org/abs/2511.10585]]
+
+** 摘要
+The WikiRace game, where players navigate between Wikipedia articles using only hyperlinks, serves as a compelling benchmark for goal-directed search in complex information networks. This paper presents a systematic evaluation of navigation strategies for this task, comparing agents guided by graph-theoretic structure (betweenness centrality), semantic meaning (language model embeddings), and hybrid approaches. Through rigorous benchmarking on a large Wikipedia subgraph, we demonstrate that a purely greedy agent guided by the semantic similarity of article titles is overwhelmingly effective. This strategy, when combined with a simple loop-avoidance mechanism, achieved a perfect success rate and navigated the network with an efficiency an order of magnitude better than structural or hybrid methods. Our findings highlight the critical limitations of purely structural heuristics for goal-directed search and underscore the transformative potential of large language models to act as powerful, zero-shot semantic navigators in complex information spaces.
+
+** 作者
+Raman Ebrahimi, Sean Fuhrman, Kendrick Nguyen, Harini Gurusankar, Massimo Franceschetti
+
+** 分类
+cs.SI, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10585
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 25: Towards an Agentic Workflow for Internet Measurement Research [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.10611
+:ID: oai:arXiv.org:2511.10611v1
+:ARXIV_ID: 2511.10611
+:CATEGORIES: cs.NI, cs.AI
+:END:
+
+** 标题
+Towards an Agentic Workflow for Internet Measurement Research
+
+** 链接
+[[https://arxiv.org/abs/2511.10611][https://arxiv.org/abs/2511.10611]]
+
+** 摘要
+Internet measurement research faces an accessibility crisis: complex analyses require custom integration of multiple specialized tools that demands specialized domain expertise. When network disruptions occur, operators need rapid diagnostic workflows spanning infrastructure mapping, routing analysis, and dependency modeling. However, developing these workflows requires specialized knowledge and significant manual effort.   We present ArachNet, the first system demonstrating that LLM agents can independently generate measurement workflows that mimics expert reasoning. Our core insight is that measurement expertise follows predictable compositional patterns that can be systematically automated. ArachNet operates through four specialized agents that mirror expert workflow, from problem decomposition to solution implementation. We validate ArachNet with progressively challenging Internet resilience scenarios. The system independently generates workflows that match expert-level reasoning and produce analytical outputs similar to specialist solutions. Generated workflows handle complex multi-framework integration that traditionally requires days of manual coordination. ArachNet lowers barriers to measurement workflow composition by automating the systematic reasoning process that experts use, enabling broader access to sophisticated measurement capabilities while maintaining the technical rigor required for research-quality analysis.
+
+** 作者
+Alagappan Ramanathan, Eunju Kang, Dongsu Han, Sangeetha Abdu Jyothi
+
+** 分类
+cs.NI, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.10611
+- 公告类型: cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 26: Unlocking Efficient Vehicle Dynamics Modeling via Analytic World Models [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2502.10012
+:ID: oai:arXiv.org:2502.10012v2
+:ARXIV_ID: 2502.10012
+:CATEGORIES: cs.AI, cs.RO
+:END:
+
+** 标题
+Unlocking Efficient Vehicle Dynamics Modeling via Analytic World Models
+
+** 链接
+[[https://arxiv.org/abs/2502.10012][https://arxiv.org/abs/2502.10012]]
+
+** 摘要
+Differentiable simulators represent an environment's dynamics as a differentiable function. Within robotics and autonomous driving, this property is used in Analytic Policy Gradients (APG), which relies on backpropagating through the dynamics to train accurate policies for diverse tasks. Here we show that differentiable simulation also has an important role in world modeling, where it can impart predictive, prescriptive, and counterfactual capabilities to an agent. Specifically, we design three novel task setups in which the differentiable dynamics are combined within an end-to-end computation graph not with a policy, but a state predictor. This allows us to learn relative odometry, optimal planners, and optimal inverse states. We collectively call these predictors Analytic World Models (AWMs) and demonstrate how differentiable simulation enables their efficient, end-to-end learning. In autonomous driving scenarios, they have broad applicability and can augment an agent's decision-making beyond reactive control.
+
+** 作者
+Asen Nachkov, Danda Pani Paudel, Jan-Nico Zaech, Davide Scaramuzza, Luc Van Gool
+
+** 分类
+cs.AI, cs.RO
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2502.10012
+- 公告类型: replace
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 27: Planning Agents on an Ego-Trip: Leveraging Hybrid Ego-Graph Ensembles for Improved Tool Retrieval in Enterprise Task Planning [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2508.05888
+:ID: oai:arXiv.org:2508.05888v2
+:ARXIV_ID: 2508.05888
+:CATEGORIES: cs.AI, cs.IR
+:END:
+
+** 标题
+Planning Agents on an Ego-Trip: Leveraging Hybrid Ego-Graph Ensembles for Improved Tool Retrieval in Enterprise Task Planning
+
+** 链接
+[[https://arxiv.org/abs/2508.05888][https://arxiv.org/abs/2508.05888]]
+
+** 摘要
+Effective tool pre-selection via retrieval is essential for AI agents to select from a vast array of tools when identifying and planning actions in the context of complex user queries. Despite its central role in planning, this aspect remains underexplored in the literature. Traditional approaches rely primarily on similarities between user queries and tool descriptions, which significantly limits retrieval accuracy, specifically when handling multi-step user requests. To address these limitations, we propose a Knowledge Graph (KG)-based tool retrieval framework that captures the semantic relationships between tools and their functional dependencies. Our retrieval algorithm leverages ensembles of 1-hop ego tool graphs to model direct and indirect connections between tools, enabling more comprehensive and contextual tool selection for multi-step tasks. We evaluate our approach on a synthetically generated internal dataset across six defined user classes, extending previous work on coherent dialogue synthesis and tool retrieval benchmarks. Results demonstrate that our tool graph-based method achieves 91.85% tool coverage on the micro-average CompleteRecall metric, compared to 89.26% for re-ranked semantic-lexical hybrid retrieval, the strongest non-KG baseline in our experiments. These findings support our hypothesis that the structural information modeled in the graph provides complementary signals to pure similarity matching, particularly for queries requiring sequential tool composition.
+
+** 作者
+Sahil Bansal, Sai Shruthi Sistla, Aarti Arikatala, Sebastian Schreiber
+
+** 分类
+cs.AI, cs.IR
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2508.05888
+- 公告类型: replace
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 28: From Capabilities to Performance: Evaluating Key Functional Properties of LLM Architectures in Penetration Testing [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2509.14289
+:ID: oai:arXiv.org:2509.14289v3
+:ARXIV_ID: 2509.14289
+:CATEGORIES: cs.AI, cs.CL, cs.LG
+:END:
+
+** 标题
+From Capabilities to Performance: Evaluating Key Functional Properties of LLM Architectures in Penetration Testing
+
+** 链接
+[[https://arxiv.org/abs/2509.14289][https://arxiv.org/abs/2509.14289]]
+
+** 摘要
+Large language models (LLMs) are increasingly used to automate or augment penetration testing, but their effectiveness and reliability across attack phases remain unclear. We present a comprehensive evaluation of multiple LLM-based agents, from single-agent to modular designs, across realistic penetration testing scenarios, measuring empirical performance and recurring failure patterns. We also isolate the impact of five core functional capabilities via targeted augmentations: Global Context Memory (GCM), Inter-Agent Messaging (IAM), Context-Conditioned Invocation (CCI), Adaptive Planning (AP), and Real-Time Monitoring (RTM). These interventions support, respectively: (i) context coherence and retention, (ii) inter-component coordination and state management, (iii) tool use accuracy and selective execution, (iv) multi-step strategic planning, error detection, and recovery, and (v) real-time dynamic responsiveness. Our results show that while some architectures natively exhibit subsets of these properties, targeted augmentations substantially improve modular agent performance, especially in complex, multi-step, and real-time penetration testing tasks.
+
+** 作者
+Lanxiao Huang, Daksh Dave, Tyler Cody, Peter Beling, Ming Jin
+
+** 分类
+cs.AI, cs.CL, cs.LG
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2509.14289
+- 公告类型: replace
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 29: Ax-Prover: A Deep Reasoning Agentic Framework for Theorem Proving in Mathematics and Quantum Physics [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2510.12787
+:ID: oai:arXiv.org:2510.12787v3
+:ARXIV_ID: 2510.12787
+:CATEGORIES: cs.AI, cs.MA
+:END:
+
+** 标题
+Ax-Prover: A Deep Reasoning Agentic Framework for Theorem Proving in Mathematics and Quantum Physics
+
+** 链接
+[[https://arxiv.org/abs/2510.12787][https://arxiv.org/abs/2510.12787]]
+
+** 摘要
+We present Ax-Prover, a multi-agent system for automated theorem proving in Lean that can solve problems across diverse scientific domains and operate either autonomously or collaboratively with human experts. To achieve this, Ax-Prover approaches scientific problem solving through formal proof generation, a process that demands both creative reasoning and strict syntactic rigor. Ax-Prover meets this challenge by equipping Large Language Models (LLMs), which provide knowledge and reasoning, with Lean tools via the Model Context Protocol (MCP), which ensure formal correctness. To evaluate its performance as an autonomous prover, we benchmark our approach against frontier LLMs and specialized prover models on two public math benchmarks and on two Lean benchmarks we introduce in the fields of abstract algebra and quantum theory. On public datasets, Ax-Prover is competitive with state-of-the-art provers, while it largely outperforms them on the new benchmarks. This shows that, unlike specialized systems that struggle to generalize, our tool-based agentic theorem prover approach offers a generalizable methodology for formal verification across diverse scientific domains. Furthermore, we demonstrate Ax-Prover's assistant capabilities in a practical use case, showing how it enabled an expert mathematician to formalize the proof of a complex cryptography theorem.
+
+** 作者
+Benjamin Breen, Marco Del Tredici, Jacob McCarran, Javier Aspuru Mijares, Weichen Winston Yin, Kfir Sulimany, Jacob M. Taylor, Frank H. L. Koppens, Dirk Englund
+
+** 分类
+cs.AI, cs.MA
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2510.12787
+- 公告类型: replace
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 30: LiveResearchBench: A Live Benchmark for User-Centric Deep Research in the Wild [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2510.14240
+:ID: oai:arXiv.org:2510.14240v3
+:ARXIV_ID: 2510.14240
+:CATEGORIES: cs.AI
+:END:
+
+** 标题
+LiveResearchBench: A Live Benchmark for User-Centric Deep Research in the Wild
+
+** 链接
+[[https://arxiv.org/abs/2510.14240][https://arxiv.org/abs/2510.14240]]
+
+** 摘要
+Deep research -- producing comprehensive, citation-grounded reports by searching and synthesizing information from hundreds of live web sources -- marks an important frontier for agentic systems. To rigorously evaluate this ability, four principles are essential: tasks should be (1) user-centric, reflecting realistic information needs, (2) dynamic, requiring up-to-date information beyond parametric knowledge, (3) unambiguous, ensuring consistent interpretation across users, and (4) multi-faceted and search-intensive, requiring search over numerous web sources and in-depth analysis. Existing benchmarks fall short of these principles, often focusing on narrow domains or posing ambiguous questions that hinder fair comparison. Guided by these principles, we introduce LiveResearchBench, a benchmark of 100 expert-curated tasks spanning daily life, enterprise, and academia, each requiring extensive, dynamic, real-time web search and synthesis. Built with over 1,500 hours of human labor, LiveResearchBench provides a rigorous basis for systematic evaluation. To evaluate citation-grounded long-form reports, we introduce DeepEval, a comprehensive suite covering both content- and report-level quality, including coverage, presentation, citation accuracy and association, consistency and depth of analysis. DeepEval integrates four complementary evaluation protocols, each designed to ensure stable assessment and high agreement with human judgments. Using LiveResearchBench and DeepEval, we conduct a comprehensive evaluation of 17 frontier deep research systems, including single-agent web search, single-agent deep research, and multi-agent systems. Our analysis reveals current strengths, recurring failure modes, and key system components needed to advance reliable, insightful deep research.
+
+** 作者
+Jiayu Wang, Yifei Ming, Riya Dulepet, Qinglin Chen, Austin Xu, Zixuan Ke, Frederic Sala, Aws Albarghouthi, Caiming Xiong, Shafiq Joty
+
+** 分类
+cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2510.14240
+- 公告类型: replace
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 31: A Brain Cell Type Resource Created by Large Language Models and a Multi-Agent AI System for Collaborative Community Annotation [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2510.17064
+:ID: oai:arXiv.org:2510.17064v3
+:ARXIV_ID: 2510.17064
+:CATEGORIES: cs.AI
+:END:
+
+** 标题
+A Brain Cell Type Resource Created by Large Language Models and a Multi-Agent AI System for Collaborative Community Annotation
+
+** 链接
+[[https://arxiv.org/abs/2510.17064][https://arxiv.org/abs/2510.17064]]
+
+** 摘要
+Single-cell RNA sequencing has transformed our ability to identify diverse cell types and their transcriptomic signatures. However, annotating these signatures-especially those involving poorly characterized genes-remains a major challenge. Traditional methods, such as Gene Set Enrichment Analysis (GSEA), depend on well-curated annotations and often perform poorly in these contexts. Large Language Models (LLMs) offer a promising alternative but struggle to represent complex biological knowledge within structured ontologies. To address this, we present BRAINCELL-AID (BRAINCELL-AID: https://biodataai.uth.edu/BRAINCELL-AID), a novel multi-agent AI system that integrates free-text descriptions with ontology labels to enable more accurate and robust gene set annotation. By incorporating retrieval-augmented generation (RAG), we developed a robust agentic workflow that refines predictions using relevant PubMed literature, reducing hallucinations and enhancing interpretability. Using this workflow, we achieved correct annotations for 77% of mouse gene sets among their top predictions. Applying this approach, we annotated 5,322 brain cell clusters from the comprehensive mouse brain cell atlas generated by the BRAIN Initiative Cell Census Network, enabling novel insights into brain cell function by identifying region-specific gene co-expression patterns and inferring functional roles of gene ensembles. BRAINCELL-AID also identifies Basal Ganglia-related cell types with neurologically meaningful descriptions. Hence, we create a valuable resource to support community-driven cell type annotation.
+
+** 作者
+Rongbin Li, Wenbo Chen, Zhao Li, Rodrigo Munoz-Castaneda, Jinbo Li, Neha S. Maurya, Arnav Solanki, Huan He, Hanwen Xing, Meaghan Ramlakhan, Zachary Wise, Nelson Johansen, Zhuhao Wu, Hua Xu, Michael Hawrylycz, W. Jim Zheng
+
+** 分类
+cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2510.17064
+- 公告类型: replace
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 32: An Efficient Training Pipeline for Reasoning Graphical User Interface Agents [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.08172
+:ID: oai:arXiv.org:2511.08172v2
+:ARXIV_ID: 2511.08172
+:CATEGORIES: cs.AI
+:END:
+
+** 标题
+An Efficient Training Pipeline for Reasoning Graphical User Interface Agents
+
+** 链接
+[[https://arxiv.org/abs/2511.08172][https://arxiv.org/abs/2511.08172]]
+
+** 摘要
+Visual grounding is the task of localising image regions from natural language queries and is critical for reasoning capable Graphical User Interface agents. Many existing methods rely on massive, noisy synthetic datasets.This work introduces an efficient training pipeline that combines model-based data filtering with parameter-efficient fine-tuning. From 4.8M synthetic examples, 12K clean and diverse instances are curated by first identifying challenging cases, removing misaligned and then selecting a diverse set of multimodal instances. On this data, a 3B-parameter Vision-Language Model is trained under three regimes: supervised fine-tuning, chain-of-thought-augmented fine-tuning, and reinforcement learning via Group Relative Policy Optimization. Models trained with the filtered data and lightweight training strategies match or surpass larger baselines on benchmarks such as ScreenSpot, Multimodal-Mind2Web, and AndroidControl. These results demonstrate that principled data curation and robust adaptation can rival large-scale training, enabling compact yet capable multimodal reasoning agents.
+
+** 作者
+Georgios Pantazopoulos, Eda B. \"Ozyi\u{g}it
+
+** 分类
+cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.08172
+- 公告类型: replace
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 33: Understanding Human-AI Trust in Education [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2506.09160
+:ID: oai:arXiv.org:2506.09160v4
+:ARXIV_ID: 2506.09160
+:CATEGORIES: cs.CY, cs.AI, cs.HC
+:END:
+
+** 标题
+Understanding Human-AI Trust in Education
+
+** 链接
+[[https://arxiv.org/abs/2506.09160][https://arxiv.org/abs/2506.09160]]
+
+** 摘要
+As AI chatbots become integrated in education, students are turning to these systems for guidance, feedback, and information. However, the anthropomorphic characteristics of these chatbots create ambiguity over whether students develop trust in them in ways similar to trusting a human peer or instructor (human-like trust, often linked to interpersonal trust models) or in ways similar to trusting a conventional technology (system-like trust, often linked to technology trust models). This ambiguity presents theoretical challenges, as interpersonal trust models may inappropriately ascribe human intentionality and morality to AI, while technology trust models were developed for non-social systems, leaving their applicability to conversational, human-like agents unclear. To address this gap, we examine how these two forms of trust, human-like and system-like, comparatively influence students' perceptions of an AI chatbot, specifically perceived enjoyment, trusting intention, behavioral intention to use, and perceived usefulness. Using partial least squares structural equation modeling, we found that both forms of trust significantly influenced student perceptions, though with varied effects. Human-like trust was the stronger predictor of trusting intention, whereas system-like trust more strongly influenced behavioral intention and perceived usefulness; both had similar effects on perceived enjoyment. The results suggest that interactions with AI chatbots give rise to a distinct form of trust, human-AI trust, that differs from human-human and human-technology models, highlighting the need for new theoretical frameworks in this domain. In addition, the study offers practical insights for fostering appropriately calibrated trust, which is critical for the effective adoption and pedagogical impact of AI in education.
+
+** 作者
+Griffin Pitts, Sanaz Motamedi
+
+** 分类
+cs.CY, cs.AI, cs.HC
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2506.09160
+- 公告类型: replace-cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 34: Application-Specific Component-Aware Structured Pruning of Deep Neural Networks in Control via Soft Coefficient Optimization [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2507.14882
+:ID: oai:arXiv.org:2507.14882v2
+:ARXIV_ID: 2507.14882
+:CATEGORIES: cs.LG, cs.AI
+:END:
+
+** 标题
+Application-Specific Component-Aware Structured Pruning of Deep Neural Networks in Control via Soft Coefficient Optimization
+
+** 链接
+[[https://arxiv.org/abs/2507.14882][https://arxiv.org/abs/2507.14882]]
+
+** 摘要
+Deep neural networks (DNNs) offer significant flexibility and robust performance. This makes them ideal for building not only system models but also advanced neural network controllers (NNCs). However, their high complexity and computational needs often limit their use. Various model compression strategies have been developed over the past few decades to address these issues. These strategies are effective for general DNNs but do not directly apply to NNCs. NNCs need both size reduction and the retention of key application-specific performance features. In structured pruning, which removes groups of related elements, standard importance metrics often fail to protect these critical characteristics. In this paper, we introduce a novel framework for calculating importance metrics in pruning groups. This framework not only shrinks the model size but also considers various application-specific constraints. To find the best pruning coefficient for each group, we evaluate two approaches. The first approach involves simple exploration through grid search. The second utilizes gradient descent optimization, aiming to balance compression and task performance. We test our method in two use cases: one on an MNIST autoencoder and the other on a Temporal Difference Model Predictive Control (TDMPC) agent. Results show that the method effectively maintains application-relevant performance while achieving a significant reduction in model size.
+
+** 作者
+Ganesh Sundaram, Jonas Ulmen, Amjad Haider, Daniel G\"orges
+
+** 分类
+cs.LG, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2507.14882
+- 公告类型: replace-cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 35: Towards Embodied Agentic AI: Review and Classification of LLM- and VLM-Driven Robot Autonomy and Interaction [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2508.05294
+:ID: oai:arXiv.org:2508.05294v4
+:ARXIV_ID: 2508.05294
+:CATEGORIES: cs.RO, cs.AI, cs.LG
+:END:
+
+** 标题
+Towards Embodied Agentic AI: Review and Classification of LLM- and VLM-Driven Robot Autonomy and Interaction
+
+** 链接
+[[https://arxiv.org/abs/2508.05294][https://arxiv.org/abs/2508.05294]]
+
+** 摘要
+Foundation models, including large language models (LLMs) and vision-language models (VLMs), have recently enabled novel approaches to robot autonomy and human-robot interfaces. In parallel, vision-language-action models (VLAs) or large behavior models (LBMs) are increasing the dexterity and capabilities of robotic systems. This survey paper reviews works that advance agentic applications and architectures, including initial efforts with GPT-style interfaces and more complex systems where AI agents function as coordinators, planners, perception actors, or generalist interfaces. Such agentic architectures allow robots to reason over natural language instructions, invoke APIs, plan task sequences, or assist in operations and diagnostics. In addition to peer-reviewed research, due to the fast-evolving nature of the field, we highlight and include community-driven projects, ROS packages, and industrial frameworks that show emerging trends. We propose a taxonomy for classifying model integration approaches and present a comparative analysis of the role that agents play in different solutions in today's literature.
+
+** 作者
+Sahar Salimpour, Lei Fu, Kajetan Rachwa{\l}, Pascal Bertrand, Kevin O'Sullivan, Robert Jakob, Farhad Keramat, Leonardo Militano, Giovanni Toffetti, Harry Edelman, Jorge Pe\~na Queralta
+
+** 分类
+cs.RO, cs.AI, cs.LG
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2508.05294
+- 公告类型: replace-cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 36: Test-Time Reinforcement Learning for GUI Grounding via Region Consistency [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2508.05615
+:ID: oai:arXiv.org:2508.05615v2
+:ARXIV_ID: 2508.05615
+:CATEGORIES: cs.CV, cs.AI, cs.CL
+:END:
+
+** 标题
+Test-Time Reinforcement Learning for GUI Grounding via Region Consistency
+
+** 链接
+[[https://arxiv.org/abs/2508.05615][https://arxiv.org/abs/2508.05615]]
+
+** 摘要
+Graphical User Interface (GUI) grounding, the task of mapping natural language instructions to precise screen coordinates, is fundamental to autonomous GUI agents. While existing methods achieve strong performance through extensive supervised training or reinforcement learning with labeled rewards, they remain constrained by the cost and availability of pixel-level annotations. We observe that when models generate multiple predictions for the same GUI element, the spatial overlap patterns reveal implicit confidence signals that can guide more accurate localization. Leveraging this insight, we propose GUI-RC (Region Consistency), a test-time scaling method that constructs spatial voting grids from multiple sampled predictions to identify consensus regions where models show highest agreement. Without any training, GUI-RC improves accuracy by 2-3% across various architectures on ScreenSpot benchmarks. We further introduce GUI-RCPO (Region Consistency Policy Optimization), transforming these consistency patterns into rewards for test-time reinforcement learning. By computing how well each prediction aligns with the collective consensus, GUI-RCPO enables models to iteratively refine their outputs on unlabeled data during inference. Extensive experiments demonstrate the generality of our approach: using only 1,272 unlabeled data, GUI-RCPO achieves 3-6% accuracy improvements across various architectures on ScreenSpot benchmarks. Our approach reveals the untapped potential of test-time scaling and test-time reinforcement learning for GUI grounding, offering a promising path toward more data-efficient GUI agents.
+
+** 作者
+Yong Du, Yuchen Yan, Fei Tang, Zhengxi Lu, Chang Zong, Weiming Lu, Shengpei Jiang, Yongliang Shen
+
+** 分类
+cs.CV, cs.AI, cs.CL
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2508.05615
+- 公告类型: replace-cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 37: FHIR-AgentBench: Benchmarking LLM Agents for Realistic Interoperable EHR Question Answering [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2509.19319
+:ID: oai:arXiv.org:2509.19319v2
+:ARXIV_ID: 2509.19319
+:CATEGORIES: cs.CL, cs.AI
+:END:
+
+** 标题
+FHIR-AgentBench: Benchmarking LLM Agents for Realistic Interoperable EHR Question Answering
+
+** 链接
+[[https://arxiv.org/abs/2509.19319][https://arxiv.org/abs/2509.19319]]
+
+** 摘要
+The recent shift toward the Health Level Seven Fast Healthcare Interoperability Resources (HL7 FHIR) standard opens a new frontier for clinical AI, demanding LLM agents to navigate complex, resource-based data models instead of conventional structured health data. However, existing benchmarks have lagged behind this transition, lacking the realism needed to evaluate recent LLMs on interoperable clinical data. To bridge this gap, we introduce FHIR-AgentBench, a benchmark that grounds 2,931 real-world clinical questions in the HL7 FHIR standard. Using this benchmark, we systematically evaluate agentic frameworks, comparing different data retrieval strategies (direct FHIR API calls vs. specialized tools), interaction patterns (single-turn vs. multi-turn), and reasoning strategies (natural language vs. code generation). Our experiments highlight the practical challenges of retrieving data from intricate FHIR resources and the difficulty of reasoning over them, both of which critically affect question answering performance. We publicly release the FHIR-AgentBench dataset and evaluation suite (https://github.com/glee4810/FHIR-AgentBench) to promote reproducible research and the development of robust, reliable LLM agents for clinical applications.
+
+** 作者
+Gyubok Lee, Elea Bach, Eric Yang, Tom Pollard, Alistair Johnson, Edward Choi, Yugang jia, Jong Ha Lee
+
+** 分类
+cs.CL, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2509.19319
+- 公告类型: replace-cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 38: Enhancing the development of Cherenkov Telescope Array control software with Large Language Models [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2510.01299
+:ID: oai:arXiv.org:2510.01299v2
+:ARXIV_ID: 2510.01299
+:CATEGORIES: astro-ph.IM, cs.AI
+:END:
+
+** 标题
+Enhancing the development of Cherenkov Telescope Array control software with Large Language Models
+
+** 链接
+[[https://arxiv.org/abs/2510.01299][https://arxiv.org/abs/2510.01299]]
+
+** 摘要
+We develop AI agents based on instruction-finetuned large language models (LLMs) to assist in the engineering and operation of the Cherenkov Telescope Array Observatory (CTAO) Control and Data Acquisition Software (ACADA). These agents align with project-specific documentation and codebases, understand contextual information, interact with external APIs, and communicate with users in natural language. We present our progress in integrating these features into CTAO pipelines for operations and offline data analysis.
+
+** 作者
+Dmitriy Kostunin, Elisa Jones, Vladimir Sotnikov, Valery Sotnikov, Sergo Golovachev, Alexandre Strube
+
+** 分类
+astro-ph.IM, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2510.01299
+- 公告类型: replace-cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 39: WOD-E2E: Waymo Open Dataset for End-to-End Driving in Challenging Long-tail Scenarios [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2510.26125
+:ID: oai:arXiv.org:2510.26125v3
+:ARXIV_ID: 2510.26125
+:CATEGORIES: cs.CV, cs.AI
+:END:
+
+** 标题
+WOD-E2E: Waymo Open Dataset for End-to-End Driving in Challenging Long-tail Scenarios
+
+** 链接
+[[https://arxiv.org/abs/2510.26125][https://arxiv.org/abs/2510.26125]]
+
+** 摘要
+Vision-based end-to-end (E2E) driving has garnered significant interest in the research community due to its scalability and synergy with multimodal large language models (MLLMs). However, current E2E driving benchmarks primarily feature nominal scenarios, failing to adequately test the true potential of these systems. Furthermore, existing open-loop evaluation metrics often fall short in capturing the multi-modal nature of driving or effectively evaluating performance in long-tail scenarios. To address these gaps, we introduce the Waymo Open Dataset for End-to-End Driving (WOD-E2E). WOD-E2E contains 4,021 driving segments (approximately 12 hours), specifically curated for challenging long-tail scenarios that that are rare in daily life with an occurring frequency of less than 0.03%. Concretely, each segment in WOD-E2E includes the high-level routing information, ego states, and 360-degree camera views from 8 surrounding cameras. To evaluate the E2E driving performance on these long-tail situations, we propose a novel open-loop evaluation metric: Rater Feedback Score (RFS). Unlike conventional metrics that measure the distance between predicted way points and the logs, RFS measures how closely the predicted trajectory matches rater-annotated trajectory preference labels. We have released rater preference labels for all WOD-E2E validation set segments, while the held out test set labels have been used for the 2025 WOD-E2E Challenge. Through our work, we aim to foster state of the art research into generalizable, robust, and safe end-to-end autonomous driving agents capable of handling complex real-world situations.
+
+** 作者
+Runsheng Xu, Hubert Lin, Wonseok Jeon, Hao Feng, Yuliang Zou, Liting Sun, John Gorman, Ekaterina Tolstaya, Sarah Tang, Brandyn White, Ben Sapp, Mingxing Tan, Jyh-Jing Hwang, Dragomir Anguelov
+
+** 分类
+cs.CV, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2510.26125
+- 公告类型: replace-cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 40: Does AI-Assisted Coding Deliver? A Difference-in-Differences Study of Cursor's Impact on Software Projects [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.04427
+:ID: oai:arXiv.org:2511.04427v2
+:ARXIV_ID: 2511.04427
+:CATEGORIES: cs.SE, cs.AI
+:END:
+
+** 标题
+Does AI-Assisted Coding Deliver? A Difference-in-Differences Study of Cursor's Impact on Software Projects
+
+** 链接
+[[https://arxiv.org/abs/2511.04427][https://arxiv.org/abs/2511.04427]]
+
+** 摘要
+Large language models (LLMs) have demonstrated the promise to revolutionize the field of software engineering. Among other things, LLM agents are rapidly gaining momentum in their application to software development, with practitioners claiming a multifold productivity increase after adoption. Yet, empirical evidence is lacking around these claims. In this paper, we estimate the causal effect of adopting a widely popular LLM agent assistant, namely Cursor, on development velocity and software quality. The estimation is enabled by a state-of-the-art difference-in-differences design comparing Cursor-adopting GitHub projects with a matched control group of similar GitHub projects that do not use Cursor. We find that the adoption of Cursor leads to a significant, large, but transient increase in project-level development velocity, along with a significant and persistent increase in static analysis warnings and code complexity. Further panel generalized method of moments estimation reveals that the increase in static analysis warnings and code complexity acts as a major factor causing long-term velocity slowdown. Our study carries implications for software engineering practitioners, LLM agent assistant designers, and researchers.
+
+** 作者
+Hao He, Courtney Miller, Shyam Agarwal, Christian K\"astner, Bogdan Vasilescu
+
+** 分类
+cs.SE, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.04427
+- 公告类型: replace-cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 41: Explainable Cross-Disease Reasoning for Cardiovascular Risk Assessment from LDCT [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.06625
+:ID: oai:arXiv.org:2511.06625v2
+:ARXIV_ID: 2511.06625
+:CATEGORIES: cs.CV, cs.AI, cs.LG
+:END:
+
+** 标题
+Explainable Cross-Disease Reasoning for Cardiovascular Risk Assessment from LDCT
+
+** 链接
+[[https://arxiv.org/abs/2511.06625][https://arxiv.org/abs/2511.06625]]
+
+** 摘要
+Low-dose chest computed tomography (LDCT) inherently captures both pulmonary and cardiac structures, offering a unique opportunity for joint assessment of lung and cardiovascular health. However, most existing approaches treat these domains as independent tasks, overlooking their physiological interplay and shared imaging biomarkers. We propose an Explainable Cross-Disease Reasoning Framework that enables interpretable cardiopulmonary risk assessment from a single LDCT scan. The framework introduces an agentic reasoning process that emulates clinical diagnostic thinking-first perceiving pulmonary findings, then reasoning through established medical knowledge, and finally deriving a cardiovascular judgment with explanatory rationale. It integrates three synergistic components: a pulmonary perception module that summarizes lung abnormalities, a knowledge-guided reasoning module that infers their cardiovascular implications, and a cardiac representation module that encodes structural biomarkers. Their outputs are fused to produce a holistic cardiovascular risk prediction that is both accurate and physiologically grounded. Experiments on the NLST cohort demonstrate that the proposed framework achieves state-of-the-art performance for CVD screening and mortality prediction, outperforming single-disease and purely image-based baselines. Beyond quantitative gains, the framework provides human-verifiable reasoning that aligns with cardiological understanding, revealing coherent links between pulmonary abnormalities and cardiac stress mechanisms. Overall, this work establishes a unified and explainable paradigm for cardiovascular analysis from LDCT, bridging the gap between image-based prediction and mechanism-based medical interpretation.
+
+** 作者
+Yifei Zhang, Jiashuo Zhang, Mojtaba Safari, Xiaofeng Yang, Liang Zhao
+
+** 分类
+cs.CV, cs.AI, cs.LG
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.06625
+- 公告类型: replace-cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 42: PAN: A World Model for General, Interactable, and Long-Horizon World Simulation [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.09057
+:ID: oai:arXiv.org:2511.09057v2
+:ARXIV_ID: 2511.09057
+:CATEGORIES: cs.CV, cs.AI, cs.CL, cs.LG
+:END:
+
+** 标题
+PAN: A World Model for General, Interactable, and Long-Horizon World Simulation
+
+** 链接
+[[https://arxiv.org/abs/2511.09057][https://arxiv.org/abs/2511.09057]]
+
+** 摘要
+A world model enables an intelligent agent to imagine, predict, and reason about how the world evolves in response to its actions, and accordingly to plan and strategize. While recent video generation models produce realistic visual sequences, they typically operate in the prompt-to-full-video manner without causal control, interactivity, or long-horizon consistency required for purposeful reasoning. Existing world modeling efforts, on the other hand, often focus on restricted domains (e.g., physical, game, or 3D-scene dynamics) with limited depth and controllability, and struggle to generalize across diverse environments and interaction formats. In this work, we introduce PAN, a general, interactable, and long-horizon world model that predicts future world states through high-quality video simulation conditioned on history and natural language actions. PAN employs the Generative Latent Prediction (GLP) architecture that combines an autoregressive latent dynamics backbone based on a large language model (LLM), which grounds simulation in extensive text-based knowledge and enables conditioning on language-specified actions, with a video diffusion decoder that reconstructs perceptually detailed and temporally coherent visual observations, to achieve a unification between latent space reasoning (imagination) and realizable world dynamics (reality). Trained on large-scale video-action pairs spanning diverse domains, PAN supports open-domain, action-conditioned simulation with coherent, long-term dynamics. Extensive experiments show that PAN achieves strong performance in action-conditioned world simulation, long-horizon forecasting, and simulative reasoning compared to other video generators and world models, taking a step towards general world models that enable predictive simulation of future world states for reasoning and acting.
+
+** 作者
+PAN Team, Jiannan Xiang, Yi Gu, Zihan Liu, Zeyu Feng, Qiyue Gao, Yiyan Hu, Benhao Huang, Guangyi Liu, Yichi Yang, Kun Zhou, Davit Abrahamyan, Arif Ahmad, Ganesh Bannur, Junrong Chen, Kimi Chen, Mingkai Deng, Ruobing Han, Xinqi Huang, Haoqiang Kang, Zheqi Li, Enze Ma, Hector Ren, Yashowardhan Shinde, Rohan Shingre, Ramsundar Tanikella, Kaiming Tao, Dequan Yang, Xinle Yu, Cong Zeng, Binglin Zhou, Zhengzhong Liu, Zhiting Hu, Eric P. Xing
+
+** 分类
+cs.CV, cs.AI, cs.CL, cs.LG
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.09057
+- 公告类型: replace-cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---
+
+* 条目 43: Enhancing PIBT via Multi-Action Operations [2025-11-14T05:00:00]
+:PROPERTIES:
+:URL: https://arxiv.org/abs/2511.09193
+:ID: oai:arXiv.org:2511.09193v2
+:ARXIV_ID: 2511.09193
+:CATEGORIES: cs.MA, cs.AI
+:END:
+
+** 标题
+Enhancing PIBT via Multi-Action Operations
+
+** 链接
+[[https://arxiv.org/abs/2511.09193][https://arxiv.org/abs/2511.09193]]
+
+** 摘要
+PIBT is a rule-based Multi-Agent Path Finding (MAPF) solver, widely used as a low-level planner or action sampler in many state-of-the-art approaches. Its primary advantage lies in its exceptional speed, enabling action selection for thousands of agents within milliseconds by considering only the immediate next timestep. However, this short-horizon design leads to poor performance in scenarios where agents have orientation and must perform time-consuming rotation actions. In this work, we present an enhanced version of PIBT that addresses this limitation by incorporating multi-action operations. We detail the modifications introduced to improve PIBT's performance while preserving its hallmark efficiency. Furthermore, we demonstrate how our method, when combined with graph-guidance technique and large neighborhood search optimization, achieves state-of-the-art performance in the online LMAPF-T setting.
+
+** 作者
+Egor Yukhnevich, Anton Andreychuk
+
+** 分类
+cs.MA, cs.AI
+
+** 元数据
+- 发布时间: 2025-11-14T05:00:00
+- ArXiv ID: 2511.09193
+- 公告类型: replace-cross
+- 爬取时间: 2025-11-14 21:46:47
+
+---

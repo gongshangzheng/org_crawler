@@ -20,12 +20,18 @@ class SiteConfig:
     
     @classmethod
     def from_dict(cls, data: dict) -> 'SiteConfig':
-        """从字典创建 SiteConfig"""
+        """
+        从字典创建 SiteConfig
+        
+        注意：update_frequency 应该在调用此方法前已经处理（规则文件优先级 > 全局配置）
+        """
+        # update_frequency 应该在 load_rule_config 中已经设置好了
+        # 这里使用 get 是为了向后兼容，但通常不应该走到默认值
         return cls(
             name=data['name'],
             url=data['url'],
             crawl_type=data['crawl_type'],
-            update_frequency=data.get('update_frequency', 120),  # 默认 120 分钟
+            update_frequency=data.get('update_frequency', 120),  # 默认 120 分钟（通常不会用到）
             storage_path=data['storage_path'],
             enabled=data.get('enabled', True),
             keywords=data.get('keywords', []),
