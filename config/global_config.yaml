@@ -1,0 +1,15 @@
+storage:
+  base_path: "data"
+  date_format: "%Y-%m-%d"
+  output_format: "org"  # 输出格式：'org' 或 'json' 或 'both'
+  
+logging:
+  level: "INFO"
+  file: "logs/crawler.log"
+  max_size_mb: 10
+  
+scheduler:
+  check_interval: 60  # 检查任务间隔（秒）
+  max_workers: 5      # 最大并发数
+  default_update_frequency: 120  # 默认更新频率（分钟），如果规则文件中未指定则使用此值
+

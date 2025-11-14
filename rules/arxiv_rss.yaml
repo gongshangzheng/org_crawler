@@ -1,0 +1,30 @@
+# ArXiv RSS 爬取规则配置
+# 用于爬取 AI 领域的 agent 相关论文
+
+name: "arxiv"
+url: "http://export.arxiv.org/rss/cs.AI"  # 计算机科学-人工智能分类的 RSS
+crawl_type: "rss"
+# update_frequency: 120  # 更新频率（分钟），如果未指定则使用全局配置的默认值
+storage_path: "arxiv"
+enabled: true
+
+# 关键词过滤：只保留包含这些关键词的论文
+keywords:
+  - "agent"
+  - "agents"
+  - "multi-agent"
+  - "multiagent"
+
+# 自定义配置
+custom_config:
+  # RSS 爬虫的额外配置
+  max_items: 100  # 最大条目数（可选，用于限制）
+  include_abstract: true  # 包含摘要
+  
+  # 领域配置（可以扩展支持多个分类）
+  categories:
+    - "cs.AI"  # 人工智能
+    # 可以添加其他分类，如：
+    # - "cs.LG"  # 机器学习
+    # - "cs.CV"  # 计算机视觉
+
