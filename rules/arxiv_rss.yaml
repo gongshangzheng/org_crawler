@@ -65,8 +65,8 @@ custom_config:
     # Exporter类名：BaseOrgExporter, ArXivOrgExporter
     class: "ArXivOrgExporter"
     
-    # 标题模板，支持变量：{title}, {link}, {published_time}, {crawl_time}, {index}, {arxiv_id}, {authors}, {first_author}, {categories}
-    # 示例：* [[{link}][{title}]] 或 * {title} [{published_time}]
+    # 标题模板，支持变量：{title}, {link}, {published_time}, {crawl_time}, {index}, {arxiv_id}, {authors}, {first_author}, {categories}, {output_path}, {output_file}, {output_dir}, {output_path_rel}
+    # 示例：* [[{link}][{title}]] 或 * {title} [{published_time}] 或 * [[{output_path_rel}][{title}]]
     title_template: "* [[{link}][{first_author} --- {title}]]"
     
     # 路径配置
@@ -89,16 +89,16 @@ custom_config:
       
       # 表头列表（使用变量格式，定义表格的列）
       table_headers:
+        - "{link}"
         - "{title}"
         - "{first_author}"
-        - "{link}"
       
       # 单元格模板（定义每个变量对应的内容模板）
-      # key为变量名（不含{}），支持变量：{title}, {link}, {first_author}, {authors}, {published_time}, {arxiv_id}, {categories}
+      # key为变量名（不含{}），支持变量：{title}, {link}, {first_author}, {authors}, {published_time}, {arxiv_id}, {categories}, {output_path}, {output_file}, {output_dir}, {output_path_rel}
       cell_templates:
-        title: "{title}"
-        first_author: "{first_author}"
         link: "[[{link}][查看]]"
+        title: "[[{output_path_rel}][{title}]]"
+        first_author: "{first_author}"
       
       # 表头标签映射（将变量名转换为中文显示名称，可选）
       # key为变量名（不含{}），value为在索引文件中显示的中文名称

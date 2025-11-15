@@ -2,7 +2,7 @@
 #+DATE: 2025-11-15
 #+AUTHOR: Org Crawler
 #+CATEGORY: diffusion
-#+CREATED: 2025-11-15 17:30:55
+#+CREATED: 2025-11-15 18:19:30
 
 * [[https://arxiv.org/abs/2511.10101][Takehiro Ishikawa --- Balancing Centralized Learning and Distributed Self-Organization: A Hybrid Model for Embodied Morphogenesis]]
 :PROPERTIES:
@@ -12,7 +12,7 @@
 :CATEGORIES: cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: new
-:CRAWL_TIME: 2025-11-15 17:30:55
+:CRAWL_TIME: 2025-11-15 18:19:30
 
 :END:
 
@@ -32,7 +32,7 @@ Takehiro Ishikawa
 diffusion
 
 
-* [[https://arxiv.org/abs/2511.09568][Peining Zhang, Jinbo Bi, Minghu Song --- VEDA: 3D Molecular Generation via Variance-Exploding Diffusion with Annealing]]
+* [[https://arxiv.org/abs/2511.09568][Peining Zhang --- VEDA: 3D Molecular Generation via Variance-Exploding Diffusion with Annealing]]
 :PROPERTIES:
 :URL: https://arxiv.org/abs/2511.09568
 :ID: oai:arXiv.org:2511.09568v1
@@ -40,7 +40,7 @@ diffusion
 :CATEGORIES: physics.chem-ph, cs.AI, cs.CV
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 17:30:55
+:CRAWL_TIME: 2025-11-15 18:19:30
 
 :END:
 
@@ -60,7 +60,7 @@ Peining Zhang, Jinbo Bi, Minghu Song
 diffusion model, diffusion, diffusion models
 
 
-* [[https://arxiv.org/abs/2511.09578][Hadi Keramati, Morteza Sadeghi, Rajeev K. Jaiman --- HeatGen: A Guided Diffusion Framework for Multiphysics Heat Sink Design Optimization]]
+* [[https://arxiv.org/abs/2511.09578][Hadi Keramati --- HeatGen: A Guided Diffusion Framework for Multiphysics Heat Sink Design Optimization]]
 :PROPERTIES:
 :URL: https://arxiv.org/abs/2511.09578
 :ID: oai:arXiv.org:2511.09578v1
@@ -68,7 +68,7 @@ diffusion model, diffusion, diffusion models
 :CATEGORIES: cs.LG, cs.AI, physics.comp-ph
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 17:30:55
+:CRAWL_TIME: 2025-11-15 18:19:30
 
 :END:
 
@@ -88,7 +88,7 @@ Hadi Keramati, Morteza Sadeghi, Rajeev K. Jaiman
 diffusion model, diffusion
 
 
-* [[https://arxiv.org/abs/2511.09895][Xiaoda Wang, Kaiqiao Han, Yuhao Xu, Xiao Luo, Yizhou Sun, Wei Wang, Carl Yang --- Simulator and Experience Enhanced Diffusion Model for Comprehensive ECG Generation]]
+* [[https://arxiv.org/abs/2511.09895][Xiaoda Wang --- Simulator and Experience Enhanced Diffusion Model for Comprehensive ECG Generation]]
 :PROPERTIES:
 :URL: https://arxiv.org/abs/2511.09895
 :ID: oai:arXiv.org:2511.09895v1
@@ -96,7 +96,7 @@ diffusion model, diffusion
 :CATEGORIES: cs.LG, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 17:30:55
+:CRAWL_TIME: 2025-11-15 18:19:30
 
 :END:
 
@@ -116,7 +116,7 @@ Xiaoda Wang, Kaiqiao Han, Yuhao Xu, Xiao Luo, Yizhou Sun, Wei Wang, Carl Yang
 diffusion model, diffusion, diffusion models
 
 
-* [[https://arxiv.org/abs/2511.09962][Ziqing Yin, Xuanjing Chen, Xi Zhang --- AI-Integrated Decision Support System for Real-Time Market Growth Forecasting and Multi-Source Content Diffusion Analytics]]
+* [[https://arxiv.org/abs/2511.09962][Ziqing Yin --- AI-Integrated Decision Support System for Real-Time Market Growth Forecasting and Multi-Source Content Diffusion Analytics]]
 :PROPERTIES:
 :URL: https://arxiv.org/abs/2511.09962
 :ID: oai:arXiv.org:2511.09962v1
@@ -124,7 +124,7 @@ diffusion model, diffusion, diffusion models
 :CATEGORIES: cs.LG, cs.AI, cs.MM
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 17:30:55
+:CRAWL_TIME: 2025-11-15 18:19:30
 
 :END:
 
@@ -144,7 +144,7 @@ Ziqing Yin, Xuanjing Chen, Xi Zhang
 diffusion
 
 
-* [[https://arxiv.org/abs/2511.10087][Haidong Huang, Haiyue Zhu. Jiayu Song, Xixin Zhao, Yaohua Zhou, Jiayi Zhang, Yuze Zhai, Xiaocong Li --- Opinion: Towards Unified Expressive Policy Optimization for Robust Robot Learning]]
+* [[https://arxiv.org/abs/2511.10087][Haidong Huang --- Opinion: Towards Unified Expressive Policy Optimization for Robust Robot Learning]]
 :PROPERTIES:
 :URL: https://arxiv.org/abs/2511.10087
 :ID: oai:arXiv.org:2511.10087v1
@@ -152,7 +152,7 @@ diffusion
 :CATEGORIES: cs.RO, cs.AI, cs.LG
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 17:30:55
+:CRAWL_TIME: 2025-11-15 18:19:30
 
 :END:
 
@@ -172,7 +172,7 @@ Haidong Huang, Haiyue Zhu. Jiayu Song, Xixin Zhao, Yaohua Zhou, Jiayi Zhang, Yuz
 diffusion
 
 
-* [[https://arxiv.org/abs/2511.10154][Hao Zou, Runqing Zhang, Xue Zhou, Jianxiao Zou --- GEA: Generation-Enhanced Alignment for Text-to-Image Person Retrieval]]
+* [[https://arxiv.org/abs/2511.10154][Hao Zou --- GEA: Generation-Enhanced Alignment for Text-to-Image Person Retrieval]]
 :PROPERTIES:
 :URL: https://arxiv.org/abs/2511.10154
 :ID: oai:arXiv.org:2511.10154v1
@@ -180,7 +180,7 @@ diffusion
 :CATEGORIES: cs.CV, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 17:30:55
+:CRAWL_TIME: 2025-11-15 18:19:30
 
 :END:
 
@@ -200,7 +200,7 @@ Hao Zou, Runqing Zhang, Xue Zhou, Jianxiao Zou
 diffusion
 
 
-* [[https://arxiv.org/abs/2511.10208][Cheng Kevin Qu, Andrew Ly, Pulin Gong --- Fractional neural attention for efficient multiscale sequence processing]]
+* [[https://arxiv.org/abs/2511.10208][Cheng Kevin Qu --- Fractional neural attention for efficient multiscale sequence processing]]
 :PROPERTIES:
 :URL: https://arxiv.org/abs/2511.10208
 :ID: oai:arXiv.org:2511.10208v1
@@ -208,7 +208,7 @@ diffusion
 :CATEGORIES: cs.LG, cs.AI, math.DS, math.PR, physics.bio-ph
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 17:30:55
+:CRAWL_TIME: 2025-11-15 18:19:30
 
 :END:
 
@@ -228,7 +228,7 @@ Cheng Kevin Qu, Andrew Ly, Pulin Gong
 diffusion
 
 
-* [[https://arxiv.org/abs/2511.10384][Raj Gaurav Maurya, Vaibhav Shukla, Raj Abhijit Dandekar, Rajat Dandekar, Sreedath Panat --- Simulating Misinformation Propagation in Social Networks using Large Language Models]]
+* [[https://arxiv.org/abs/2511.10384][Raj Gaurav Maurya --- Simulating Misinformation Propagation in Social Networks using Large Language Models]]
 :PROPERTIES:
 :URL: https://arxiv.org/abs/2511.10384
 :ID: oai:arXiv.org:2511.10384v1
@@ -236,7 +236,7 @@ diffusion
 :CATEGORIES: cs.SI, cs.AI, cs.CL, cs.CY
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 17:30:55
+:CRAWL_TIME: 2025-11-15 18:19:30
 
 :END:
 
@@ -253,10 +253,10 @@ Misinformation on social media thrives on surprise, emotion, and identity-driven
 Raj Gaurav Maurya, Vaibhav Shukla, Raj Abhijit Dandekar, Rajat Dandekar, Sreedath Panat
 
 ** 关键词
-agents, agent, diffusion
+diffusion, agent, agents
 
 
-* [[https://arxiv.org/abs/2511.10403][Mingxing Peng, Ruoyu Yao, Xusen Guo, Jun Ma --- nuPlan-R: A Closed-Loop Planning Benchmark for Autonomous Driving via Reactive Multi-Agent Simulation]]
+* [[https://arxiv.org/abs/2511.10403][Mingxing Peng --- nuPlan-R: A Closed-Loop Planning Benchmark for Autonomous Driving via Reactive Multi-Agent Simulation]]
 :PROPERTIES:
 :URL: https://arxiv.org/abs/2511.10403
 :ID: oai:arXiv.org:2511.10403v1
@@ -264,7 +264,7 @@ agents, agent, diffusion
 :CATEGORIES: cs.RO, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 17:30:55
+:CRAWL_TIME: 2025-11-15 18:19:30
 
 :END:
 
@@ -281,10 +281,10 @@ Recent advances in closed-loop planning benchmarks have significantly improved t
 Mingxing Peng, Ruoyu Yao, Xusen Guo, Jun Ma
 
 ** 关键词
-agents, agent, diffusion, multi-agent
+diffusion, agent, agents, multi-agent
 
 
-* [[https://arxiv.org/abs/2511.10555][Huijie Liu, Shuhao Cui, Haoxiang Cao, Shuai Ma, Kai Wu, Guoliang Kang --- A Style is Worth One Code: Unlocking Code-to-Style Image Generation with Discrete Style Space]]
+* [[https://arxiv.org/abs/2511.10555][Huijie Liu --- A Style is Worth One Code: Unlocking Code-to-Style Image Generation with Discrete Style Space]]
 :PROPERTIES:
 :URL: https://arxiv.org/abs/2511.10555
 :ID: oai:arXiv.org:2511.10555v1
@@ -292,7 +292,7 @@ agents, agent, diffusion, multi-agent
 :CATEGORIES: cs.CV, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 17:30:55
+:CRAWL_TIME: 2025-11-15 18:19:30
 
 :END:
 
@@ -312,7 +312,7 @@ Huijie Liu, Shuhao Cui, Haoxiang Cao, Shuai Ma, Kai Wu, Guoliang Kang
 diffusion model, diffusion
 
 
-* [[https://arxiv.org/abs/2509.05314][Ying Li, Xiaobao Wei, Xiaowei Chi, Yuming Li, Zhongyu Zhao, Hao Wang, Ningning Ma, Ming Lu, Sirui Han, Shanghang Zhang --- ManipDreamer3D : Synthesizing Plausible Robotic Manipulation Video with Occupancy-aware 3D Trajectory]]
+* [[https://arxiv.org/abs/2509.05314][Ying Li --- ManipDreamer3D : Synthesizing Plausible Robotic Manipulation Video with Occupancy-aware 3D Trajectory]]
 :PROPERTIES:
 :URL: https://arxiv.org/abs/2509.05314
 :ID: oai:arXiv.org:2509.05314v2
@@ -320,7 +320,7 @@ diffusion model, diffusion
 :CATEGORIES: cs.RO, cs.AI, cs.CV
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 17:30:55
+:CRAWL_TIME: 2025-11-15 18:19:30
 
 :END:
 
@@ -340,7 +340,7 @@ Ying Li, Xiaobao Wei, Xiaowei Chi, Yuming Li, Zhongyu Zhao, Hao Wang, Ningning M
 diffusion model, diffusion, diffusion models
 
 
-* [[https://arxiv.org/abs/2511.09057][PAN Team, Jiannan Xiang, Yi Gu, Zihan Liu, Zeyu Feng, Qiyue Gao, Yiyan Hu, Benhao Huang, Guangyi Liu, Yichi Yang, Kun Zhou, Davit Abrahamyan, Arif Ahmad, Ganesh Bannur, Junrong Chen, Kimi Chen, Mingkai Deng, Ruobing Han, Xinqi Huang, Haoqiang Kang, Zheqi Li, Enze Ma, Hector Ren, Yashowardhan Shinde, Rohan Shingre, Ramsundar Tanikella, Kaiming Tao, Dequan Yang, Xinle Yu, Cong Zeng, Binglin Zhou, Zhengzhong Liu, Zhiting Hu, Eric P. Xing --- PAN: A World Model for General, Interactable, and Long-Horizon World Simulation]]
+* [[https://arxiv.org/abs/2511.09057][PAN Team --- PAN: A World Model for General, Interactable, and Long-Horizon World Simulation]]
 :PROPERTIES:
 :URL: https://arxiv.org/abs/2511.09057
 :ID: oai:arXiv.org:2511.09057v2
@@ -348,7 +348,7 @@ diffusion model, diffusion, diffusion models
 :CATEGORIES: cs.CV, cs.AI, cs.CL, cs.LG
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 17:30:55
+:CRAWL_TIME: 2025-11-15 18:19:30
 
 :END:
 
@@ -365,5 +365,5 @@ A world model enables an intelligent agent to imagine, predict, and reason about
 PAN Team, Jiannan Xiang, Yi Gu, Zihan Liu, Zeyu Feng, Qiyue Gao, Yiyan Hu, Benhao Huang, Guangyi Liu, Yichi Yang, Kun Zhou, Davit Abrahamyan, Arif Ahmad, Ganesh Bannur, Junrong Chen, Kimi Chen, Mingkai Deng, Ruobing Han, Xinqi Huang, Haoqiang Kang, Zheqi Li, Enze Ma, Hector Ren, Yashowardhan Shinde, Rohan Shingre, Ramsundar Tanikella, Kaiming Tao, Dequan Yang, Xinle Yu, Cong Zeng, Binglin Zhou, Zhengzhong Liu, Zhiting Hu, Eric P. Xing
 
 ** 关键词
-agent, diffusion
+diffusion, agent
 

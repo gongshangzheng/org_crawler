@@ -38,6 +38,10 @@ class IndexManager:
             "published_time": "{published_time}",
             "arxiv_id": "{arxiv_id}",
             "categories": "{categories}",
+            "output_path": "{output_path}",
+            "output_file": "{output_file}",
+            "output_dir": "{output_dir}",
+            "output_path_rel": "[[{output_path_rel}][{output_file}]]",
         }
         if cell_templates:
             default_templates.update(cell_templates)
@@ -52,6 +56,10 @@ class IndexManager:
             "published_time": "发布时间",
             "arxiv_id": "ArXiv ID",
             "categories": "分类",
+            "output_path": "输出路径",
+            "output_file": "输出文件",
+            "output_dir": "输出目录",
+            "output_path_rel": "相对路径",
         }
         if header_labels:
             default_labels.update(header_labels)
@@ -62,7 +70,8 @@ class IndexManager:
                     crawl_time: datetime,
                     items: List[Dict],
                     date_file_path: Optional[Path] = None,
-                    categorized_items: Optional[Dict[str, List[Dict]]] = None):
+                    categorized_items: Optional[Dict[str, List[Dict]]] = None,
+                    category_folders: Optional[Dict[str, str]] = None):
         """
         更新索引文件，在文件最前面添加新的更新记录
         
@@ -72,10 +81,11 @@ class IndexManager:
             items: 条目列表（如果提供了categorized_items则忽略此参数）
             date_file_path: 日期文件路径（用于创建链接），如果为None则不创建链接
             categorized_items: 按类别分组的条目字典，格式为 {类别名: [条目列表]}
+            category_folders: 类别文件夹映射，格式为 {类别名: 文件夹路径}
         """
         # 生成新的更新记录
         new_section = self._generate_update_section(
-            site_name, crawl_time, items, date_file_path, categorized_items
+            site_name, crawl_time, items, date_file_path, categorized_items, category_folders
         )
         
         # 读取现有内容
@@ -123,7 +133,8 @@ class IndexManager:
                                  crawl_time: datetime,
                                  items: List[Dict],
                                  date_file_path: Optional[Path] = None,
-                                 categorized_items: Optional[Dict[str, List[Dict]]] = None) -> str:
+                                 categorized_items: Optional[Dict[str, List[Dict]]] = None,
+                                 category_folders: Optional[Dict[str, str]] = None) -> str:
         """
         生成更新记录部分
         
@@ -133,6 +144,7 @@ class IndexManager:
             items: 条目列表（如果提供了categorized_items则忽略）
             date_file_path: 日期文件路径（用于创建链接）
             categorized_items: 按类别分组的条目字典
+            category_folders: 类别文件夹映射
             
         Returns:
             更新记录内容
@@ -164,22 +176,30 @@ class IndexManager:
                 lines.append(f"** {category}")
                 lines.append("")
                 
+                # 计算该类别的输出路径（如果有date_file_path）
+                category_output_path = None
+                if date_file_path:
+                    # 使用 category_folders 获取正确的文件夹名，如果没有则使用类别名
+                    category_folder = category_folders.get(category, category) if category_folders else category
+                    category_output_path = date_file_path.parent / category_folder / date_file_path.name
+                
                 # 生成该类别的表格
-                lines.append(self._generate_table(category_items))
+                lines.append(self._generate_table(category_items, category_output_path))
                 lines.append("")
         else:
             # 没有分类，直接生成表格
-            lines.append(self._generate_table(items))
+            lines.append(self._generate_table(items, date_file_path))
             lines.append("")
         
         return "\n".join(lines)
     
-    def _generate_table(self, items: List[Dict]) -> str:
+    def _generate_table(self, items: List[Dict], output_path: Optional[Path] = None) -> str:
         """
         生成表格内容
         
         Args:
             items: 条目列表
+            output_path: 输出文件路径（可选）
             
         Returns:
             表格内容字符串
@@ -220,7 +240,7 @@ class IndexManager:
                     template = self.cell_templates.get(header, "{title}")
                 
                 # 渲染单元格内容
-                cell_content = self._render_cell(template, item)
+                cell_content = self._render_cell(template, item, output_path)
                 # 转义表格中的特殊字符
                 cell_content = cell_content.replace('|', '\\|')
                 row_cells.append(cell_content)
@@ -230,13 +250,14 @@ class IndexManager:
         
         return "\n".join(lines)
     
-    def _render_cell(self, template: str, item: Dict) -> str:
+    def _render_cell(self, template: str, item: Dict, output_path: Optional[Path] = None) -> str:
         """
         渲染单元格内容
         
         Args:
             template: 模板字符串
             item: 条目字典
+            output_path: 输出文件路径（可选）
             
         Returns:
             渲染后的内容
@@ -252,7 +273,7 @@ class IndexManager:
         
         # 添加作者信息
         authors = item.get('authors', [])
-        # 确保 authors 是列表格式
+        # 确保 authors 是列表格式，并处理嵌套的逗号分隔字符串
         if not isinstance(authors, list):
             if isinstance(authors, str):
                 # 如果是字符串，可能是逗号分隔的，需要分割
@@ -262,6 +283,23 @@ class IndexManager:
                     authors = [authors] if authors.strip() else []
             else:
                 authors = []
+        else:
+            # 如果已经是列表，检查列表中的元素是否包含逗号分隔的字符串
+            expanded_authors = []
+            for author in authors:
+                if isinstance(author, str):
+                    # 如果列表元素是字符串且包含逗号，需要分割
+                    if ',' in author:
+                        expanded_authors.extend([a.strip() for a in author.split(',') if a.strip()])
+                    else:
+                        if author.strip():
+                            expanded_authors.append(author.strip())
+                else:
+                    # 如果不是字符串，转换为字符串
+                    author_str = str(author).strip()
+                    if author_str:
+                        expanded_authors.append(author_str)
+            authors = expanded_authors
         
         if authors and len(authors) > 0:
             variables['authors'] = ', '.join(authors)
@@ -276,6 +314,24 @@ class IndexManager:
             variables['categories'] = ', '.join(categories)
         else:
             variables['categories'] = ''
+        
+        # 添加输出路径信息
+        if output_path:
+            variables['output_path'] = str(output_path)
+            variables['output_file'] = output_path.name
+            variables['output_dir'] = str(output_path.parent)
+            # 相对路径（相对于索引文件所在目录）
+            try:
+                rel_path = output_path.relative_to(self.index_path.parent)
+                variables['output_path_rel'] = './' + str(rel_path)
+            except ValueError:
+                # 如果无法计算相对路径，使用绝对路径
+                variables['output_path_rel'] = str(output_path)
+        else:
+            variables['output_path'] = ''
+            variables['output_file'] = ''
+            variables['output_dir'] = ''
+            variables['output_path_rel'] = ''
         
         # 渲染模板
         try:

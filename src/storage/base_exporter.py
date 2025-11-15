@@ -39,7 +39,7 @@ class BaseOrgExporter(ABC):
         self.category_folders = category_folders or {}
         self.title_template = title_template
     
-    def _render_title(self, item: Dict, index: int, crawl_time: datetime) -> str:
+    def _render_title(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> str:
         """
         渲染标题模板
         
@@ -47,6 +47,7 @@ class BaseOrgExporter(ABC):
             item: 条目字典
             index: 条目索引
             crawl_time: 爬取时间
+            output_path: 输出文件路径（可选）
             
         Returns:
             渲染后的标题字符串
@@ -70,7 +71,7 @@ class BaseOrgExporter(ABC):
         
         # 添加作者信息（如果有）
         authors = item.get('authors', [])
-        # 确保 authors 是列表格式
+        # 确保 authors 是列表格式，并处理嵌套的逗号分隔字符串
         if not isinstance(authors, list):
             if isinstance(authors, str):
                 # 如果是字符串，可能是逗号分隔的，需要分割
@@ -80,6 +81,23 @@ class BaseOrgExporter(ABC):
                     authors = [authors] if authors.strip() else []
             else:
                 authors = []
+        else:
+            # 如果已经是列表，检查列表中的元素是否包含逗号分隔的字符串
+            expanded_authors = []
+            for author in authors:
+                if isinstance(author, str):
+                    # 如果列表元素是字符串且包含逗号，需要分割
+                    if ',' in author:
+                        expanded_authors.extend([a.strip() for a in author.split(',') if a.strip()])
+                    else:
+                        if author.strip():
+                            expanded_authors.append(author.strip())
+                else:
+                    # 如果不是字符串，转换为字符串
+                    author_str = str(author).strip()
+                    if author_str:
+                        expanded_authors.append(author_str)
+            authors = expanded_authors
         
         if authors and len(authors) > 0:
             variables['authors'] = ', '.join(authors)
@@ -94,6 +112,24 @@ class BaseOrgExporter(ABC):
             variables['categories'] = ', '.join(categories)
         else:
             variables['categories'] = ''
+        
+        # 添加输出路径信息
+        if output_path:
+            variables['output_path'] = str(output_path)
+            variables['output_file'] = output_path.name
+            variables['output_dir'] = str(output_path.parent)
+            # 相对路径（相对于当前工作目录）
+            try:
+                cwd = Path.cwd()
+                rel_path = output_path.relative_to(cwd)
+                variables['output_path_rel'] = './' + str(rel_path)
+            except ValueError:
+                variables['output_path_rel'] = str(output_path)
+        else:
+            variables['output_path'] = ''
+            variables['output_file'] = ''
+            variables['output_dir'] = ''
+            variables['output_path_rel'] = ''
         
         # 渲染模板
         try:
@@ -146,7 +182,7 @@ class BaseOrgExporter(ABC):
                 )
                 
                 # 生成并保存该类别的org内容
-                org_content = self._generate_org_content(category_result, category)
+                org_content = self._generate_org_content(category_result, category, category_path)
                 
                 # 直接覆盖文件（不再合并）
                 category_path.write_text(org_content, encoding='utf-8')
@@ -154,12 +190,12 @@ class BaseOrgExporter(ABC):
             # 未启用分类，使用原有逻辑
             output_path.parent.mkdir(parents=True, exist_ok=True)
             
-            org_content = self._generate_org_content(result)
+            org_content = self._generate_org_content(result, None, output_path)
             
             # 直接覆盖文件（不再合并）
             output_path.write_text(org_content, encoding='utf-8')
     
-    def _generate_org_content(self, result: CrawlResult, category: Optional[str] = None) -> str:
+    def _generate_org_content(self, result: CrawlResult, category: Optional[str] = None, output_path: Optional[Path] = None) -> str:
         """
         生成 org-mode 内容
         
@@ -197,12 +233,12 @@ class BaseOrgExporter(ABC):
         
         # 添加条目
         for idx, item in enumerate(result.items, 1):
-            lines.extend(self._format_item(item, idx, result.crawl_time))
+            lines.extend(self._format_item(item, idx, result.crawl_time, output_path))
             lines.append("")  # 条目之间的空行
         
         return "\n".join(lines)
     
-    def _format_item(self, item: Dict, index: int, crawl_time: datetime) -> List[str]:
+    def _format_item(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
         """
         格式化单个条目（子类可以重写）
         
@@ -210,31 +246,32 @@ class BaseOrgExporter(ABC):
             item: 条目字典
             index: 条目索引
             crawl_time: 爬取时间
+            output_path: 输出文件路径（可选）
             
         Returns:
             格式化的行列表
         """
         # 根据格式类型选择格式化方法
         if self.format_type == self.FORMAT_COMPACT:
-            return self._format_item_compact(item, index, crawl_time)
+            return self._format_item_compact(item, index, crawl_time, output_path)
         elif self.format_type == self.FORMAT_CARD:
-            return self._format_item_card(item, index, crawl_time)
+            return self._format_item_card(item, index, crawl_time, output_path)
         elif self.format_type == self.FORMAT_MINIMAL:
-            return self._format_item_minimal(item, index, crawl_time)
+            return self._format_item_minimal(item, index, crawl_time, output_path)
         else:  # FORMAT_DETAILED (默认)
-            return self._format_item_detailed(item, index, crawl_time)
+            return self._format_item_detailed(item, index, crawl_time, output_path)
     
     @abstractmethod
-    def _format_item_detailed(self, item: Dict, index: int, crawl_time: datetime) -> List[str]:
+    def _format_item_detailed(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
         """详细格式：包含所有信息（子类必须实现）"""
         pass
     
-    def _format_item_compact(self, item: Dict, index: int, crawl_time: datetime) -> List[str]:
+    def _format_item_compact(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
         """紧凑格式：只包含关键信息"""
         lines = []
         
         # 使用标题模板
-        lines.append(self._render_title(item, index, crawl_time))
+        lines.append(self._render_title(item, index, crawl_time, output_path))
         
         # Properties（简化版）
         lines.append(":PROPERTIES:")
@@ -261,12 +298,12 @@ class BaseOrgExporter(ABC):
         
         return lines
     
-    def _format_item_card(self, item: Dict, index: int, crawl_time: datetime) -> List[str]:
+    def _format_item_card(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
         """卡片格式：类似卡片布局"""
         lines = []
         
         # 使用标题模板
-        lines.append(self._render_title(item, index, crawl_time))
+        lines.append(self._render_title(item, index, crawl_time, output_path))
         lines.append("")
         
         # 卡片信息（使用表格格式）
@@ -301,12 +338,12 @@ class BaseOrgExporter(ABC):
         
         return lines
     
-    def _format_item_minimal(self, item: Dict, index: int, crawl_time: datetime) -> List[str]:
+    def _format_item_minimal(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
         """极简格式：最少信息"""
         lines = []
         
         # 使用标题模板
-        lines.append(self._render_title(item, index, crawl_time))
+        lines.append(self._render_title(item, index, crawl_time, output_path))
         lines.append("")
         
         return lines

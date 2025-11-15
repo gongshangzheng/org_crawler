@@ -201,7 +201,8 @@ def main():
                     crawl_time=result.crawl_time,
                     items=result.items,
                     date_file_path=org_path,
-                    categorized_items=categorized_items
+                    categorized_items=categorized_items,
+                    category_folders=org_exporter.category_folders
                 )
                 logger.info(f"已更新索引文件: {index_manager.index_path}")
             

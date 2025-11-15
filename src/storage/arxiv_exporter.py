@@ -1,7 +1,8 @@
 """ArXiv 专用的 Org-mode 格式导出器"""
 
 from datetime import datetime
-from typing import List, Dict
+from typing import List, Dict, Optional
+from pathlib import Path
 
 from .base_exporter import BaseOrgExporter
 
@@ -9,12 +10,12 @@ from .base_exporter import BaseOrgExporter
 class ArXivOrgExporter(BaseOrgExporter):
     """ArXiv 专用的 Org-mode 格式导出器"""
     
-    def _format_item_detailed(self, item: Dict, index: int, crawl_time: datetime) -> List[str]:
+    def _format_item_detailed(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
         """详细格式：包含所有信息（ArXiv 特定）"""
         lines = []
         
         # 使用标题模板
-        lines.append(self._render_title(item, index, crawl_time))
+        lines.append(self._render_title(item, index, crawl_time, output_path))
         
         # Properties
         lines.append(":PROPERTIES:")

@@ -1,22 +1,22 @@
 """Org-mode 格式导出器（向后兼容）"""
 
 from datetime import datetime
-from typing import List, Dict
+from typing import List, Dict, Optional
+from pathlib import Path
 
 from .base_exporter import BaseOrgExporter
 from ..utils.keyword_classifier import KeywordClassifier
-from typing import Optional
 
 
 class OrgExporter(BaseOrgExporter):
     """Org-mode 格式导出器（向后兼容，继承自BaseOrgExporter）"""
     
-    def _format_item_detailed(self, item: Dict, index: int, crawl_time: datetime) -> List[str]:
+    def _format_item_detailed(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
         """详细格式：包含所有信息（默认实现）"""
         lines = []
         
         # 使用标题模板
-        lines.append(self._render_title(item, index, crawl_time))
+        lines.append(self._render_title(item, index, crawl_time, output_path))
         
         # Properties
         lines.append(":PROPERTIES:")
