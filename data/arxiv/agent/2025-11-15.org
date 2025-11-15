@@ -2,7 +2,8 @@
 #+DATE: 2025-11-15
 #+AUTHOR: Org Crawler
 #+CATEGORY: agent
-#+CREATED: 2025-11-15 18:19:30
+#+CREATED: 2025-11-15 18:26:45
+#+startup: overview
 
 * [[https://arxiv.org/abs/2511.09572][Tommaso Castellani --- SynthTools: A Framework for Scaling Synthetic Tools for Agent Development]]
 :PROPERTIES:
@@ -12,7 +13,7 @@
 :CATEGORIES: cs.AI, cs.LG, cs.SE
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: new
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -29,7 +30,7 @@ AI agents increasingly rely on external tools to solve complex, long-horizon tas
 Tommaso Castellani, Naimeng Ye, Daksh Mittal, Thomson Yen, Hongseok Namkoong
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2511.09710][Sarath Shekkizhar --- Echoing: Identity Failures when LLM Agents Talk to Each Other]]
@@ -40,7 +41,7 @@ agent, agents
 :CATEGORIES: cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: new
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -57,7 +58,7 @@ As large language model (LLM) based agents interact autonomously with one anothe
 Sarath Shekkizhar, Romain Cosentino, Adam Earle, Silvio Savarese
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2511.09804][Eric Xie --- SlideBot: A Multi-Agent Framework for Generating Informative, Reliable, Multi-Modal Presentations]]
@@ -68,7 +69,7 @@ agent, agents
 :CATEGORIES: cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: new
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -85,7 +86,7 @@ Large Language Models (LLMs) have shown immense potential in education, automati
 Eric Xie, Danielle Waterfield, Michael Kennedy, Aidong Zhang
 
 ** 关键词
-agent, agents, multi-agent
+multi-agent, agents, agent
 
 
 * [[https://arxiv.org/abs/2511.09904][Francis Rhys Ward --- CTRL-ALT-DECEIT: Sabotage Evaluations for Automated AI R&D]]
@@ -96,7 +97,7 @@ agent, agents, multi-agent
 :CATEGORIES: cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: new
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -113,7 +114,7 @@ AI systems are increasingly able to autonomously conduct realistic software engi
 Francis Rhys Ward, Teun van der Weij, Hanna G\'abor, Sam Martin, Raja Mehta Moreno, Harel Lidar, Louis Makower, Thomas Jodrell, Lauren Robson
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2511.09993][Zhongjian Miao --- SPAN: Benchmarking and Improving Cross-Calendar Temporal Reasoning of Large Language Models]]
@@ -124,7 +125,7 @@ agent, agents
 :CATEGORIES: cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: new
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -152,7 +153,7 @@ agent
 :CATEGORIES: cs.AI, cs.IR
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: new
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -169,7 +170,7 @@ Large Language Models (LLMs) have demonstrated remarkable capabilities in genera
 Martin Braas, Lukas Esterle
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2511.10409][Kayla Boggess --- Explaining Decentralized Multi-Agent Reinforcement Learning Policies]]
@@ -180,7 +181,7 @@ agent, agents
 :CATEGORIES: cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: new
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -197,7 +198,7 @@ Multi-Agent Reinforcement Learning (MARL) has gained significant interest in rec
 Kayla Boggess, Sarit Kraus, Lu Feng
 
 ** 关键词
-agent, agents, multi-agent
+multi-agent, agents, agent
 
 
 * [[https://arxiv.org/abs/2511.10501][Georgios Chalkiadakis --- Strategic Opponent Modeling with Graph Neural Networks, Deep Reinforcement Learning and Probabilistic Topic Modeling]]
@@ -208,7 +209,7 @@ agent, agents, multi-agent
 :CATEGORIES: cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: new
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -236,7 +237,7 @@ multiagent, agent
 :CATEGORIES: cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: new
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -253,7 +254,7 @@ We propose a new General Game Playing (GGP) system called Regular Games (RG). Th
 Rados{\l}aw Miernik, Marek Szyku{\l}a, Jakub Kowalski, Jakub Cie\'sluk, {\L}ukasz Galas, Wojciech Pawlik
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2511.09586][Yuchen Huang --- Scaling Environments for LLM Agents in the Era of Learning from Interaction: A Survey]]
@@ -264,7 +265,7 @@ agent, agents
 :CATEGORIES: cs.LG, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -281,7 +282,7 @@ LLM-based agents can autonomously accomplish complex tasks across various domain
 Yuchen Huang, Sijia Li, Minghao Liu, Wei Liu, Shijue Huang, Zhiyuan Fan, Hou Pong Chan, Yi R. Fung
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2511.09681][Tairan Huang --- SEBA: Sample-Efficient Black-Box Attacks on Visual Reinforcement Learning]]
@@ -292,7 +293,7 @@ agent, agents
 :CATEGORIES: cs.LG, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -309,7 +310,7 @@ Visual reinforcement learning has achieved remarkable progress in visual control
 Tairan Huang, Yulin Jin, Junxu Liu, Qingqing Ye, Haibo Hu
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2511.09727][Stelios Zarifis --- Baby Sophia: A Developmental Approach to Self-Exploration through Self-Touch and Hand Regard]]
@@ -320,7 +321,7 @@ agent, agents
 :CATEGORIES: cs.RO, cs.AI, cs.LG
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -348,7 +349,7 @@ agent
 :CATEGORIES: cs.LG, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -365,7 +366,7 @@ Generalization to unseen environments is a significant challenge in the field of
 Bram Grooten, Patrick MacAlpine, Kaushik Subramanian, Peter Stone, Peter R. Wurman
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2511.09947][Sha Zhao --- EEGAgent: A Unified Framework for Automated EEG Analysis Using Large Language Models]]
@@ -376,7 +377,7 @@ agent, agents
 :CATEGORIES: cs.LG, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -404,7 +405,7 @@ agent
 :CATEGORIES: cs.SE, cs.AI, cs.PL
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -432,7 +433,7 @@ agent
 :CATEGORIES: cs.LG, cs.AI, quant-ph
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -449,7 +450,7 @@ Reinforcement learning (RL) with limited samples is common in real-world applica
 Outongyi Lv, Yewei Yuan, Nana Liu
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2511.10203][Stephane Da Silva Martins --- VISTA: A Vision and Intent-Aware Social Attention Framework for Multi-Agent Trajectory Prediction]]
@@ -460,7 +461,7 @@ agent, agents
 :CATEGORIES: cs.CV, cs.AI, cs.RO
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -477,7 +478,7 @@ Multi-agent trajectory prediction is crucial for autonomous systems operating in
 Stephane Da Silva Martins, Emanuel Aldea, Sylvie Le H\'egarat-Mascle
 
 ** 关键词
-agent, agents, multi-agent
+multi-agent, agents, agent
 
 
 * [[https://arxiv.org/abs/2511.10384][Raj Gaurav Maurya --- Simulating Misinformation Propagation in Social Networks using Large Language Models]]
@@ -488,7 +489,7 @@ agent, agents, multi-agent
 :CATEGORIES: cs.SI, cs.AI, cs.CL, cs.CY
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -505,7 +506,7 @@ Misinformation on social media thrives on surprise, emotion, and identity-driven
 Raj Gaurav Maurya, Vaibhav Shukla, Raj Abhijit Dandekar, Rajat Dandekar, Sreedath Panat
 
 ** 关键词
-diffusion, agent, agents
+diffusion, agents, agent
 
 
 * [[https://arxiv.org/abs/2511.10395][Yunpeng Zhai --- AgentEvolver: Towards Efficient Self-Evolving Agent System]]
@@ -516,7 +517,7 @@ diffusion, agent, agents
 :CATEGORIES: cs.LG, cs.AI, cs.CL
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -533,7 +534,7 @@ Autonomous agents powered by large language models (LLMs) have the potential to 
 Yunpeng Zhai, Shuchang Tao, Cheng Chen, Anni Zou, Ziqian Chen, Qingxu Fu, Shinji Mai, Li Yu, Jiaji Deng, Zouying Cao, Zhaoyang Liu, Bolin Ding, Jingren Zhou
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2511.10400][Lifan Zheng --- Rethinking the Reliability of Multi-agent System: A Perspective from Byzantine Fault Tolerance]]
@@ -544,7 +545,7 @@ agent, agents
 :CATEGORIES: cs.MA, cs.AI, cs.CL
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -561,7 +562,7 @@ Ensuring the reliability of agent architectures and effectively identifying prob
 Lifan Zheng, Jiawei Chen, Qinghong Yin, Jingyuan Zhang, Xinyi Zeng, Yu Tian
 
 ** 关键词
-agent, agents, multi-agent
+multi-agent, agents, agent
 
 
 * [[https://arxiv.org/abs/2511.10403][Mingxing Peng --- nuPlan-R: A Closed-Loop Planning Benchmark for Autonomous Driving via Reactive Multi-Agent Simulation]]
@@ -572,7 +573,7 @@ agent, agents, multi-agent
 :CATEGORIES: cs.RO, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -589,7 +590,7 @@ Recent advances in closed-loop planning benchmarks have significantly improved t
 Mingxing Peng, Ruoyu Yao, Xusen Guo, Jun Ma
 
 ** 关键词
-diffusion, agent, agents, multi-agent
+multi-agent, diffusion, agents, agent
 
 
 * [[https://arxiv.org/abs/2511.10573][Garapati Keerthana --- Towards Emotionally Intelligent and Responsible Reinforcement Learning]]
@@ -600,7 +601,7 @@ diffusion, agent, agents, multi-agent
 :CATEGORIES: cs.LG, cs.AI, cs.CL, cs.HC, cs.MA
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -628,7 +629,7 @@ agent
 :CATEGORIES: cs.CL, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -656,7 +657,7 @@ agent
 :CATEGORIES: cs.SI, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -673,7 +674,7 @@ The WikiRace game, where players navigate between Wikipedia articles using only 
 Raman Ebrahimi, Sean Fuhrman, Kendrick Nguyen, Harini Gurusankar, Massimo Franceschetti
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2511.10611][Alagappan Ramanathan --- Towards an Agentic Workflow for Internet Measurement Research]]
@@ -684,7 +685,7 @@ agent, agents
 :CATEGORIES: cs.NI, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -701,7 +702,7 @@ Internet measurement research faces an accessibility crisis: complex analyses re
 Alagappan Ramanathan, Eunju Kang, Dongsu Han, Sangeetha Abdu Jyothi
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2502.10012][Asen Nachkov --- Unlocking Efficient Vehicle Dynamics Modeling via Analytic World Models]]
@@ -712,7 +713,7 @@ agent, agents
 :CATEGORIES: cs.AI, cs.RO
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -740,7 +741,7 @@ agent
 :CATEGORIES: cs.AI, cs.IR
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -757,7 +758,7 @@ Effective tool pre-selection via retrieval is essential for AI agents to select 
 Sahil Bansal, Sai Shruthi Sistla, Aarti Arikatala, Sebastian Schreiber
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2509.14289][Lanxiao Huang --- From Capabilities to Performance: Evaluating Key Functional Properties of LLM Architectures in Penetration Testing]]
@@ -768,7 +769,7 @@ agent, agents
 :CATEGORIES: cs.AI, cs.CL, cs.LG
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -785,7 +786,7 @@ Large language models (LLMs) are increasingly used to automate or augment penetr
 Lanxiao Huang, Daksh Dave, Tyler Cody, Peter Beling, Ming Jin
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2510.12787][Benjamin Breen --- Ax-Prover: A Deep Reasoning Agentic Framework for Theorem Proving in Mathematics and Quantum Physics]]
@@ -796,7 +797,7 @@ agent, agents
 :CATEGORIES: cs.AI, cs.MA
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -813,7 +814,7 @@ We present Ax-Prover, a multi-agent system for automated theorem proving in Lean
 Benjamin Breen, Marco Del Tredici, Jacob McCarran, Javier Aspuru Mijares, Weichen Winston Yin, Kfir Sulimany, Jacob M. Taylor, Frank H. L. Koppens, Dirk Englund
 
 ** 关键词
-agent, multi-agent
+multi-agent, agent
 
 
 * [[https://arxiv.org/abs/2510.14240][Jiayu Wang --- LiveResearchBench: A Live Benchmark for User-Centric Deep Research in the Wild]]
@@ -824,7 +825,7 @@ agent, multi-agent
 :CATEGORIES: cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -841,7 +842,7 @@ Deep research -- producing comprehensive, citation-grounded reports by searching
 Jiayu Wang, Yifei Ming, Riya Dulepet, Qinglin Chen, Austin Xu, Zixuan Ke, Frederic Sala, Aws Albarghouthi, Caiming Xiong, Shafiq Joty
 
 ** 关键词
-agent, multi-agent
+multi-agent, agent
 
 
 * [[https://arxiv.org/abs/2510.17064][Rongbin Li --- A Brain Cell Type Resource Created by Large Language Models and a Multi-Agent AI System for Collaborative Community Annotation]]
@@ -852,7 +853,7 @@ agent, multi-agent
 :CATEGORIES: cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -869,7 +870,7 @@ Single-cell RNA sequencing has transformed our ability to identify diverse cell 
 Rongbin Li, Wenbo Chen, Zhao Li, Rodrigo Munoz-Castaneda, Jinbo Li, Neha S. Maurya, Arnav Solanki, Huan He, Hanwen Xing, Meaghan Ramlakhan, Zachary Wise, Nelson Johansen, Zhuhao Wu, Hua Xu, Michael Hawrylycz, W. Jim Zheng
 
 ** 关键词
-agent, multi-agent
+multi-agent, agent
 
 
 * [[https://arxiv.org/abs/2511.08172][Georgios Pantazopoulos --- An Efficient Training Pipeline for Reasoning Graphical User Interface Agents]]
@@ -880,7 +881,7 @@ agent, multi-agent
 :CATEGORIES: cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -897,7 +898,7 @@ Visual grounding is the task of localising image regions from natural language q
 Georgios Pantazopoulos, Eda B. \"Ozyi\u{g}it
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2506.09160][Griffin Pitts --- Understanding Human-AI Trust in Education]]
@@ -908,7 +909,7 @@ agent, agents
 :CATEGORIES: cs.CY, cs.AI, cs.HC
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -925,7 +926,7 @@ As AI chatbots become integrated in education, students are turning to these sys
 Griffin Pitts, Sanaz Motamedi
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2507.14882][Ganesh Sundaram --- Application-Specific Component-Aware Structured Pruning of Deep Neural Networks in Control via Soft Coefficient Optimization]]
@@ -936,7 +937,7 @@ agent, agents
 :CATEGORIES: cs.LG, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -964,7 +965,7 @@ agent
 :CATEGORIES: cs.RO, cs.AI, cs.LG
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -981,7 +982,7 @@ Foundation models, including large language models (LLMs) and vision-language mo
 Sahar Salimpour, Lei Fu, Kajetan Rachwa{\l}, Pascal Bertrand, Kevin O'Sullivan, Robert Jakob, Farhad Keramat, Leonardo Militano, Giovanni Toffetti, Harry Edelman, Jorge Pe\~na Queralta
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2508.05615][Yong Du --- Test-Time Reinforcement Learning for GUI Grounding via Region Consistency]]
@@ -992,7 +993,7 @@ agent, agents
 :CATEGORIES: cs.CV, cs.AI, cs.CL
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -1009,7 +1010,7 @@ Graphical User Interface (GUI) grounding, the task of mapping natural language i
 Yong Du, Yuchen Yan, Fei Tang, Zhengxi Lu, Chang Zong, Weiming Lu, Shengpei Jiang, Yongliang Shen
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2509.19319][Gyubok Lee --- FHIR-AgentBench: Benchmarking LLM Agents for Realistic Interoperable EHR Question Answering]]
@@ -1020,7 +1021,7 @@ agent, agents
 :CATEGORIES: cs.CL, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -1037,7 +1038,7 @@ The recent shift toward the Health Level Seven Fast Healthcare Interoperability 
 Gyubok Lee, Elea Bach, Eric Yang, Tom Pollard, Alistair Johnson, Edward Choi, Yugang jia, Jong Ha Lee
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2510.01299][Dmitriy Kostunin --- Enhancing the development of Cherenkov Telescope Array control software with Large Language Models]]
@@ -1048,7 +1049,7 @@ agent, agents
 :CATEGORIES: astro-ph.IM, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -1065,7 +1066,7 @@ We develop AI agents based on instruction-finetuned large language models (LLMs)
 Dmitriy Kostunin, Elisa Jones, Vladimir Sotnikov, Valery Sotnikov, Sergo Golovachev, Alexandre Strube
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2510.26125][Runsheng Xu --- WOD-E2E: Waymo Open Dataset for End-to-End Driving in Challenging Long-tail Scenarios]]
@@ -1076,7 +1077,7 @@ agent, agents
 :CATEGORIES: cs.CV, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -1093,7 +1094,7 @@ Vision-based end-to-end (E2E) driving has garnered significant interest in the r
 Runsheng Xu, Hubert Lin, Wonseok Jeon, Hao Feng, Yuliang Zou, Liting Sun, John Gorman, Ekaterina Tolstaya, Sarah Tang, Brandyn White, Ben Sapp, Mingxing Tan, Jyh-Jing Hwang, Dragomir Anguelov
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2511.04427][Hao He --- Does AI-Assisted Coding Deliver? A Difference-in-Differences Study of Cursor's Impact on Software Projects]]
@@ -1104,7 +1105,7 @@ agent, agents
 :CATEGORIES: cs.SE, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -1121,7 +1122,7 @@ Large language models (LLMs) have demonstrated the promise to revolutionize the 
 Hao He, Courtney Miller, Shyam Agarwal, Christian K\"astner, Bogdan Vasilescu
 
 ** 关键词
-agent, agents
+agents, agent
 
 
 * [[https://arxiv.org/abs/2511.06625][Yifei Zhang --- Explainable Cross-Disease Reasoning for Cardiovascular Risk Assessment from LDCT]]
@@ -1132,7 +1133,7 @@ agent, agents
 :CATEGORIES: cs.CV, cs.AI, cs.LG
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -1160,7 +1161,7 @@ agent
 :CATEGORIES: cs.CV, cs.AI, cs.CL, cs.LG
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -1188,7 +1189,7 @@ diffusion, agent
 :CATEGORIES: cs.MA, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -1205,5 +1206,5 @@ PIBT is a rule-based Multi-Agent Path Finding (MAPF) solver, widely used as a lo
 Egor Yukhnevich, Anton Andreychuk
 
 ** 关键词
-agent, agents, multi-agent
+multi-agent, agents, agent
 

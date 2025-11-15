@@ -33,8 +33,7 @@ class ArXivOrgExporter(BaseOrgExporter):
         if item.get('arxiv_announce_type'):
             lines.append(f":ARXIV_ANNOUNCE_TYPE: {item['arxiv_announce_type']}")
         lines.append(f":CRAWL_TIME: {crawl_time.strftime('%Y-%m-%d %H:%M:%S')}")
-        lines.append("")
-        
+
         lines.append(":END:")
         lines.append("")
         

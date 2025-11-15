@@ -2,6 +2,7 @@
 
 import sys
 import time
+import signal
 from pathlib import Path
 from datetime import datetime
 
@@ -13,6 +14,129 @@ from .storage.file_manager import FileManager
 from .storage.exporter_manager import ExporterManager
 from .storage.path_manager import PathManager
 from .storage.index_manager import IndexManager
+
+
+# 全局变量用于信号处理
+running = True
+
+
+def signal_handler(signum, frame):
+    """信号处理函数，用于优雅退出"""
+    global running
+    logger = get_logger()
+    logger.info("收到退出信号，正在停止...")
+    running = False
+
+
+def run_crawl(crawler, path_manager, org_exporter, index_manager, 
+              file_manager, storage_config, logger):
+    """
+    执行一次爬取任务
+    
+    Args:
+        crawler: 爬虫实例
+        path_manager: 路径管理器
+        org_exporter: 导出器
+        index_manager: 索引管理器（可选）
+        file_manager: 文件管理器
+        storage_config: 存储配置
+        logger: 日志记录器
+        
+    Returns:
+        bool: 是否成功
+    """
+    try:
+        logger.info("=" * 60)
+        logger.info(f"开始执行爬取 - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        logger.info("=" * 60)
+        
+        result = crawler.crawl()
+        
+        if result.success:
+            logger.info(f"爬取成功，获取到 {result.items_count} 个条目")
+            
+            if result.items_count > 0:
+                # 使用 PathManager 获取输出路径
+                org_path = path_manager.get_output_path(
+                    site_name=result.site_name,
+                    date=result.crawl_time
+                )
+                
+                # 保存 JSON（可选，使用新的路径格式）
+                output_format = storage_config.get('output_format', 'org')
+                if output_format in ['json', 'both']:
+                    # 使用与 org 文件相同的路径，但扩展名为 .json
+                    json_path = org_path.with_suffix('.json')
+                    json_path.parent.mkdir(parents=True, exist_ok=True)
+                    
+                    # 保存 JSON 数据
+                    import json
+                    data = {
+                        'site_name': result.site_name,
+                        'crawl_time': result.crawl_time.isoformat(),
+                        'items_count': result.items_count,
+                        'items': result.items
+                    }
+                    with open(json_path, 'w', encoding='utf-8') as f:
+                        json.dump(data, f, ensure_ascii=False, indent=2)
+                    logger.info(f"已保存 JSON 文件: {json_path}")
+                
+                # 保存 Org-mode
+                if output_format in ['org', 'both']:
+                    org_exporter.export(result, org_path)
+                    
+                    # 如果启用了分类，显示每个类别的文件路径
+                    if org_exporter.keyword_classifier and result.items_count > 0:
+                        categorized_items = org_exporter.keyword_classifier.classify_items(result.items)
+                        for category, items in categorized_items.items():
+                            category_folder = org_exporter.category_folders.get(category, category)
+                            category_path = org_path.parent / category_folder / org_path.name
+                            logger.info(f"已保存 {category} 类别 Org-mode 文件: {category_path} ({len(items)} 个条目)")
+                    else:
+                        logger.info(f"已保存 Org-mode 文件: {org_path}")
+                
+                # 更新索引文件
+                if index_manager:
+                    # 如果启用了分类，传递分类信息
+                    categorized_items = None
+                    if org_exporter.keyword_classifier and result.items_count > 0:
+                        categorized_items = org_exporter.keyword_classifier.classify_items(result.items)
+                    
+                    index_manager.update_index(
+                        site_name=result.site_name,
+                        crawl_time=result.crawl_time,
+                        items=result.items,
+                        date_file_path=org_path,
+                        categorized_items=categorized_items,
+                        category_folders=org_exporter.category_folders
+                    )
+                    logger.info(f"已更新索引文件: {index_manager.index_path}")
+                
+                # 更新元数据
+                json_path_for_metadata = None
+                if output_format in ['json', 'both']:
+                    json_path_for_metadata = org_path.with_suffix('.json')
+                file_manager.update_metadata(result, json_path=json_path_for_metadata)
+                logger.info("已更新元数据")
+                
+                # 显示前几个条目
+                logger.info("前几个条目:")
+                for i, item in enumerate(result.items[:3], 1):
+                    logger.info(f"  {i}. {item.get('title', '无标题')[:60]}...")
+            else:
+                logger.info("本次爬取没有新条目")
+        else:
+            logger.error(f"爬取失败: {result.error_message}")
+            return False
+        
+        logger.info("=" * 60)
+        logger.info("本次爬取完成")
+        logger.info("=" * 60)
+        return True
+        
+    except Exception as e:
+        logger.error(f"爬取过程中发生错误: {e}", exc_info=True)
+        return False
 
 
 def main():
@@ -142,88 +266,57 @@ def main():
     crawler = CrawlerManager.get_crawler(site_config)
     logger.info(f"使用爬虫: {crawler.__class__.__name__}")
     
-    # 执行一次爬取
-    logger.info("开始执行爬取...")
-    result = crawler.crawl()
+    # 注册信号处理器（用于优雅退出）
+    signal.signal(signal.SIGINT, signal_handler)  # Ctrl+C
+    signal.signal(signal.SIGTERM, signal_handler)  # 终止信号
     
-    if result.success:
-        logger.info(f"爬取成功，获取到 {result.items_count} 个条目")
-        
-        if result.items_count > 0:
-            # 使用 PathManager 获取输出路径
-            org_path = path_manager.get_output_path(
-                site_name=result.site_name,
-                date=result.crawl_time
-            )
-            
-            # 保存 JSON（可选，使用新的路径格式）
-            output_format = storage_config.get('output_format', 'org')
-            if output_format in ['json', 'both']:
-                # 使用与 org 文件相同的路径，但扩展名为 .json
-                json_path = org_path.with_suffix('.json')
-                json_path.parent.mkdir(parents=True, exist_ok=True)
-                
-                # 保存 JSON 数据
-                import json
-                data = {
-                    'site_name': result.site_name,
-                    'crawl_time': result.crawl_time.isoformat(),
-                    'items_count': result.items_count,
-                    'items': result.items
-                }
-                with open(json_path, 'w', encoding='utf-8') as f:
-                    json.dump(data, f, ensure_ascii=False, indent=2)
-                logger.info(f"已保存 JSON 文件: {json_path}")
-            
-            # 保存 Org-mode
-            if output_format in ['org', 'both']:
-                org_exporter.export(result, org_path)
-                
-                # 如果启用了分类，显示每个类别的文件路径
-                if org_exporter.keyword_classifier and result.items_count > 0:
-                    categorized_items = org_exporter.keyword_classifier.classify_items(result.items)
-                    for category, items in categorized_items.items():
-                        category_folder = org_exporter.category_folders.get(category, category)
-                        category_path = org_path.parent / category_folder / org_path.name
-                        logger.info(f"已保存 {category} 类别 Org-mode 文件: {category_path} ({len(items)} 个条目)")
-                else:
-                    logger.info(f"已保存 Org-mode 文件: {org_path}")
-            
-            # 更新索引文件
-            if index_manager:
-                # 如果启用了分类，传递分类信息
-                categorized_items = None
-                if org_exporter.keyword_classifier and result.items_count > 0:
-                    categorized_items = org_exporter.keyword_classifier.classify_items(result.items)
-                
-                index_manager.update_index(
-                    site_name=result.site_name,
-                    crawl_time=result.crawl_time,
-                    items=result.items,
-                    date_file_path=org_path,
-                    categorized_items=categorized_items,
-                    category_folders=org_exporter.category_folders
-                )
-                logger.info(f"已更新索引文件: {index_manager.index_path}")
-            
-            # 更新元数据
-            json_path_for_metadata = None
-            if output_format in ['json', 'both']:
-                json_path_for_metadata = org_path.with_suffix('.json')
-            file_manager.update_metadata(result, json_path=json_path_for_metadata)
-            logger.info("已更新元数据")
-            
-            # 显示前几个条目
-            logger.info("前几个条目:")
-            for i, item in enumerate(result.items[:3], 1):
-                logger.info(f"  {i}. {item.get('title', '无标题')[:60]}...")
-        else:
-            logger.info("本次爬取没有新条目")
-    else:
-        logger.error(f"爬取失败: {result.error_message}")
+    # 获取更新频率（分钟）
+    update_frequency_minutes = site_config.update_frequency
+    update_frequency_seconds = update_frequency_minutes * 60
     
     logger.info("=" * 60)
-    logger.info("爬取完成")
+    logger.info("开始持续运行模式")
+    logger.info(f"更新频率: {update_frequency_minutes} 分钟 ({update_frequency_seconds} 秒)")
+    logger.info("按 Ctrl+C 停止程序")
+    logger.info("=" * 60)
+    
+    # 立即执行一次爬取
+    run_crawl(crawler, path_manager, org_exporter, index_manager, 
+              file_manager, storage_config, logger)
+    
+    # 持续运行循环
+    while running:
+        try:
+            # 等待指定时间
+            logger.info(f"等待 {update_frequency_minutes} 分钟后进行下次爬取...")
+            
+            # 分段等待，以便能够响应退出信号
+            wait_interval = 60  # 每60秒检查一次
+            waited = 0
+            while waited < update_frequency_seconds and running:
+                time.sleep(min(wait_interval, update_frequency_seconds - waited))
+                waited += wait_interval
+                if waited % 300 == 0:  # 每5分钟打印一次剩余时间
+                    remaining_minutes = (update_frequency_seconds - waited) // 60
+                    logger.info(f"距离下次爬取还有约 {remaining_minutes} 分钟")
+            
+            if not running:
+                break
+            
+            # 执行爬取
+            run_crawl(crawler, path_manager, org_exporter, index_manager, 
+                      file_manager, storage_config, logger)
+            
+        except KeyboardInterrupt:
+            logger.info("收到键盘中断信号")
+            break
+        except Exception as e:
+            logger.error(f"循环中发生错误: {e}", exc_info=True)
+            # 即使出错也继续运行，等待下次更新
+            logger.info(f"将在 {update_frequency_minutes} 分钟后重试...")
+    
+    logger.info("=" * 60)
+    logger.info("程序已停止")
     logger.info("=" * 60)
 
 

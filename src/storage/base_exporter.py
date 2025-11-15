@@ -220,6 +220,7 @@ class BaseOrgExporter(ABC):
         if category:
             lines.append(f"#+CATEGORY: {category}")
         lines.append(f"#+CREATED: {result.crawl_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        lines.append(f"#+startup: overview")
         lines.append("")
         
         # 如果没有条目，添加说明

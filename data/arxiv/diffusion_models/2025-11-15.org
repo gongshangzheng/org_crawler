@@ -2,7 +2,8 @@
 #+DATE: 2025-11-15
 #+AUTHOR: Org Crawler
 #+CATEGORY: diffusion
-#+CREATED: 2025-11-15 18:19:30
+#+CREATED: 2025-11-15 18:26:45
+#+startup: overview
 
 * [[https://arxiv.org/abs/2511.10101][Takehiro Ishikawa --- Balancing Centralized Learning and Distributed Self-Organization: A Hybrid Model for Embodied Morphogenesis]]
 :PROPERTIES:
@@ -12,7 +13,7 @@
 :CATEGORIES: cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: new
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -40,7 +41,7 @@ diffusion
 :CATEGORIES: physics.chem-ph, cs.AI, cs.CV
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -57,7 +58,7 @@ Diffusion models show promise for 3D molecular generation, but face a fundamenta
 Peining Zhang, Jinbo Bi, Minghu Song
 
 ** 关键词
-diffusion model, diffusion, diffusion models
+diffusion, diffusion models, diffusion model
 
 
 * [[https://arxiv.org/abs/2511.09578][Hadi Keramati --- HeatGen: A Guided Diffusion Framework for Multiphysics Heat Sink Design Optimization]]
@@ -68,7 +69,7 @@ diffusion model, diffusion, diffusion models
 :CATEGORIES: cs.LG, cs.AI, physics.comp-ph
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -85,7 +86,7 @@ This study presents a generative optimization framework based on a guided denois
 Hadi Keramati, Morteza Sadeghi, Rajeev K. Jaiman
 
 ** 关键词
-diffusion model, diffusion
+diffusion, diffusion model
 
 
 * [[https://arxiv.org/abs/2511.09895][Xiaoda Wang --- Simulator and Experience Enhanced Diffusion Model for Comprehensive ECG Generation]]
@@ -96,7 +97,7 @@ diffusion model, diffusion
 :CATEGORIES: cs.LG, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -113,7 +114,7 @@ Cardiovascular disease (CVD) is a leading cause of mortality worldwide. Electroc
 Xiaoda Wang, Kaiqiao Han, Yuhao Xu, Xiao Luo, Yizhou Sun, Wei Wang, Carl Yang
 
 ** 关键词
-diffusion model, diffusion, diffusion models
+diffusion, diffusion models, diffusion model
 
 
 * [[https://arxiv.org/abs/2511.09962][Ziqing Yin --- AI-Integrated Decision Support System for Real-Time Market Growth Forecasting and Multi-Source Content Diffusion Analytics]]
@@ -124,7 +125,7 @@ diffusion model, diffusion, diffusion models
 :CATEGORIES: cs.LG, cs.AI, cs.MM
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -152,7 +153,7 @@ diffusion
 :CATEGORIES: cs.RO, cs.AI, cs.LG
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -180,7 +181,7 @@ diffusion
 :CATEGORIES: cs.CV, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -208,7 +209,7 @@ diffusion
 :CATEGORIES: cs.LG, cs.AI, math.DS, math.PR, physics.bio-ph
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -236,7 +237,7 @@ diffusion
 :CATEGORIES: cs.SI, cs.AI, cs.CL, cs.CY
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -253,7 +254,7 @@ Misinformation on social media thrives on surprise, emotion, and identity-driven
 Raj Gaurav Maurya, Vaibhav Shukla, Raj Abhijit Dandekar, Rajat Dandekar, Sreedath Panat
 
 ** 关键词
-diffusion, agent, agents
+diffusion, agents, agent
 
 
 * [[https://arxiv.org/abs/2511.10403][Mingxing Peng --- nuPlan-R: A Closed-Loop Planning Benchmark for Autonomous Driving via Reactive Multi-Agent Simulation]]
@@ -264,7 +265,7 @@ diffusion, agent, agents
 :CATEGORIES: cs.RO, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -281,7 +282,7 @@ Recent advances in closed-loop planning benchmarks have significantly improved t
 Mingxing Peng, Ruoyu Yao, Xusen Guo, Jun Ma
 
 ** 关键词
-diffusion, agent, agents, multi-agent
+multi-agent, diffusion, agents, agent
 
 
 * [[https://arxiv.org/abs/2511.10555][Huijie Liu --- A Style is Worth One Code: Unlocking Code-to-Style Image Generation with Discrete Style Space]]
@@ -292,7 +293,7 @@ diffusion, agent, agents, multi-agent
 :CATEGORIES: cs.CV, cs.AI
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -309,7 +310,7 @@ Innovative visual stylization is a cornerstone of artistic creation, yet generat
 Huijie Liu, Shuhao Cui, Haoxiang Cao, Shuai Ma, Kai Wu, Guoliang Kang
 
 ** 关键词
-diffusion model, diffusion
+diffusion, diffusion model
 
 
 * [[https://arxiv.org/abs/2509.05314][Ying Li --- ManipDreamer3D : Synthesizing Plausible Robotic Manipulation Video with Occupancy-aware 3D Trajectory]]
@@ -320,7 +321,7 @@ diffusion model, diffusion
 :CATEGORIES: cs.RO, cs.AI, cs.CV
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 
@@ -337,7 +338,7 @@ Data scarcity continues to be a major challenge in the field of robotic manipula
 Ying Li, Xiaobao Wei, Xiaowei Chi, Yuming Li, Zhongyu Zhao, Hao Wang, Ningning Ma, Ming Lu, Sirui Han, Shanghang Zhang
 
 ** 关键词
-diffusion model, diffusion, diffusion models
+diffusion, diffusion models, diffusion model
 
 
 * [[https://arxiv.org/abs/2511.09057][PAN Team --- PAN: A World Model for General, Interactable, and Long-Horizon World Simulation]]
@@ -348,7 +349,7 @@ diffusion model, diffusion, diffusion models
 :CATEGORIES: cs.CV, cs.AI, cs.CL, cs.LG
 :PUBLISHED_TIME: 2025-11-15T05:00:00
 :ARXIV_ANNOUNCE_TYPE: replace-cross
-:CRAWL_TIME: 2025-11-15 18:19:30
+:CRAWL_TIME: 2025-11-15 18:26:45
 
 :END:
 

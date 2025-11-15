@@ -33,15 +33,15 @@ class FileManager:
             date: 日期，如果为 None 则使用当前日期
             
         Returns:
-            存储路径（不再包含 items 文件夹）
+            存储路径（不再包含 items 文件夹，不自动创建目录）
         """
         if date is None:
             date = datetime.now()
         
         date_str = date.strftime(self.date_format)
         # 移除 items 文件夹，直接使用 site_name / date_str
+        # 注意：不再自动创建目录，路径管理由 PathManager 处理
         storage_path = self.base_path / site_name / date_str
-        storage_path.mkdir(parents=True, exist_ok=True)
         return storage_path
     
     def load_metadata(self, site_name: str) -> Dict:
