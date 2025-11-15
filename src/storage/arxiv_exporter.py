@@ -1,18 +1,16 @@
-"""Org-mode 格式导出器（向后兼容）"""
+"""ArXiv 专用的 Org-mode 格式导出器"""
 
 from datetime import datetime
 from typing import List, Dict
 
 from .base_exporter import BaseOrgExporter
-from ..utils.keyword_classifier import KeywordClassifier
-from typing import Optional
 
 
-class OrgExporter(BaseOrgExporter):
-    """Org-mode 格式导出器（向后兼容，继承自BaseOrgExporter）"""
+class ArXivOrgExporter(BaseOrgExporter):
+    """ArXiv 专用的 Org-mode 格式导出器"""
     
     def _format_item_detailed(self, item: Dict, index: int, crawl_time: datetime) -> List[str]:
-        """详细格式：包含所有信息（默认实现）"""
+        """详细格式：包含所有信息（ArXiv 特定）"""
         lines = []
         
         # 使用标题模板
@@ -94,3 +92,4 @@ class OrgExporter(BaseOrgExporter):
             lines.append("")
         
         return lines
+

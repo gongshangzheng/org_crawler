@@ -112,7 +112,7 @@ class BaseCrawler(ABC):
     
     def filter_by_keywords(self, items: List[CrawlItem]) -> List[CrawlItem]:
         """
-        根据关键词过滤条目
+        根据关键词过滤条目，并将匹配的关键词存储到条目中
         
         Args:
             items: 条目列表
@@ -130,8 +130,23 @@ class BaseCrawler(ABC):
             summary = item.summary.lower()
             content = f"{title} {summary}"
             
+            # 找出所有匹配的关键词
+            matched_keywords = []
+            for keyword in self.site_config.keywords:
+                if keyword.lower() in content:
+                    matched_keywords.append(keyword)
+            
             # 如果包含任一关键词，则保留
-            if any(keyword.lower() in content for keyword in self.site_config.keywords):
+            if matched_keywords:
+                # 将匹配的关键词存储到item中
+                if 'keywords' not in item.other_info:
+                    item.other_info['keywords'] = []
+                # 合并关键词（去重）
+                existing_keywords = item.other_info.get('keywords', [])
+                if isinstance(existing_keywords, str):
+                    existing_keywords = [existing_keywords]
+                all_keywords = list(set(existing_keywords + matched_keywords))
+                item.other_info['keywords'] = all_keywords
                 filtered_items.append(item)
         
         return filtered_items

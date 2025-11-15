@@ -1,0 +1,351 @@
+"""Org-mode 格式导出器基类"""
+
+from pathlib import Path
+from datetime import datetime
+from typing import List, Dict, Optional
+from abc import ABC, abstractmethod
+
+from ..models.crawl_result import CrawlResult
+from ..utils.keyword_classifier import KeywordClassifier
+
+
+class BaseOrgExporter(ABC):
+    """Org-mode 格式导出器基类"""
+    
+    # 支持的格式类型
+    FORMAT_DETAILED = "detailed"  # 详细格式（默认）
+    FORMAT_COMPACT = "compact"    # 紧凑格式
+    FORMAT_CARD = "card"          # 卡片格式
+    FORMAT_MINIMAL = "minimal"    # 极简格式
+    
+    def __init__(self, 
+                 format_type: str = FORMAT_DETAILED,
+                 keyword_classifier: Optional[KeywordClassifier] = None,
+                 category_folders: Optional[Dict[str, str]] = None,
+                 title_template: Optional[str] = None):
+        """
+        初始化导出器
+        
+        Args:
+            format_type: 格式类型，可选值：detailed, compact, card, minimal
+            keyword_classifier: 关键词分类器，如果提供则按类别分类存储
+            category_folders: 类别文件夹映射，格式为 {类别名: 文件夹路径}
+                             如果为None，则使用类别名作为文件夹名
+            title_template: 标题模板，支持变量：{title}, {link}, {published_time}, 
+                           {crawl_time}, {index}, {arxiv_id} 等
+        """
+        self.format_type = format_type
+        self.keyword_classifier = keyword_classifier
+        self.category_folders = category_folders or {}
+        self.title_template = title_template
+    
+    def _render_title(self, item: Dict, index: int, crawl_time: datetime) -> str:
+        """
+        渲染标题模板
+        
+        Args:
+            item: 条目字典
+            index: 条目索引
+            crawl_time: 爬取时间
+            
+        Returns:
+            渲染后的标题字符串
+        """
+        if not self.title_template:
+            # 如果没有模板，返回默认格式
+            title = item.get('title', '无标题')
+            published_time = item.get('published_time', '')
+            return f"* 条目 {index}: {title} [{published_time}]"
+        
+        # 准备变量字典
+        variables = {
+            'title': item.get('title', '无标题'),
+            'link': item.get('link', ''),
+            'published_time': item.get('published_time', item.get('published_time_str', '')),
+            'crawl_time': crawl_time.strftime('%Y-%m-%d %H:%M:%S'),
+            'index': str(index),
+            'arxiv_id': item.get('arxiv_id', ''),
+            'id': item.get('id', ''),
+        }
+        
+        # 添加作者信息（如果有）
+        authors = item.get('authors', [])
+        if authors:
+            variables['authors'] = ', '.join(authors)
+            variables['first_author'] = authors[0] if authors else ''
+        else:
+            variables['authors'] = ''
+            variables['first_author'] = ''
+        
+        # 添加分类信息（如果有）
+        categories = item.get('categories', [])
+        if categories:
+            variables['categories'] = ', '.join(categories)
+        else:
+            variables['categories'] = ''
+        
+        # 渲染模板
+        try:
+            return self.title_template.format(**variables)
+        except KeyError as e:
+            # 如果模板中有未定义的变量，使用空字符串或变量名作为占位符
+            # 使用 SafeFormatter 的方式：对于未定义的变量，返回空字符串
+            import string
+            formatter = string.Formatter()
+            result = []
+            for literal_text, field_name, format_spec, conversion in formatter.parse(self.title_template):
+                if literal_text:
+                    result.append(literal_text)
+                if field_name:
+                    value = variables.get(field_name, '')
+                    if format_spec:
+                        result.append(format(value, format_spec))
+                    else:
+                        result.append(str(value))
+            return ''.join(result)
+    
+    def export(self, result: CrawlResult, output_path: Path):
+        """
+        导出为 org-mode 格式
+        
+        Args:
+            result: 爬取结果
+            output_path: 输出文件路径（如果启用分类，这将是基础路径）
+        """
+        # 如果启用了分类，按类别分别导出
+        if self.keyword_classifier and result.items_count > 0:
+            categorized_items = self.keyword_classifier.classify_items(result.items)
+            
+            for category, items in categorized_items.items():
+                # 获取该类别的文件夹路径
+                category_folder = self.category_folders.get(category, category)
+                
+                # 构建该类别的输出路径
+                category_path = output_path.parent / category_folder / output_path.name
+                category_path.parent.mkdir(parents=True, exist_ok=True)
+                
+                # 创建该类别的结果对象
+                category_result = CrawlResult(
+                    site_name=result.site_name,
+                    crawl_time=result.crawl_time,
+                    items_count=len(items),
+                    items=items,
+                    success=result.success,
+                    error_message=result.error_message
+                )
+                
+                # 生成并保存该类别的org内容
+                org_content = self._generate_org_content(category_result, category)
+                
+                # 如果文件已存在，追加新条目
+                if category_path.exists():
+                    existing_content = category_path.read_text(encoding='utf-8')
+                    org_content = self._merge_org_content(existing_content, org_content, category_result)
+                
+                category_path.write_text(org_content, encoding='utf-8')
+        else:
+            # 未启用分类，使用原有逻辑
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            org_content = self._generate_org_content(result)
+            
+            # 如果文件已存在，追加新条目
+            if output_path.exists():
+                existing_content = output_path.read_text(encoding='utf-8')
+                org_content = self._merge_org_content(existing_content, org_content, result)
+            
+            output_path.write_text(org_content, encoding='utf-8')
+    
+    def _generate_org_content(self, result: CrawlResult, category: Optional[str] = None) -> str:
+        """
+        生成 org-mode 内容
+        
+        Args:
+            result: 爬取结果
+            category: 类别名称（如果按类别分类）
+            
+        Returns:
+            org-mode 格式的字符串
+        """
+        lines = []
+        
+        # 文件头
+        date_str = result.crawl_time.strftime('%Y-%m-%d')
+        title = f"{result.site_name.upper()} 爬取结果"
+        if category:
+            title += f" - {category}"
+        title += f" - {date_str}"
+        lines.append(f"#+TITLE: {title}")
+        lines.append(f"#+DATE: {date_str}")
+        lines.append(f"#+AUTHOR: Org Crawler")
+        if category:
+            lines.append(f"#+CATEGORY: {category}")
+        lines.append(f"#+CREATED: {result.crawl_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        lines.append("")
+        
+        # 如果没有条目，添加说明
+        if result.items_count == 0:
+            lines.append(f"* 本次爬取无新条目")
+            lines.append(f"")
+            lines.append(f"爬取时间: {result.crawl_time.strftime('%Y-%m-%d %H:%M:%S')}")
+            if result.error_message:
+                lines.append(f"错误信息: {result.error_message}")
+            return "\n".join(lines)
+        
+        # 添加条目
+        for idx, item in enumerate(result.items, 1):
+            lines.extend(self._format_item(item, idx, result.crawl_time))
+            lines.append("")  # 条目之间的空行
+        
+        return "\n".join(lines)
+    
+    def _format_item(self, item: Dict, index: int, crawl_time: datetime) -> List[str]:
+        """
+        格式化单个条目（子类可以重写）
+        
+        Args:
+            item: 条目字典
+            index: 条目索引
+            crawl_time: 爬取时间
+            
+        Returns:
+            格式化的行列表
+        """
+        # 根据格式类型选择格式化方法
+        if self.format_type == self.FORMAT_COMPACT:
+            return self._format_item_compact(item, index, crawl_time)
+        elif self.format_type == self.FORMAT_CARD:
+            return self._format_item_card(item, index, crawl_time)
+        elif self.format_type == self.FORMAT_MINIMAL:
+            return self._format_item_minimal(item, index, crawl_time)
+        else:  # FORMAT_DETAILED (默认)
+            return self._format_item_detailed(item, index, crawl_time)
+    
+    @abstractmethod
+    def _format_item_detailed(self, item: Dict, index: int, crawl_time: datetime) -> List[str]:
+        """详细格式：包含所有信息（子类必须实现）"""
+        pass
+    
+    def _format_item_compact(self, item: Dict, index: int, crawl_time: datetime) -> List[str]:
+        """紧凑格式：只包含关键信息"""
+        lines = []
+        
+        # 使用标题模板
+        lines.append(self._render_title(item, index, crawl_time))
+        
+        # Properties（简化版）
+        lines.append(":PROPERTIES:")
+        if item.get('arxiv_id'):
+            lines.append(f":ARXIV_ID: {item['arxiv_id']}")
+        lines.append(":END:")
+        lines.append("")
+        
+        # 作者（如果有）
+        if item.get('authors'):
+            authors_str = ", ".join(item['authors'][:3])  # 只显示前3个作者
+            if len(item['authors']) > 3:
+                authors_str += " et al."
+            lines.append(f"作者: {authors_str}")
+            lines.append("")
+        
+        # 摘要（截断到200字符）
+        if item.get('summary'):
+            summary = item['summary'].replace('\n', ' ').strip()
+            if len(summary) > 200:
+                summary = summary[:200] + "..."
+            lines.append(summary)
+            lines.append("")
+        
+        return lines
+    
+    def _format_item_card(self, item: Dict, index: int, crawl_time: datetime) -> List[str]:
+        """卡片格式：类似卡片布局"""
+        lines = []
+        
+        # 使用标题模板
+        lines.append(self._render_title(item, index, crawl_time))
+        lines.append("")
+        
+        # 卡片信息（使用表格格式）
+        lines.append("| 属性 | 值 |")
+        lines.append("|------+----|")
+        
+        published_time = item.get('published_time', item.get('published_time_str', ''))
+        if published_time:
+            lines.append(f"| 发布时间 | {published_time} |")
+        if item.get('authors'):
+            authors_str = ", ".join(item['authors'][:5])
+            if len(item['authors']) > 5:
+                authors_str += f" 等{len(item['authors'])}人"
+            lines.append(f"| 作者 | {authors_str} |")
+        link = item.get('link', '')
+        if link:
+            lines.append(f"| 链接 | [[{link}][查看]] |")
+        if item.get('arxiv_id'):
+            lines.append(f"| ArXiv ID | {item['arxiv_id']} |")
+        if item.get('categories'):
+            categories_str = ", ".join(item['categories'])
+            lines.append(f"| 分类 | {categories_str} |")
+        
+        lines.append("")
+        
+        # 摘要
+        if item.get('summary'):
+            lines.append("** 摘要")
+            summary = item['summary'].replace('\n', ' ')
+            lines.append(summary)
+            lines.append("")
+        
+        return lines
+    
+    def _format_item_minimal(self, item: Dict, index: int, crawl_time: datetime) -> List[str]:
+        """极简格式：最少信息"""
+        lines = []
+        
+        # 使用标题模板
+        lines.append(self._render_title(item, index, crawl_time))
+        lines.append("")
+        
+        return lines
+    
+    def _merge_org_content(self, existing: str, new: str, result: CrawlResult) -> str:
+        """
+        合并现有的和新的 org 内容
+        
+        Args:
+            existing: 现有内容
+            new: 新内容
+            result: 爬取结果
+            
+        Returns:
+            合并后的内容
+        """
+        # 简单实现：如果新内容有条目，则追加到现有内容
+        if result.items_count > 0:
+            # 提取新内容的条目部分（跳过文件头）
+            new_lines = new.split('\n')
+            # 找到第一个 "* 条目" 的位置
+            start_idx = 0
+            for i, line in enumerate(new_lines):
+                if line.startswith('* 条目'):
+                    start_idx = i
+                    break
+            
+            if start_idx > 0:
+                # 追加新条目到现有内容
+                existing_lines = existing.split('\n')
+                # 移除现有内容的最后一个空行（如果有）
+                while existing_lines and not existing_lines[-1].strip():
+                    existing_lines.pop()
+                
+                # 添加分隔和说明
+                existing_lines.append("")
+                existing_lines.append(f"* 更新于 {result.crawl_time.strftime('%Y-%m-%d %H:%M:%S')}")
+                existing_lines.append("")
+                
+                # 添加新条目
+                existing_lines.extend(new_lines[start_idx:])
+                return "\n".join(existing_lines)
+        
+        return existing
+

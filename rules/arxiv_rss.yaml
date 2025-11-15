@@ -2,9 +2,9 @@
 # 用于爬取 AI 领域的 agent 相关论文
 
 name: "arxiv"
-url: "http://export.arxiv.org/rss/cs.AI"  # 计算机科学-人工智能分类的 RSS
+url: "https://rss.arxiv.org/rss/cs.AI"  # 计算机科学-人工智能分类的 RSS
 crawl_type: "rss"
-update_frequency: 2400  # 更新频率（分钟），优先级高于全局配置, 2400分钟=40小时
+update_frequency: 1440  # 更新频率（分钟），优先级高于全局配置, 1440分钟=24小时
 # 如果不指定，则使用全局配置 config/global_config.yaml 中的 default_update_frequency
 storage_path: "arxiv"
 enabled: true
@@ -15,6 +15,12 @@ keywords:
   - "agents"
   - "multi-agent"
   - "multiagent"
+  - "multi agent"
+  - "diffusion"
+  - "diffusion model"
+  - "diffusion models"
+  - "stable diffusion"
+  - "latent diffusion"
 
 # 自定义配置
 custom_config:
@@ -28,4 +34,56 @@ custom_config:
     # 可以添加其他分类，如：
     # - "cs.LG"  # 机器学习
     # - "cs.CV"  # 计算机视觉
+  
+  # 关键词分类映射（用于将关键词归类到不同类别）
+  category_mapping:
+    agent:
+      - "agent"
+      - "agents"
+      - "multi-agent"
+      - "multiagent"
+      - "multi agent"
+      - "autonomous agent"
+      - "intelligent agent"
+    diffusion:
+      - "diffusion"
+      - "diffusion model"
+      - "diffusion models"
+      - "stable diffusion"
+      - "latent diffusion"
+  
+  # 类别文件夹映射（可选，如果不配置则使用类别名作为文件夹名）
+  category_folders:
+    agent: "agent"  # agent类别存储到agent文件夹
+    diffusion: "diffusion_models"  # diffusion类别存储到diffusion_models文件夹
+  
+  # Org格式类型：detailed（详细）、compact（紧凑）、card（卡片）、minimal（极简）
+  org_format: "detailed"
+  
+  # Exporter配置
+  exporter:
+    # Exporter类名：BaseOrgExporter, ArXivOrgExporter
+    class: "ArXivOrgExporter"
+    
+    # 标题模板，支持变量：{title}, {link}, {published_time}, {crawl_time}, {index}, {arxiv_id}, {authors}, {first_author}, {categories}
+    # 示例：* [[{link}][{title}]] 或 * {title} [{published_time}]
+    title_template: "* [[{link}][{first_author} --- {title}]]"
+    
+    # 路径配置
+    path:
+      # 路径类型：relative（相对路径）或 absolute（绝对路径）
+      type: "relative"
+      # 基础路径（相对路径的基准或绝对路径的根）
+      base_path: "data"
+      # 路径模板，支持变量：{site_name}, {date}, {base_path}
+      # 默认：data/{site_name}/{date}.org
+      template: "data/{site_name}/{date}.org"
+    
+    # 索引文件配置
+    index:
+      # 是否启用索引文件
+      enabled: true
+      # 索引文件路径（相对于base_path），如果为None则使用默认路径
+      # 默认：data/{site_name}/index.org
+      path: null
 
