@@ -114,8 +114,29 @@ def main():
             index_path = Path(path_base) / site_config.name / index_path_config
         else:
             index_path = path_manager.get_index_path(site_config.name)
-        index_manager = IndexManager(index_path)
+        
+        # 读取表头和模板配置
+        table_headers = index_config.get('table_headers', ["{title}", "{first_author}", "{link}"])
+        cell_templates = index_config.get('cell_templates', {
+            "title": "{title}",
+            "first_author": "{first_author}",
+            "link": "[[{link}][查看]]"
+        })
+        # 读取表头标签映射（可选，用于将变量名转换为中文显示）
+        header_labels = index_config.get('header_labels', {
+            "title": "标题",
+            "first_author": "第一作者",
+            "link": "链接"
+        })
+        
+        index_manager = IndexManager(
+            index_path=index_path,
+            table_headers=table_headers,
+            cell_templates=cell_templates,
+            header_labels=header_labels
+        )
         logger.info(f"索引文件: {index_path}")
+        logger.info(f"索引表头: {table_headers}")
     
     # 创建爬虫（使用 CrawlerManager 自动选择）
     crawler = CrawlerManager.get_crawler(site_config)
@@ -170,11 +191,17 @@ def main():
             
             # 更新索引文件
             if index_manager:
+                # 如果启用了分类，传递分类信息
+                categorized_items = None
+                if org_exporter.keyword_classifier and result.items_count > 0:
+                    categorized_items = org_exporter.keyword_classifier.classify_items(result.items)
+                
                 index_manager.update_index(
                     site_name=result.site_name,
                     crawl_time=result.crawl_time,
                     items=result.items,
-                    date_file_path=org_path
+                    date_file_path=org_path,
+                    categorized_items=categorized_items
                 )
                 logger.info(f"已更新索引文件: {index_manager.index_path}")
             

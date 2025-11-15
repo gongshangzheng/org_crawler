@@ -70,9 +70,20 @@ class BaseOrgExporter(ABC):
         
         # 添加作者信息（如果有）
         authors = item.get('authors', [])
-        if authors:
+        # 确保 authors 是列表格式
+        if not isinstance(authors, list):
+            if isinstance(authors, str):
+                # 如果是字符串，可能是逗号分隔的，需要分割
+                if ',' in authors:
+                    authors = [a.strip() for a in authors.split(',') if a.strip()]
+                else:
+                    authors = [authors] if authors.strip() else []
+            else:
+                authors = []
+        
+        if authors and len(authors) > 0:
             variables['authors'] = ', '.join(authors)
-            variables['first_author'] = authors[0] if authors else ''
+            variables['first_author'] = authors[0].strip()  # 只取第一个作者，并去除空格
         else:
             variables['authors'] = ''
             variables['first_author'] = ''
@@ -137,11 +148,7 @@ class BaseOrgExporter(ABC):
                 # 生成并保存该类别的org内容
                 org_content = self._generate_org_content(category_result, category)
                 
-                # 如果文件已存在，追加新条目
-                if category_path.exists():
-                    existing_content = category_path.read_text(encoding='utf-8')
-                    org_content = self._merge_org_content(existing_content, org_content, category_result)
-                
+                # 直接覆盖文件（不再合并）
                 category_path.write_text(org_content, encoding='utf-8')
         else:
             # 未启用分类，使用原有逻辑
@@ -149,11 +156,7 @@ class BaseOrgExporter(ABC):
             
             org_content = self._generate_org_content(result)
             
-            # 如果文件已存在，追加新条目
-            if output_path.exists():
-                existing_content = output_path.read_text(encoding='utf-8')
-                org_content = self._merge_org_content(existing_content, org_content, result)
-            
+            # 直接覆盖文件（不再合并）
             output_path.write_text(org_content, encoding='utf-8')
     
     def _generate_org_content(self, result: CrawlResult, category: Optional[str] = None) -> str:
