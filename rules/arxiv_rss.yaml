@@ -26,6 +26,10 @@ keywords:
 custom_config:
   # RSS 爬虫的额外配置
   max_items: 100  # 最大条目数（可选，用于限制）
+  
+  # 定时爬取时间（可选），格式：HH:MM（24小时制），例如 "08:00" 表示每天早上8点
+  # 如果设置的时间不在24小时内，或未设置，则立即执行
+  crawl_time: "08:00"
   include_abstract: true  # 包含摘要
   
   # 领域配置（可以扩展支持多个分类）
@@ -51,11 +55,26 @@ custom_config:
       - "diffusion models"
       - "stable diffusion"
       - "latent diffusion"
+      - "image generation"
+      - "image synthesis"
+      - "image synthesis model"
+      - "image synthesis models"
+      - "image synthesis model"
+      - "video generation"
+      - "video synthesis"
+      - "video synthesis model"
+      - "video synthesis models"
+      - "video synthesis model"
+      - "video synthesis model"
+    vton:
+      - "virtual try-on"
+      - "VTON"
   
   # 类别文件夹映射（可选，如果不配置则使用类别名作为文件夹名）
   category_folders:
     agent: "agent"  # agent类别存储到agent文件夹
     diffusion: "diffusion_models"  # diffusion类别存储到diffusion_models文件夹
+    vton: "vton"  # vton类别存储到vton文件夹
   
   # Org格式类型：detailed（详细）、compact（紧凑）、card（卡片）、minimal（极简）
   org_format: "detailed"

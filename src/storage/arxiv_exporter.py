@@ -38,9 +38,15 @@ class ArXivOrgExporter(BaseOrgExporter):
         lines.append("")
         
         # 标题
-        lines.append("** 标题")
         lines.append(item.get('title', ''))
         lines.append("")
+        
+        # 摘要
+        if item.get('summary'):
+            summary = item['summary'].replace('\n', ' ')
+            lines.append(summary)
+            lines.append("")
+
         
         # 标题（中文）- 如果有翻译
         if item.get('title_zh'):
@@ -52,13 +58,6 @@ class ArXivOrgExporter(BaseOrgExporter):
         if item.get('link'):
             lines.append("** 链接")
             lines.append(f"[[{item['link']}][{item['link']}]]")
-            lines.append("")
-        
-        # 摘要
-        if item.get('summary'):
-            lines.append("** 摘要")
-            summary = item['summary'].replace('\n', ' ')
-            lines.append(summary)
             lines.append("")
         
         # 摘要（中文）- 如果有翻译

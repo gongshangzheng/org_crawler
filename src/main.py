@@ -4,7 +4,7 @@ import sys
 import time
 import signal
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from .utils.logger import setup_logger, get_logger
 from .utils.config_loader import load_global_config, load_rule_config
@@ -28,7 +28,7 @@ def signal_handler(signum, frame):
     running = False
 
 
-def run_crawl(crawler, path_manager, org_exporter, index_manager, 
+def run_crawl(crawler, path_manager, org_exporter, index_manager,
               file_manager, storage_config, logger):
     """
     执行一次爬取任务
@@ -139,78 +139,59 @@ def run_crawl(crawler, path_manager, org_exporter, index_manager,
         return False
 
 
-def main():
-    """主函数"""
-    # 加载全局配置
-    global_config = load_global_config()
-    
-    # 设置日志
-    log_config = global_config.get('logging', {})
-    logger = setup_logger(
-        level=log_config.get('level', 'INFO'),
-        log_file=log_config.get('file'),
-        max_size_mb=log_config.get('max_size_mb', 10)
-    )
-    
-    logger.info("=" * 60)
-    logger.info("Org Crawler 启动")
-    logger.info("=" * 60)
-    
+def setup_runtime(global_config, logger):
+    """
+    加载规则配置并初始化与站点相关的组件。
+    每次调用都会重新读取规则文件，以便运行中修改配置可以生效。
+    """
     # 加载规则配置（示例：ArXiv）
     rule_file = "rules/arxiv_rss.yaml"
     if not Path(rule_file).exists():
         logger.error(f"规则文件不存在: {rule_file}")
         logger.info("请先创建规则配置文件")
-        sys.exit(1)
-    
-    try:
-        # 加载规则配置（传入全局配置以获取默认更新频率）
-        site_config = load_rule_config(rule_file, global_config)
-        logger.info(f"加载规则: {site_config.name}")
-        logger.info(f"  URL: {site_config.url}")
-        logger.info(f"  更新频率: {site_config.update_frequency} 分钟")
+        raise FileNotFoundError(f"规则文件不存在: {rule_file}")
+
+    # 加载规则（传入全局配置以获取默认更新频率）
+    site_config = load_rule_config(rule_file, global_config)
+    logger.info(f"加载规则: {site_config.name}")
+    logger.info(f"  URL: {site_config.url}")
+    logger.info(f"  更新频率: {site_config.update_frequency} 分钟")
+    if site_config.keywords:
         logger.info(f"  关键词: {', '.join(site_config.keywords)}")
-    except Exception as e:
-        logger.error(f"加载规则配置失败: {e}")
-        sys.exit(1)
-    
-    # 初始化组件
-    storage_config = global_config.get('storage', {})
-    file_manager = FileManager(
-        base_path=storage_config.get('base_path', 'data'),
-        date_format=storage_config.get('date_format', '%Y-%m-%d')
-    )
-    
-    # 从规则配置中读取配置
+
+    # 从规则配置中读取自定义配置
     custom_config = site_config.custom_config or {}
-    
+
+    # 读取存储配置
+    storage_config = global_config.get('storage', {})
+
     # 初始化关键词分类器（如果配置了类别映射）
     keyword_classifier = None
     category_folders = {}
-    
+
     category_mapping = custom_config.get('category_mapping', {})
     if category_mapping:
         keyword_classifier = KeywordClassifier(category_mapping)
         logger.info(f"已启用关键词分类，类别数: {len(category_mapping)}")
-    
+
     category_folders = custom_config.get('category_folders', {})
     if category_folders:
         logger.info(f"已配置类别文件夹映射: {category_folders}")
-    
+
     # 初始化 PathManager
     exporter_config = custom_config.get('exporter', {})
     path_config = exporter_config.get('path', {})
     path_type = path_config.get('type', 'relative')
     path_base = path_config.get('base_path', storage_config.get('base_path', 'data'))
     path_template = path_config.get('template', 'data/{site_name}/{date}.org')
-    
+
     path_manager = PathManager(
         base_path=path_base,
         path_type=path_type,
         path_template=path_template
     )
     logger.info(f"路径管理器: 类型={path_type}, 基础路径={path_base}")
-    
+
     # 初始化 Exporter
     exporter_config_dict = custom_config.get('exporter', {})
     if not exporter_config_dict:
@@ -219,26 +200,26 @@ def main():
             'class': 'BaseOrgExporter',
             'org_format': custom_config.get('org_format', 'detailed')
         }
-    
+
     org_exporter = ExporterManager.create_exporter(
         exporter_config=exporter_config_dict,
         keyword_classifier=keyword_classifier,
         category_folders=category_folders
     )
     logger.info(f"使用 Exporter: {exporter_config_dict.get('class', 'BaseOrgExporter')}")
-    
+
     # 初始化 IndexManager（如果启用）
     index_config = exporter_config.get('index', {})
     index_enabled = index_config.get('enabled', False)
     index_manager = None
-    
+
     if index_enabled:
         index_path_config = index_config.get('path')
         if index_path_config:
             index_path = Path(path_base) / site_config.name / index_path_config
         else:
             index_path = path_manager.get_index_path(site_config.name)
-        
+
         # 读取表头和模板配置
         table_headers = index_config.get('table_headers', ["{title}", "{first_author}", "{link}"])
         cell_templates = index_config.get('cell_templates', {
@@ -252,7 +233,7 @@ def main():
             "first_author": "第一作者",
             "link": "链接"
         })
-        
+
         index_manager = IndexManager(
             index_path=index_path,
             table_headers=table_headers,
@@ -261,60 +242,144 @@ def main():
         )
         logger.info(f"索引文件: {index_path}")
         logger.info(f"索引表头: {table_headers}")
-    
+
     # 创建爬虫（使用 CrawlerManager 自动选择）
     crawler = CrawlerManager.get_crawler(site_config)
     logger.info(f"使用爬虫: {crawler.__class__.__name__}")
-    
+
+    return (
+        site_config,
+        custom_config,
+        storage_config,
+        path_manager,
+        org_exporter,
+        index_manager,
+        crawler,
+    )
+
+
+def main():
+    """主函数"""
+    # 加载全局配置
+    global_config = load_global_config()
+
+    # 设置日志
+    log_config = global_config.get('logging', {})
+    logger = setup_logger(
+        level=log_config.get('level', 'INFO'),
+        log_file=log_config.get('file'),
+        max_size_mb=log_config.get('max_size_mb', 10)
+    )
+
+    logger.info("=" * 60)
+    logger.info("Org Crawler 启动")
+    logger.info("=" * 60)
+
+    # 初始化组件（与全局配置相关的，只需初始化一次）
+    storage_config = global_config.get('storage', {})
+    file_manager = FileManager(
+        base_path=storage_config.get('base_path', 'data'),
+        date_format=storage_config.get('date_format', '%Y-%m-%d')
+    )
+
     # 注册信号处理器（用于优雅退出）
-    signal.signal(signal.SIGINT, signal_handler)  # Ctrl+C
+    signal.signal(signal.SIGINT, signal_handler)   # Ctrl+C
     signal.signal(signal.SIGTERM, signal_handler)  # 终止信号
-    
-    # 获取更新频率（分钟）
-    update_frequency_minutes = site_config.update_frequency
-    update_frequency_seconds = update_frequency_minutes * 60
-    
-    logger.info("=" * 60)
-    logger.info("开始持续运行模式")
-    logger.info(f"更新频率: {update_frequency_minutes} 分钟 ({update_frequency_seconds} 秒)")
+
+    logger.info("进入持续运行模式，配置将在每轮循环前重新加载")
     logger.info("按 Ctrl+C 停止程序")
-    logger.info("=" * 60)
-    
-    # 立即执行一次爬取
-    run_crawl(crawler, path_manager, org_exporter, index_manager, 
-              file_manager, storage_config, logger)
-    
+
     # 持续运行循环
     while running:
         try:
-            # 等待指定时间
-            logger.info(f"等待 {update_frequency_minutes} 分钟后进行下次爬取...")
-            
-            # 分段等待，以便能够响应退出信号
-            wait_interval = 60  # 每60秒检查一次
-            waited = 0
-            while waited < update_frequency_seconds and running:
-                time.sleep(min(wait_interval, update_frequency_seconds - waited))
-                waited += wait_interval
-                if waited % 300 == 0:  # 每5分钟打印一次剩余时间
-                    remaining_minutes = (update_frequency_seconds - waited) // 60
-                    logger.info(f"距离下次爬取还有约 {remaining_minutes} 分钟")
-            
-            if not running:
-                break
-            
-            # 执行爬取
-            run_crawl(crawler, path_manager, org_exporter, index_manager, 
-                      file_manager, storage_config, logger)
-            
+            # 每轮循环开始前重新加载规则配置，并初始化与站点相关的组件
+            (
+                site_config,
+                custom_config,
+                storage_config,
+                path_manager,
+                org_exporter,
+                index_manager,
+                crawler,
+            ) = setup_runtime(global_config, logger)
+
+            # 获取更新频率（分钟）
+            update_frequency_minutes = site_config.update_frequency
+            update_frequency_seconds = update_frequency_minutes * 60
+
+            # 获取定时爬取时间（从 custom_config 中读取）
+            crawl_time_str = custom_config.get('crawl_time', None)
+
+            # 计算下次爬取前需要等待的秒数
+            next_crawl_time = None
+            wait_seconds = update_frequency_seconds
+
+            if crawl_time_str:
+                try:
+                    # 解析时间字符串（格式：HH:MM，例如 "08:00"）
+                    hour, minute = map(int, crawl_time_str.split(':'))
+                    if not (0 <= hour < 24 and 0 <= minute < 60):
+                        raise ValueError("时间格式错误")
+
+                    now = datetime.now()
+                    today_crawl_time = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+
+                    # 如果今天的时间已过，则设置为明天
+                    if today_crawl_time <= now:
+                        next_crawl_time = today_crawl_time + timedelta(days=1)
+                    else:
+                        next_crawl_time = today_crawl_time
+
+                    wait_seconds = max(0, (next_crawl_time - now).total_seconds())
+                    logger.info(f"已设置定时爬取时间: {crawl_time_str}")
+                    logger.info(f"下次爬取时间: {next_crawl_time.strftime('%Y-%m-%d %H:%M:%S')}")
+                except (ValueError, AttributeError) as e:
+                    logger.warning(f"解析爬取时间失败 ({crawl_time_str}): {e}，将使用更新频率 {update_frequency_minutes} 分钟")
+                    wait_seconds = update_frequency_seconds
+
+            # 等待至下次爬取时间
+            if wait_seconds > 0:
+                wait_minutes = int(wait_seconds // 60)
+                if next_crawl_time:
+                    logger.info(f"等待到 {next_crawl_time.strftime('%Y-%m-%d %H:%M:%S')} 进行爬取（约 {wait_minutes} 分钟）...")
+                else:
+                    logger.info(f"等待 {wait_minutes} 分钟后进行爬取...")
+
+                wait_interval = 60  # 每60秒检查一次
+                waited = 0
+                while waited < wait_seconds and running:
+                    sleep_time = min(wait_interval, wait_seconds - waited)
+                    time.sleep(sleep_time)
+                    waited += sleep_time
+                    if waited % 300 == 0:  # 每5分钟打印一次剩余时间
+                        remaining_minutes = int(max(0, (wait_seconds - waited) // 60))
+                        logger.info(f"距离下次爬取还有约 {remaining_minutes} 分钟")
+
+                if not running:
+                    break
+
+            # 执行一次爬取
+            run_crawl(
+                crawler=crawler,
+                path_manager=path_manager,
+                org_exporter=org_exporter,
+                index_manager=index_manager,
+                file_manager=file_manager,
+                storage_config=storage_config,
+                logger=logger,
+            )
+
         except KeyboardInterrupt:
             logger.info("收到键盘中断信号")
+            break
+        except FileNotFoundError:
+            # 规则文件不存在时直接退出
             break
         except Exception as e:
             logger.error(f"循环中发生错误: {e}", exc_info=True)
             # 即使出错也继续运行，等待下次更新
-            logger.info(f"将在 {update_frequency_minutes} 分钟后重试...")
-    
+            logger.info("将按照当前更新频率在下一轮重试...")
+
     logger.info("=" * 60)
     logger.info("程序已停止")
     logger.info("=" * 60)
