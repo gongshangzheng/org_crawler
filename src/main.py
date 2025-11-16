@@ -16,6 +16,14 @@ from .storage.path_manager import PathManager
 from .storage.index_manager import IndexManager
 
 
+# 需要运行的规则文件列表（可以添加多个）
+RULE_FILES = [
+    "rules/arxiv_rss.yaml",
+    # 在这里继续添加其他规则文件路径，例如：
+    # "rules/another_site.yaml",
+]
+
+
 # 全局变量用于信号处理
 running = True
 
@@ -139,13 +147,12 @@ def run_crawl(crawler, path_manager, org_exporter, index_manager,
         return False
 
 
-def setup_runtime(global_config, logger):
+def setup_runtime(global_config, logger, rule_file: str):
     """
-    加载规则配置并初始化与站点相关的组件。
-    每次调用都会重新读取规则文件，以便运行中修改配置可以生效。
+    加载指定规则文件并初始化与站点相关的组件。
+    每次调用都会重新读取该规则文件，以便运行中修改配置可以生效。
     """
-    # 加载规则配置（示例：ArXiv）
-    rule_file = "rules/arxiv_rss.yaml"
+    # 加载规则配置
     if not Path(rule_file).exists():
         logger.error(f"规则文件不存在: {rule_file}")
         logger.info("请先创建规则配置文件")
@@ -292,16 +299,21 @@ def main():
     # 持续运行循环
     while running:
         try:
-            # 每轮循环开始前重新加载规则配置，并初始化与站点相关的组件
+            if not RULE_FILES:
+                logger.error("RULE_FILES 为空，没有可运行的规则文件")
+                break
+
+            # 以第一个规则文件作为调度基准，计算等待时间
+            primary_rule_file = RULE_FILES[0]
             (
                 site_config,
                 custom_config,
-                storage_config,
-                path_manager,
-                org_exporter,
-                index_manager,
-                crawler,
-            ) = setup_runtime(global_config, logger)
+                _storage_config_site,
+                _path_manager_site,
+                _org_exporter_site,
+                _index_manager_site,
+                _crawler_site,
+            ) = setup_runtime(global_config, logger, primary_rule_file)
 
             # 获取更新频率（分钟）
             update_frequency_minutes = site_config.update_frequency
@@ -310,7 +322,7 @@ def main():
             # 获取定时爬取时间（从 custom_config 中读取）
             crawl_time_str = custom_config.get('crawl_time', None)
 
-            # 计算下次爬取前需要等待的秒数
+            # 计算本轮开始前需要等待的秒数
             next_crawl_time = None
             wait_seconds = update_frequency_seconds
 
@@ -331,19 +343,19 @@ def main():
                         next_crawl_time = today_crawl_time
 
                     wait_seconds = max(0, (next_crawl_time - now).total_seconds())
-                    logger.info(f"已设置定时爬取时间: {crawl_time_str}")
-                    logger.info(f"下次爬取时间: {next_crawl_time.strftime('%Y-%m-%d %H:%M:%S')}")
+                    logger.info(f"[调度] 已设置定时爬取时间: {crawl_time_str}")
+                    logger.info(f"[调度] 下次爬取时间: {next_crawl_time.strftime('%Y-%m-%d %H:%M:%S')}")
                 except (ValueError, AttributeError) as e:
-                    logger.warning(f"解析爬取时间失败 ({crawl_time_str}): {e}，将使用更新频率 {update_frequency_minutes} 分钟")
+                    logger.warning(f"[调度] 解析爬取时间失败 ({crawl_time_str}): {e}，将使用更新频率 {update_frequency_minutes} 分钟")
                     wait_seconds = update_frequency_seconds
 
-            # 等待至下次爬取时间
+            # 等待至本轮开始时间
             if wait_seconds > 0:
                 wait_minutes = int(wait_seconds // 60)
                 if next_crawl_time:
-                    logger.info(f"等待到 {next_crawl_time.strftime('%Y-%m-%d %H:%M:%S')} 进行爬取（约 {wait_minutes} 分钟）...")
+                    logger.info(f"[调度] 等待到 {next_crawl_time.strftime('%Y-%m-%d %H:%M:%S')} 开始本轮爬取（约 {wait_minutes} 分钟）...")
                 else:
-                    logger.info(f"等待 {wait_minutes} 分钟后进行爬取...")
+                    logger.info(f"[调度] 等待 {wait_minutes} 分钟后开始本轮爬取...")
 
                 wait_interval = 60  # 每60秒检查一次
                 waited = 0
@@ -353,21 +365,42 @@ def main():
                     waited += sleep_time
                     if waited % 300 == 0:  # 每5分钟打印一次剩余时间
                         remaining_minutes = int(max(0, (wait_seconds - waited) // 60))
-                        logger.info(f"距离下次爬取还有约 {remaining_minutes} 分钟")
+                        logger.info(f"[调度] 距离本轮爬取还有约 {remaining_minutes} 分钟")
 
                 if not running:
                     break
 
-            # 执行一次爬取
-            run_crawl(
-                crawler=crawler,
-                path_manager=path_manager,
-                org_exporter=org_exporter,
-                index_manager=index_manager,
-                file_manager=file_manager,
-                storage_config=storage_config,
-                logger=logger,
-            )
+            # 到达本轮执行时间后，依次跑每一个规则文件
+            for rule_file in RULE_FILES:
+                try:
+                    logger.info("=" * 60)
+                    logger.info(f"开始处理规则文件: {rule_file}")
+                    logger.info("=" * 60)
+
+                    (
+                        site_config,
+                        custom_config,
+                        storage_config_site,
+                        path_manager,
+                        org_exporter,
+                        index_manager,
+                        crawler,
+                    ) = setup_runtime(global_config, logger, rule_file)
+
+                    # 对于每个站点，使用其自己的存储配置（目前来自全局 storage，但为将来扩展保留）
+                    run_crawl(
+                        crawler=crawler,
+                        path_manager=path_manager,
+                        org_exporter=org_exporter,
+                        index_manager=index_manager,
+                        file_manager=file_manager,
+                        storage_config=storage_config_site,
+                        logger=logger,
+                    )
+                except FileNotFoundError:
+                    # 某个规则文件不存在时，记录错误但继续处理其他规则
+                    logger.error(f"规则文件不存在，跳过: {rule_file}")
+                    continue
 
         except KeyboardInterrupt:
             logger.info("收到键盘中断信号")
