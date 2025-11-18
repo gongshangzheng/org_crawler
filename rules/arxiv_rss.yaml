@@ -9,19 +9,6 @@ update_frequency: 1440  # 更新频率（分钟），优先级高于全局配置
 storage_path: "arxiv"
 enabled: true
 
-# 关键词过滤：只保留包含这些关键词的论文
-keywords:
-  - "agent"
-  - "agents"
-  - "multi-agent"
-  - "multiagent"
-  - "multi agent"
-  - "diffusion"
-  - "diffusion model"
-  - "diffusion models"
-  - "stable diffusion"
-  - "latent diffusion"
-
 # 自定义配置
 custom_config:
   # RSS 爬虫的额外配置
@@ -32,6 +19,30 @@ custom_config:
   crawl_time: "08:00"
   include_abstract: true  # 包含摘要
   
+  # 过滤器链：用于整体筛选需要保留的论文（替代原来的 keywords）
+  filters:
+    # 时间过滤器：爬取昨天的所有条目（ArXiv 时间只到日期，时分秒为0）
+    - type: "time"
+      yesterday: true
+      date_only: true
+    # 关键词过滤器：标题或摘要中包含指定关键词
+    - type: "or"
+      filters:
+        - type: "title"
+          keywords:
+            - "agent"
+            - "diffusion"
+            - "Image Compression"
+            - "Image Generation"
+            - "Image Synthesis"
+        - type: "summary"
+          keywords:
+            - "agent"
+            - "diffusion"
+            - "Image Compression"
+            - "Image Generation"
+            - "Image Synthesis"
+  
   # 领域配置（可以扩展支持多个分类）
   categories:
     - "cs.AI"  # 人工智能
@@ -39,42 +50,58 @@ custom_config:
     # - "cs.LG"  # 机器学习
     # - "cs.CV"  # 计算机视觉
   
-  # 关键词分类映射（用于将关键词归类到不同类别）
+  # 分类映射（基于过滤器的分类规则，用于得到不同的 category）
   category_mapping:
     agent:
-      - "agent"
-      - "agents"
-      - "multi-agent"
-      - "multiagent"
-      - "multi agent"
-      - "autonomous agent"
-      - "intelligent agent"
+      folder: "agent"  # 存储到 agent 子目录
+      filter:
+        type: "or"
+        filters:
+          - type: "title"
+            keywords:
+              - "agent"
+          - type: "summary"
+            keywords:
+              - "agent"
     diffusion:
-      - "diffusion"
-      - "diffusion model"
-      - "diffusion models"
-      - "stable diffusion"
-      - "latent diffusion"
-      - "image generation"
-      - "image synthesis"
-      - "image synthesis model"
-      - "image synthesis models"
-      - "image synthesis model"
-      - "video generation"
-      - "video synthesis"
-      - "video synthesis model"
-      - "video synthesis models"
-      - "video synthesis model"
-      - "video synthesis model"
+      folder: "diffusion_models"
+      filter:
+        type: "or"
+        filters:
+          - type: "title"
+            keywords:
+              - "diffusion"
+              - "image synthesis"
+              - "video generation"
+          - type: "summary"
+            keywords:
+              - "diffusion"
+              - "image synthesis"
+              - "video generation"
     vton:
-      - "virtual try-on"
-      - "VTON"
-  
-  # 类别文件夹映射（可选，如果不配置则使用类别名作为文件夹名）
-  category_folders:
-    agent: "agent"  # agent类别存储到agent文件夹
-    diffusion: "diffusion_models"  # diffusion类别存储到diffusion_models文件夹
-    vton: "vton"  # vton类别存储到vton文件夹
+      folder: "vton"
+      filter:
+        type: "or"
+        filters:
+          - type: "title"
+            keywords:
+              - "virtual try-on"
+              - "VTON"
+          - type: "summary"
+            keywords:
+              - "virtual try-on"
+              - "VTON"
+    image_compression:
+      folder: "image_compression"
+      filter:
+        type: "or"
+        filters:
+          - type: "title"
+            keywords:
+              - "image compression"
+          - type: "summary"
+            keywords:
+              - "image compression"
   
   # Org格式类型：detailed（详细）、compact（紧凑）、card（卡片）、minimal（极简）
   org_format: "detailed"

@@ -99,8 +99,8 @@ class BaseRSSCrawler(BaseCrawler):
                     if item:
                         items.append(item)
             
-            # 关键词过滤
-            filtered_items = self.filter_by_keywords(items)
+            # 过滤器链处理（标题/摘要/作者/时间等），如果未配置则回退到关键词过滤
+            filtered_items = self.apply_filters(items)
             
             # 转换为字典列表（用于 CrawlResult）
             items_dict = [item.to_dict() for item in filtered_items]

@@ -2,6 +2,15 @@
 
 PROCESS_NAME="run.py"
 
+# 检查是否提供了 -c 或 --continuous 参数
+CONTINUOUS_FLAG=""
+if [ "$1" == "-c" ] || [ "$1" == "--continuous" ]; then
+    CONTINUOUS_FLAG="-c"
+    echo "使用持续运行模式"
+else
+    echo "使用单次运行模式"
+fi
+
 echo "正在查找 $PROCESS_NAME 进程..."
 PID=$(pgrep -f "$PROCESS_NAME")
 
@@ -23,4 +32,4 @@ else
 fi
 
 source ~/code/org_crawler/.venv/bin/activate
-python run.py &
+python run.py $CONTINUOUS_FLAG &

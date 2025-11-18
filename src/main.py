@@ -6,14 +6,20 @@ import signal
 from pathlib import Path
 from datetime import datetime, timedelta
 
+from typing import Dict
+import argparse
 from .utils.logger import setup_logger, get_logger
 from .utils.config_loader import load_global_config, load_rule_config
-from .utils.keyword_classifier import KeywordClassifier
 from .crawler.crawler_manager import CrawlerManager
 from .storage.file_manager import FileManager
 from .storage.exporter_manager import ExporterManager
 from .storage.path_manager import PathManager
 from .storage.index_manager import IndexManager
+from .filters import FilterManager, CategoryRuleClassifier
+
+parser = argparse.ArgumentParser(description='Org Crawler')
+parser.add_argument('-c', '--continuous', action='store_true', help='持续运行模式')
+args = parser.parse_args()
 
 
 # 需要运行的规则文件列表（可以添加多个）
@@ -169,21 +175,30 @@ def setup_runtime(global_config, logger, rule_file: str):
     # 从规则配置中读取自定义配置
     custom_config = site_config.custom_config or {}
 
+    # 初始化分类器（使用基于过滤器的 category_mapping）
+    keyword_classifier = None
+    category_folders: Dict[str, str] = {}
+
+    category_mapping_cfg = custom_config.get('category_mapping', {})
+    if category_mapping_cfg:
+        category_classifier = CategoryRuleClassifier.from_config(category_mapping_cfg)
+        keyword_classifier = category_classifier  # 作为 BaseOrgExporter 的分类器传入
+        # 从配置中提取类别文件夹映射
+        for name, cfg in category_mapping_cfg.items():
+            folder = name
+            if isinstance(cfg, dict):
+                folder = cfg.get("folder", name)
+            category_folders[name] = folder
+        logger.info(f"已启用基于过滤器的分类，类别数: {len(category_folders)}")
+
+    # 向后兼容：旧的 category_folders 配置仍然生效（可覆盖上面的 folder）
+    legacy_category_folders = custom_config.get('category_folders', {})
+    if legacy_category_folders:
+        category_folders.update(legacy_category_folders)
+        logger.info(f"已应用自定义类别文件夹映射: {category_folders}")
+
     # 读取存储配置
     storage_config = global_config.get('storage', {})
-
-    # 初始化关键词分类器（如果配置了类别映射）
-    keyword_classifier = None
-    category_folders = {}
-
-    category_mapping = custom_config.get('category_mapping', {})
-    if category_mapping:
-        keyword_classifier = KeywordClassifier(category_mapping)
-        logger.info(f"已启用关键词分类，类别数: {len(category_mapping)}")
-
-    category_folders = custom_config.get('category_folders', {})
-    if category_folders:
-        logger.info(f"已配置类别文件夹映射: {category_folders}")
 
     # 初始化 PathManager
     exporter_config = custom_config.get('exporter', {})
@@ -254,6 +269,22 @@ def setup_runtime(global_config, logger, rule_file: str):
     crawler = CrawlerManager.get_crawler(site_config)
     logger.info(f"使用爬虫: {crawler.__class__.__name__}")
 
+    # 构建过滤器链：全局 filters + 站点 filters
+    global_filters_cfg = global_config.get("filters", [])
+    rule_filters_cfg = custom_config.get("filters", [])
+    filter_configs = []
+    if isinstance(global_filters_cfg, list):
+        filter_configs.extend(global_filters_cfg)
+    if isinstance(rule_filters_cfg, list):
+        filter_configs.extend(rule_filters_cfg)
+
+    filters = FilterManager.create_filters(filter_configs)
+    if filters:
+        crawler.set_filters(filters)
+        logger.info(f"已配置 {len(filters)} 个过滤器")
+    else:
+        logger.info("未配置过滤器，将使用默认关键词过滤（如有）")
+
     return (
         site_config,
         custom_config,
@@ -265,8 +296,10 @@ def setup_runtime(global_config, logger, rule_file: str):
     )
 
 
-def main():
-    """主函数"""
+def run_once():
+    """
+    只运行一次的函数：执行所有规则文件后退出，不进入循环
+    """
     # 加载全局配置
     global_config = load_global_config()
 
@@ -279,7 +312,76 @@ def main():
     )
 
     logger.info("=" * 60)
-    logger.info("Org Crawler 启动")
+    logger.info("Org Crawler 启动（单次运行模式）")
+    logger.info("=" * 60)
+
+    # 初始化组件（与全局配置相关的，只需初始化一次）
+    storage_config = global_config.get('storage', {})
+    file_manager = FileManager(
+        base_path=storage_config.get('base_path', 'data'),
+        date_format=storage_config.get('date_format', '%Y-%m-%d')
+    )
+
+    # 检查规则文件列表
+    if not RULE_FILES:
+        logger.error("RULE_FILES 为空，没有可运行的规则文件")
+        return
+
+    # 依次执行每个规则文件
+    for rule_file in RULE_FILES:
+        try:
+            logger.info("=" * 60)
+            logger.info(f"开始处理规则文件: {rule_file}")
+            logger.info("=" * 60)
+
+            (
+                site_config,
+                custom_config,
+                storage_config_site,
+                path_manager,
+                org_exporter,
+                index_manager,
+                crawler,
+            ) = setup_runtime(global_config, logger, rule_file)
+
+            # 执行爬取
+            run_crawl(
+                crawler=crawler,
+                path_manager=path_manager,
+                org_exporter=org_exporter,
+                index_manager=index_manager,
+                file_manager=file_manager,
+                storage_config=storage_config_site,
+                logger=logger,
+            )
+        except FileNotFoundError:
+            # 某个规则文件不存在时，记录错误但继续处理其他规则
+            logger.error(f"规则文件不存在，跳过: {rule_file}")
+            continue
+        except Exception as e:
+            logger.error(f"处理规则文件 {rule_file} 时发生错误: {e}", exc_info=True)
+            continue
+
+    logger.info("=" * 60)
+    logger.info("单次运行完成")
+    logger.info("=" * 60)
+
+
+def run_continuous():
+    """主函数（持续运行模式）"""
+    # 加载全局配置
+    global_config = load_global_config()
+
+    # 设置日志
+    log_config = global_config.get('logging', {})
+    logger = setup_logger(
+        level=log_config.get('level', 'INFO'),
+        log_file=log_config.get('file'),
+        max_size_mb=log_config.get('max_size_mb', 10)
+    )
+
+    logger.info("=" * 60)
+    logger.info("Org Crawler 启动（持续运行模式）")
     logger.info("=" * 60)
 
     # 初始化组件（与全局配置相关的，只需初始化一次）
@@ -417,7 +519,12 @@ def main():
     logger.info("程序已停止")
     logger.info("=" * 60)
 
+def main(continuous: bool = True):
+    if continuous:
+        run_continuous()
+    else:
+        run_once()
 
 if __name__ == "__main__":
-    main()
+    main(continuous=args.continuous)
 

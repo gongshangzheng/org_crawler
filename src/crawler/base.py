@@ -3,10 +3,14 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, Optional
 from datetime import datetime
+from typing import TYPE_CHECKING
+
 from ..models.site_config import SiteConfig
 from ..models.crawl_result import CrawlResult
 from ..models.crawl_item import CrawlItem
 
+if TYPE_CHECKING:
+    from ..filters.base import BaseFilter
 
 class BaseCrawler(ABC):
     """所有爬虫的基类"""
@@ -19,6 +23,8 @@ class BaseCrawler(ABC):
             site_config: 网站配置
         """
         self.site_config = site_config
+        # 过滤器链，在主程序中注入
+        self.filters: List["BaseFilter"] = []
     
     @abstractmethod
     def crawl(self) -> CrawlResult:
@@ -110,16 +116,45 @@ class BaseCrawler(ABC):
         except Exception:
             return None
     
-    def filter_by_keywords(self, items: List[CrawlItem]) -> List[CrawlItem]:
+    def set_filters(self, filters: List["BaseFilter"]) -> None:
+        """设置过滤器链"""
+        self.filters = filters or []
+
+    def apply_filters(self, items: List[CrawlItem]) -> List[CrawlItem]:
         """
-        根据关键词过滤条目，并将匹配的关键词存储到条目中
-        
-        Args:
-            items: 条目列表
+        按顺序应用过滤器链；如果未配置过滤器，则回退到旧的关键词过滤逻辑。
+        """
+        if self.filters:
+            from ..utils.logger import get_logger
+            from ..filters.time_filter import TimeRangeFilter
+            logger = get_logger()
             
-        Returns:
-            过滤后的条目列表
-        """
+            # 打印过滤前的条目数量
+            initial_count = len(items)
+            logger.info(f"[过滤器] 过滤前获取到 {initial_count} 个条目")
+            
+            for flt in self.filters:
+                # 如果是时间过滤器，打印时间范围
+                if isinstance(flt, TimeRangeFilter):
+                    range_str = flt.get_range_str()
+                    logger.info(f"[时间过滤器] 时间范围: {range_str}")
+                
+                items = flt.apply(items)
+                # 打印每个过滤器应用后的条目数量
+                current_count = len(items)
+                filter_name = flt.__class__.__name__
+                logger.info(f"[过滤器] 应用 {filter_name} 后剩余 {current_count} 个条目")
+            
+            # 打印最终过滤后的条目数量
+            final_count = len(items)
+            logger.info(f"[过滤器] 过滤完成，最终保留 {final_count} 个条目（过滤掉 {initial_count - final_count} 个）")
+            return items
+
+        # 没有配置过滤器，使用旧的关键词过滤以保持向后兼容
+        return self._filter_by_keywords_legacy(items)
+
+    def _filter_by_keywords_legacy(self, items: List[CrawlItem]) -> List[CrawlItem]:
+        """旧的关键词过滤逻辑（用于向后兼容），未来可以逐步弃用。"""
         if not self.site_config.keywords:
             return items
         
