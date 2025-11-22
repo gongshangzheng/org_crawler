@@ -4,10 +4,20 @@ PROCESS_NAME="run.py"
 
 # 检查是否提供了 -c 或 --continuous 参数
 CONTINUOUS_FLAG=""
-if [ "$1" == "-c" ] || [ "$1" == "--continuous" ]; then
-    CONTINUOUS_FLAG="-c"
-    echo "使用持续运行模式"
-else
+REPAIR_FLAG=""
+
+# 解析参数
+for arg in "$@"; do
+    if [ "$arg" == "-c" ] || [ "$arg" == "--continuous" ]; then
+        CONTINUOUS_FLAG="-c"
+        echo "使用持续运行模式"
+    elif [ "$arg" == "-r" ] || [ "$arg" == "--repair" ]; then
+        REPAIR_FLAG="-r"
+        echo "使用修复模式"
+    fi
+done
+
+if [ -z "$CONTINUOUS_FLAG" ]; then
     echo "使用单次运行模式"
 fi
 
@@ -32,4 +42,4 @@ else
 fi
 
 source ~/code/org_crawler/.venv/bin/activate
-python run.py $CONTINUOUS_FLAG &
+python run.py $CONTINUOUS_FLAG $REPAIR_FLAG &

@@ -24,6 +24,6 @@ scheduler:
 #     keywords: ["Smith"]
 #     negate: true         # 反选：排除包含这些作者的条目
 #   - type: "time_range"   # 时间范围过滤
-#     start: "2025-01-01"  # 或者使用 relative_days / relative_hours
+#     start: "2025-01-01"  # 或者使用 relative_days_start/relative_days_end / relative_hours_start/relative_hours_end
 #     end: "2025-01-31"
 

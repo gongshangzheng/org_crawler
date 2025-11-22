@@ -36,7 +36,8 @@ class FilterManager:
             sub_filters = cls.create_filters(sub_cfgs)
             if not sub_filters:
                 return None
-            return LogicalFilter(operator=f_type, filters=sub_filters, negate=negate)
+            description = cfg.get("description")
+            return LogicalFilter(operator=f_type, filters=sub_filters, negate=negate, description=description)
 
         # NOT 逻辑
         if f_type == "not":
@@ -53,7 +54,8 @@ class FilterManager:
             sub_filters = cls.create_filters([sub_cfg])
             if not sub_filters:
                 return None
-            return NotFilter(flt=sub_filters[0], negate=negate)
+            description = cfg.get("description")
+            return NotFilter(flt=sub_filters[0], negate=negate, description=description)
 
         # 文本类过滤器
         if f_type in ("title", "summary", "author"):
@@ -61,21 +63,24 @@ class FilterManager:
             if not isinstance(keywords, list):
                 keywords = [keywords]
             FilterClass = cls._FILTER_TYPES[f_type]
-            return FilterClass(keywords=keywords, negate=negate)
+            description = cfg.get("description")
+            return FilterClass(keywords=keywords, negate=negate, description=description)
 
         # 时间过滤器
         if f_type == "time_range" or f_type == "time":
             FilterClass = cls._FILTER_TYPES["time_range"]
+            description = cfg.get("description")
             return FilterClass(
                 start=cfg.get("start"),
                 end=cfg.get("end"),
-                relative_days=cfg.get("relative_days"),
-                relative_hours=cfg.get("relative_hours"),
                 relative_days_start=cfg.get("relative_days_start"),
                 relative_days_end=cfg.get("relative_days_end"),
+                relative_hours_start=cfg.get("relative_hours_start"),
+                relative_hours_end=cfg.get("relative_hours_end"),
                 yesterday=cfg.get("yesterday", False),
                 date_only=cfg.get("date_only", False),
                 negate=negate,
+                description=description,
             )
 
         # 未知类型

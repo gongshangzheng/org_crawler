@@ -32,12 +32,13 @@ class CrawlerManager:
         cls._crawler_registry[name.lower()] = crawler_class
     
     @classmethod
-    def get_crawler(cls, site_config: SiteConfig) -> BaseCrawler:
+    def get_crawler(cls, site_config: SiteConfig, translator=None) -> BaseCrawler:
         """
         根据配置获取对应的爬虫实例
         
         Args:
             site_config: 网站配置
+            translator: 翻译器实例（可选）
             
         Returns:
             爬虫实例
@@ -46,16 +47,22 @@ class CrawlerManager:
         site_name = site_config.name.lower()
         if site_name in cls._crawler_registry:
             crawler_class = cls._crawler_registry[site_name]
-            return crawler_class(site_config)
+            # 检查爬虫类是否支持 translator 参数
+            import inspect
+            sig = inspect.signature(crawler_class.__init__)
+            if 'translator' in sig.parameters:
+                return crawler_class(site_config, translator=translator)
+            else:
+                return crawler_class(site_config)
         
         # 方法2: 根据爬取类型查找默认爬虫
         crawl_type = site_config.crawl_type.lower()
         if crawl_type in cls._default_crawlers:
             crawler_class = cls._default_crawlers[crawl_type]
-            return crawler_class(site_config)
+            return crawler_class(site_config, translator=translator)
         
         # 方法3: 默认使用 RSS 爬虫
-        return BaseRSSCrawler(site_config)
+        return BaseRSSCrawler(site_config, translator=translator)
     
     @classmethod
     def list_registered_crawlers(cls) -> Dict[str, str]:

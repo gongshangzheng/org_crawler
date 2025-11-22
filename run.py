@@ -12,9 +12,10 @@ from src.main import main
 
 parser = argparse.ArgumentParser(description='Org Crawler')
 parser.add_argument('-c', '--continuous', action='store_true', help='持续运行模式')
+parser.add_argument('-r', '--repair', action='store_true', help='修复模式')
 args = parser.parse_args()
 
 if __name__ == "__main__":
     # print("Starting crawler...")
-    main(continuous=args.continuous)
+    main(continuous=args.continuous, repair=args.repair)
 

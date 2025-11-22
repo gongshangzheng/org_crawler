@@ -16,32 +16,117 @@ custom_config:
   
   # 定时爬取时间（可选），格式：HH:MM（24小时制），例如 "08:00" 表示每天早上8点
   # 如果设置的时间不在24小时内，或未设置，则立即执行
-  crawl_time: "08:00"
+  crawl_time: "00:00"
   include_abstract: true  # 包含摘要
+  
+  # 翻译器配置（可选）
+  translator:
+    enabled: true  # 是否启用翻译（需要安装阿里云 SDK 和配置 AccessKey）
+    source_lang: "en"  # 源语言代码（默认：en）
+    target_lang: "zh"  # 目标语言代码（默认：zh）
+    # AccessKey 配置（可选，也可通过环境变量 ALIBABA_CLOUD_ACCESS_KEY_ID 和 ALIBABA_CLOUD_ACCESS_KEY_SECRET 设置）
+    # access_key_id: ""  # 已移除，请使用环境变量
+    # access_key_secret: ""  # 已移除，请使用环境变量
   
   # 过滤器链：用于整体筛选需要保留的论文（替代原来的 keywords）
   filters:
-    # 时间过滤器：爬取昨天的所有条目（ArXiv 时间只到日期，时分秒为0）
+    # 时间过滤器配置说明：
+    # type: "time" 或 "time_range"（必需）- 指定过滤器类型
+    # 
+    # 时间区间为左闭右开 [start, end)，即：start <= 发布时间 < end
+    # - start 时间点包含（发布时间必须 >= start）
+    # - end 时间点不包含（发布时间必须 < end）
+    #
+    # 可配置参数（优先级从高到低）：
+    # 1. yesterday: true/false
+    #    - 快捷选项：自动设置为昨天的 00:00:00 到今天的 00:00:00
+    #    - 示例：yesterday: true
+    #
+    # 2. relative_days_start / relative_days_end: 整数
+    #    - 相对于今天的 00:00:00 的日期范围（基于日期，时分秒为 00:00:00）
+    #    - relative_days_start: 开始日期（今天往前推N天）
+    #    - relative_days_end: 结束日期（今天往前推N天）
+    #    - 如果只设置了 start，end 默认为今天 00:00:00
+    #    - 示例：relative_days_start: 7, relative_days_end: 0  # 最近7天（从7天前的00:00:00到今天00:00:00）
+    #
+    # 3. relative_hours_start / relative_hours_end: 整数
+    #    - 相对于当前时间的精确范围（精确到时分秒）
+    #    - relative_hours_start: 开始时间（当前时间往前推N小时）
+    #    - relative_hours_end: 结束时间（当前时间往前推N小时）
+    #    - 如果只设置了 start，end 默认为当前时间
+    #    - 示例：relative_hours_start: 24, relative_hours_end: 0  # 24小时前到当前时间
+    #    - 示例：relative_hours_start: 48, relative_hours_end: 24  # 48小时前到24小时前
+    #
+    # 4. start / end: 字符串
+    #    - 绝对时间（字符串格式）
+    #    - 支持格式："%Y-%m-%d" 或 "%Y-%m-%d %H:%M:%S"
+    #    - 示例：start: "2025-01-01", end: "2025-01-31"
+    #    - 示例：start: "2025-01-01 00:00:00", end: "2025-01-31 23:59:59"
+    #
+    # 其他选项：
+    # - date_only: true/false
+    #   - 是否只比较日期部分（忽略时分秒）
+    #   - true: 只比较日期，将时间标准化为当天的 00:00:00
+    #   - false: 精确比较时分秒
+    #   - 适用于 ArXiv 等只有日期的时间
+    #   - 示例：date_only: false
+    #
+    # - negate: true/false
+    #   - 是否反选（排除匹配的条目）
+    #   - true: 排除匹配时间范围的条目
+    #   - false: 保留匹配时间范围的条目（默认）
+    #   - 示例：negate: false
+    #
+    # 时间过滤器：爬取24小时前到现在的所有条目
     - type: "time"
-      yesterday: true
-      date_only: true
-    # 关键词过滤器：标题或摘要中包含指定关键词
+      relative_hours_start: 24
+      relative_hours_end: 0
+      date_only: false
+      description: "时间过滤：爬取32小时前到8小时前的所有条目"
+    # 排除过滤器：排除标题或摘要中包含 "robot" 或 "vehicle" 的条目
     - type: "or"
+      negate: true
+      description: "排除过滤：排除标题或摘要中包含 robot 或 vehicle 的条目"
       filters:
         - type: "title"
           keywords:
-            - "agent"
-            - "diffusion"
-            - "Image Compression"
-            - "Image Generation"
-            - "Image Synthesis"
+            - "robot"
+            - "vehicle"
         - type: "summary"
           keywords:
-            - "agent"
+            - "robot"
+            - "vehicle"
+            - "living tissue"
+            - "brain connectivity"
+            - "fault diagnosis"
+    # 关键词过滤器：标题或摘要中包含指定关键词
+    - type: "or"
+      description: "关键词过滤：保留标题或摘要中包含 diffusion、图像相关（压缩/生成/合成/缩放/编辑）、Try-on/VTON 关键词的条目"
+      filters:
+        - type: "title"
+          keywords:
+            # - "agent"
             - "diffusion"
             - "Image Compression"
             - "Image Generation"
             - "Image Synthesis"
+            - "Image Rescaling"
+            - "Image Editing"
+            - "generated image"
+            - "Try-on"
+            - "VTON"
+        - type: "summary"
+          keywords:
+            # - "agent"
+            - "diffusion"
+            - "Image Compression"
+            - "Image Generation"
+            - "Image Synthesis"
+            - "Image Rescaling"
+            - "Image Editing"
+            - "generated image"
+            - "Try-on"
+            - "VTON"
   
   # 领域配置（可以扩展支持多个分类）
   categories:
@@ -73,11 +158,25 @@ custom_config:
               - "diffusion"
               - "image synthesis"
               - "video generation"
+              - "image editing"
+              - "Image Compression"
+              - "Image Generation"
+              - "Image Synthesis"
+              - "Image Rescaling"
+              - "Image Editing"
+              - "generated image"
           - type: "summary"
             keywords:
               - "diffusion"
               - "image synthesis"
               - "video generation"
+              - "image editing"
+              - "Image Compression"
+              - "Image Generation"
+              - "Image Synthesis"
+              - "Image Rescaling"
+              - "Image Editing"
+              - "generated image"
     vton:
       folder: "vton"
       filter:
@@ -99,10 +198,11 @@ custom_config:
           - type: "title"
             keywords:
               - "image compression"
+              - "image rescaling"
           - type: "summary"
             keywords:
               - "image compression"
-  
+              - "image rescaling"
   # Org格式类型：detailed（详细）、compact（紧凑）、card（卡片）、minimal（极简）
   org_format: "detailed"
   

@@ -40,44 +40,40 @@ class ArXivOrgExporter(BaseOrgExporter):
         # 标题
         lines.append(item.get('title', ''))
         lines.append("")
+                # 标题（中文）- 如果有翻译
+        if item.get('title_zh'):
+            # lines.append("** 标题（中文）")
+            lines.append(item['title_zh'])
+            lines.append("")
+
+        # 作者
+        if item.get('authors'):
+            # lines.append("** 作者")
+            authors_str = ", ".join(item['authors'])
+            lines.append(authors_str)
+            lines.append("")
         
+        # 链接
+        if item.get('link'):
+            # lines.append("** 链接")
+            lines.append(f"[[{item['link']}][{item['link']}]]")
+            lines.append("")
         # 摘要
         if item.get('summary'):
             summary = item['summary'].replace('\n', ' ')
             lines.append(summary)
             lines.append("")
-
-        
-        # 标题（中文）- 如果有翻译
-        if item.get('title_zh'):
-            lines.append("** 标题（中文）")
-            lines.append(item['title_zh'])
-            lines.append("")
-        
-        # 链接
-        if item.get('link'):
-            lines.append("** 链接")
-            lines.append(f"[[{item['link']}][{item['link']}]]")
-            lines.append("")
         
         # 摘要（中文）- 如果有翻译
         if item.get('summary_zh'):
-            lines.append("** 摘要（中文）")
+            # lines.append("** 摘要（中文）")
             summary_zh = item['summary_zh'].replace('\n', ' ')
             lines.append(summary_zh)
             lines.append("")
-        
         # LLM 摘要
         if item.get('llm_summary'):
             lines.append("** LLM 摘要")
             lines.append(item['llm_summary'])
-            lines.append("")
-        
-        # 作者
-        if item.get('authors'):
-            lines.append("** 作者")
-            authors_str = ", ".join(item['authors'])
-            lines.append(authors_str)
             lines.append("")
         
         # 关键词

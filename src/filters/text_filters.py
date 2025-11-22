@@ -1,6 +1,6 @@
 """基于文本内容的过滤器：标题、摘要、作者"""
 
-from typing import List
+from typing import List, Optional
 
 from .base import BaseFilter
 from ..models.crawl_item import CrawlItem
@@ -9,8 +9,8 @@ from ..models.crawl_item import CrawlItem
 class _KeywordTextFilter(BaseFilter):
     """通用关键字文本过滤器"""
 
-    def __init__(self, keywords: List[str], negate: bool = False):
-        super().__init__(negate=negate)
+    def __init__(self, keywords: List[str], negate: bool = False, description: Optional[str] = None):
+        super().__init__(negate=negate, description=description)
         self.keywords = [k.strip().lower() for k in keywords if k and k.strip()]
 
     def _get_text(self, item: CrawlItem) -> str:

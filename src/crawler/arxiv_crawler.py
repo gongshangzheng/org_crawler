@@ -11,14 +11,15 @@ from ..models.site_config import SiteConfig
 class ArXivRSSCrawler(BaseRSSCrawler):
     """ArXiv RSS 爬虫，专门处理 ArXiv 的特殊格式"""
     
-    def __init__(self, site_config: SiteConfig):
+    def __init__(self, site_config: SiteConfig, translator=None):
         """
         初始化 ArXiv RSS 爬虫
         
         Args:
             site_config: 网站配置
+            translator: 翻译器实例（可选）
         """
-        super().__init__(site_config)
+        super().__init__(site_config, translator=translator)
     
     # 注意：crawl() 方法继承自 BaseRSSCrawler，不需要重写
     # BaseRSSCrawler.crawl() 已经实现了完整的 RSS 爬取流程：

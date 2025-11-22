@@ -139,10 +139,14 @@ class BaseCrawler(ABC):
                     range_str = flt.get_range_str()
                     logger.info(f"[时间过滤器] 时间范围: {range_str}")
                 
+                # 输出过滤器描述（如果有）
+                filter_name = flt.__class__.__name__
+                if hasattr(flt, 'description') and flt.description:
+                    logger.info(f"[过滤器] {filter_name}: {flt.description}")
+                
                 items = flt.apply(items)
                 # 打印每个过滤器应用后的条目数量
                 current_count = len(items)
-                filter_name = flt.__class__.__name__
                 logger.info(f"[过滤器] 应用 {filter_name} 后剩余 {current_count} 个条目")
             
             # 打印最终过滤后的条目数量

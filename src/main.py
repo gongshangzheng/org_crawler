@@ -16,9 +16,11 @@ from .storage.exporter_manager import ExporterManager
 from .storage.path_manager import PathManager
 from .storage.index_manager import IndexManager
 from .filters import FilterManager, CategoryRuleClassifier
+from .tools import Translator
 
 parser = argparse.ArgumentParser(description='Org Crawler')
 parser.add_argument('-c', '--continuous', action='store_true', help='持续运行模式')
+parser.add_argument('-r', '--repair', action='store_true', help='修复模式')
 args = parser.parse_args()
 
 
@@ -95,13 +97,17 @@ def run_crawl(crawler, path_manager, org_exporter, index_manager,
                         json.dump(data, f, ensure_ascii=False, indent=2)
                     logger.info(f"已保存 JSON 文件: {json_path}")
                 
+                # 如果启用了分类，先进行分类（避免重复计算）
+                categorized_items = None
+                if org_exporter.keyword_classifier and result.items_count > 0:
+                    categorized_items = org_exporter.keyword_classifier.classify_items(result.items)
+                
                 # 保存 Org-mode
                 if output_format in ['org', 'both']:
                     org_exporter.export(result, org_path)
                     
                     # 如果启用了分类，显示每个类别的文件路径
-                    if org_exporter.keyword_classifier and result.items_count > 0:
-                        categorized_items = org_exporter.keyword_classifier.classify_items(result.items)
+                    if categorized_items:
                         for category, items in categorized_items.items():
                             category_folder = org_exporter.category_folders.get(category, category)
                             category_path = org_path.parent / category_folder / org_path.name
@@ -111,11 +117,6 @@ def run_crawl(crawler, path_manager, org_exporter, index_manager,
                 
                 # 更新索引文件
                 if index_manager:
-                    # 如果启用了分类，传递分类信息
-                    categorized_items = None
-                    if org_exporter.keyword_classifier and result.items_count > 0:
-                        categorized_items = org_exporter.keyword_classifier.classify_items(result.items)
-                    
                     index_manager.update_index(
                         site_name=result.site_name,
                         crawl_time=result.crawl_time,
@@ -132,6 +133,20 @@ def run_crawl(crawler, path_manager, org_exporter, index_manager,
                     json_path_for_metadata = org_path.with_suffix('.json')
                 file_manager.update_metadata(result, json_path=json_path_for_metadata)
                 logger.info("已更新元数据")
+                
+                # 如果启用了分类，显示每个类别的论文数量汇总
+                if categorized_items:
+                    logger.info("=" * 60)
+                    logger.info("各分类论文数量统计:")
+                    logger.info("-" * 60)
+                    # 按类别名称排序输出
+                    for category in sorted(categorized_items.keys()):
+                        count = len(categorized_items[category])
+                        logger.info(f"  {category}: {count} 篇")
+                    logger.info("-" * 60)
+                    total_categorized = sum(len(items) for items in categorized_items.values())
+                    logger.info(f"  总计: {total_categorized} 篇（可能有重复分类）")
+                    logger.info("=" * 60)
                 
                 # 显示前几个条目
                 logger.info("前几个条目:")
@@ -265,8 +280,32 @@ def setup_runtime(global_config, logger, rule_file: str):
         logger.info(f"索引文件: {index_path}")
         logger.info(f"索引表头: {table_headers}")
 
+    # 创建翻译器（从配置中读取）
+    translator_config = custom_config.get('translator', {})
+    translator_enabled = translator_config.get('enabled', False)
+    translator_source_lang = translator_config.get('source_lang', 'en')
+    translator_target_lang = translator_config.get('target_lang', 'zh')
+    translator_access_key_id = translator_config.get('access_key_id')
+    translator_access_key_secret = translator_config.get('access_key_secret')
+    
+    translator = None
+    if translator_enabled:
+        translator = Translator(
+            enabled=translator_enabled,
+            source_lang=translator_source_lang,
+            target_lang=translator_target_lang,
+            access_key_id=translator_access_key_id,
+            access_key_secret=translator_access_key_secret
+        )
+        if translator.enabled:
+            logger.info(f"翻译器已启用（{translator_source_lang} -> {translator_target_lang}）")
+        else:
+            logger.warning("翻译器配置已启用但初始化失败，翻译功能将被禁用")
+    else:
+        logger.info("翻译器未启用")
+
     # 创建爬虫（使用 CrawlerManager 自动选择）
-    crawler = CrawlerManager.get_crawler(site_config)
+    crawler = CrawlerManager.get_crawler(site_config, translator=translator)
     logger.info(f"使用爬虫: {crawler.__class__.__name__}")
 
     # 构建过滤器链：全局 filters + 站点 filters
@@ -302,7 +341,7 @@ def run_once():
     """
     # 加载全局配置
     global_config = load_global_config()
-
+    
     # 设置日志
     log_config = global_config.get('logging', {})
     logger = setup_logger(
@@ -310,11 +349,11 @@ def run_once():
         log_file=log_config.get('file'),
         max_size_mb=log_config.get('max_size_mb', 10)
     )
-
+    
     logger.info("=" * 60)
     logger.info("Org Crawler 启动（单次运行模式）")
     logger.info("=" * 60)
-
+    
     # 初始化组件（与全局配置相关的，只需初始化一次）
     storage_config = global_config.get('storage', {})
     file_manager = FileManager(
@@ -465,7 +504,7 @@ def run_continuous():
                     sleep_time = min(wait_interval, wait_seconds - waited)
                     time.sleep(sleep_time)
                     waited += sleep_time
-                    if waited % 300 == 0:  # 每5分钟打印一次剩余时间
+                    if waited % 3600 == 0:  # 每1小时打印一次剩余时间
                         remaining_minutes = int(max(0, (wait_seconds - waited) // 60))
                         logger.info(f"[调度] 距离本轮爬取还有约 {remaining_minutes} 分钟")
 
@@ -514,17 +553,19 @@ def run_continuous():
             logger.error(f"循环中发生错误: {e}", exc_info=True)
             # 即使出错也继续运行，等待下次更新
             logger.info("将按照当前更新频率在下一轮重试...")
-
+    
     logger.info("=" * 60)
     logger.info("程序已停止")
     logger.info("=" * 60)
 
-def main(continuous: bool = True):
+def main(continuous: bool = True, repair: bool = False):
     if continuous:
+        if repair:
+            run_once()
         run_continuous()
     else:
         run_once()
 
 if __name__ == "__main__":
-    main(continuous=args.continuous)
+    main(continuous=args.continuous, repair=args.repair)
 
