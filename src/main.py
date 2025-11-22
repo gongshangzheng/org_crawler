@@ -6,7 +6,7 @@ import signal
 from pathlib import Path
 from datetime import datetime, timedelta
 
-from typing import Dict
+from typing import Optional
 import argparse
 from .utils.logger import setup_logger, get_logger
 from .utils.config_loader import load_global_config, load_rule_config
@@ -22,15 +22,6 @@ parser = argparse.ArgumentParser(description='Org Crawler')
 parser.add_argument('-c', '--continuous', action='store_true', help='持续运行模式')
 parser.add_argument('-r', '--repair', action='store_true', help='修复模式')
 args = parser.parse_args()
-
-
-# 需要运行的规则文件列表（可以添加多个）
-RULE_FILES = [
-    "rules/arxiv_rss.yaml",
-    "rules/zhiyuan_rss.yaml",
-    # 在这里继续添加其他规则文件路径，例如：
-    # "rules/another_site.yaml",
-]
 
 
 # 全局变量用于信号处理
@@ -233,7 +224,7 @@ def setup_runtime(global_config, logger, rule_file: str):
 
     # 初始化分类器（使用基于过滤器的 category_mapping）
     keyword_classifier = None
-    category_folders: Dict[str, str] = {}
+    category_folders: dict[str, str] = {}
 
     category_mapping_cfg = custom_config.get('category_mapping', {})
     if category_mapping_cfg:
@@ -376,10 +367,15 @@ def setup_runtime(global_config, logger, rule_file: str):
     )
 
 
-def run_once():
+def run_once(rule_files: Optional[list[str]] = None):
     """
     只运行一次的函数：执行所有规则文件后退出，不进入循环
+    
+    Args:
+        rule_files: 规则文件列表，如果为None则使用空列表
     """
+    if rule_files is None:
+        rule_files = []
     # 加载全局配置
     global_config = load_global_config()
     
@@ -403,12 +399,12 @@ def run_once():
     )
 
     # 检查规则文件列表
-    if not RULE_FILES:
-        logger.error("RULE_FILES 为空，没有可运行的规则文件")
+    if not rule_files:
+        logger.error("rule_files 为空，没有可运行的规则文件")
         return
 
     # 依次执行每个规则文件
-    for rule_file in RULE_FILES:
+    for rule_file in rule_files:
         try:
             logger.info("=" * 60)
             logger.info(f"开始处理规则文件: {rule_file}")
@@ -447,8 +443,15 @@ def run_once():
     logger.info("=" * 60)
 
 
-def run_continuous():
-    """主函数（持续运行模式）"""
+def run_continuous(rule_files: Optional[list[str]] = None):
+    """
+    主函数（持续运行模式）
+    
+    Args:
+        rule_files: 规则文件列表，如果为None则使用空列表
+    """
+    if rule_files is None:
+        rule_files = []
     # 加载全局配置
     global_config = load_global_config()
 
@@ -481,12 +484,12 @@ def run_continuous():
     # 持续运行循环
     while running:
         try:
-            if not RULE_FILES:
-                logger.error("RULE_FILES 为空，没有可运行的规则文件")
+            if not rule_files:
+                logger.error("rule_files 为空，没有可运行的规则文件")
                 break
 
             # 以第一个规则文件作为调度基准，计算等待时间
-            primary_rule_file = RULE_FILES[0]
+            primary_rule_file = rule_files[0]
             (
                 site_config,
                 custom_config,
@@ -553,7 +556,7 @@ def run_continuous():
                     break
 
             # 到达本轮执行时间后，依次跑每一个规则文件
-            for rule_file in RULE_FILES:
+            for rule_file in rule_files:
                 try:
                     logger.info("=" * 60)
                     logger.info(f"开始处理规则文件: {rule_file}")
@@ -599,13 +602,24 @@ def run_continuous():
     logger.info("程序已停止")
     logger.info("=" * 60)
 
-def main(continuous: bool = True, repair: bool = False):
+def main(continuous: bool = True, repair: bool = False, rule_files: Optional[list[str]] = None):
+    """
+    主函数
+    
+    Args:
+        continuous: 是否持续运行模式
+        repair: 是否修复模式（在持续运行前先运行一次）
+        rule_files: 规则文件列表，如果为None则使用空列表
+    """
+    if rule_files is None:
+        rule_files = []
+    
     if continuous:
         if repair:
-            run_once()
-        run_continuous()
+            run_once(rule_files=rule_files)
+        run_continuous(rule_files=rule_files)
     else:
-        run_once()
+        run_once(rule_files=rule_files)
 
 if __name__ == "__main__":
     main(continuous=args.continuous, repair=args.repair)
