@@ -443,6 +443,61 @@ machine learning, NLP, transformer
 }
 ```
 
+## 环境变量配置
+
+### 阿里云翻译 API 配置
+
+项目支持通过环境变量配置阿里云翻译 API 的 AccessKey，这是**推荐的安全方式**。
+
+#### 方式1：使用 .env 文件（推荐）
+
+1. 复制示例文件：
+```bash
+cp .env.example .env
+```
+
+2. 编辑 `.env` 文件，填入你的实际密钥：
+```bash
+# 阿里云 AccessKey ID
+ALIBABA_CLOUD_ACCESS_KEY_ID=your_access_key_id_here
+
+# 阿里云 AccessKey Secret
+ALIBABA_CLOUD_ACCESS_KEY_SECRET=your_access_key_secret_here
+```
+
+3. 项目会自动加载 `.env` 文件中的环境变量（通过 `python-dotenv`）
+
+#### 方式2：系统环境变量
+
+在系统环境变量中设置：
+```bash
+# Linux/macOS
+export ALIBABA_CLOUD_ACCESS_KEY_ID="your_access_key_id"
+export ALIBABA_CLOUD_ACCESS_KEY_SECRET="your_access_key_secret"
+
+# Windows (PowerShell)
+$env:ALIBABA_CLOUD_ACCESS_KEY_ID="your_access_key_id"
+$env:ALIBABA_CLOUD_ACCESS_KEY_SECRET="your_access_key_secret"
+```
+
+#### 方式3：在配置文件中设置（不推荐）
+
+也可以在 `rules/*.yaml` 配置文件中直接设置，但**不推荐**，因为密钥会暴露在配置文件中：
+
+```yaml
+translator:
+  enabled: true
+  access_key_id: "your_access_key_id"
+  access_key_secret: "your_access_key_secret"
+```
+
+**优先级**：配置文件中的值 > 环境变量 > 默认值（None）
+
+**注意**：
+- `.env` 文件已被 `.gitignore` 忽略，不会被提交到 Git
+- 请妥善保管你的 AccessKey，不要泄露给他人
+- 如果 AccessKey 泄露，请及时在阿里云控制台重置
+
 ## 部署和运行
 
 ### 本地开发
@@ -450,6 +505,10 @@ machine learning, NLP, transformer
 ```bash
 # 安装依赖
 pip install -r requirements.txt
+
+# 配置环境变量（如果使用 .env 文件，确保已创建并填写）
+# cp .env.example .env
+# 编辑 .env 文件
 
 # 运行爬虫
 python src/main.py

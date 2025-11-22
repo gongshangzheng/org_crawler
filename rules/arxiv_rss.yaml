@@ -24,9 +24,15 @@ custom_config:
     enabled: true  # 是否启用翻译（需要安装阿里云 SDK 和配置 AccessKey）
     source_lang: "en"  # 源语言代码（默认：en）
     target_lang: "zh"  # 目标语言代码（默认：zh）
-    # AccessKey 配置（可选，也可通过环境变量 ALIBABA_CLOUD_ACCESS_KEY_ID 和 ALIBABA_CLOUD_ACCESS_KEY_SECRET 设置）
-    # access_key_id: ""  # 已移除，请使用环境变量
-    # access_key_secret: ""  # 已移除，请使用环境变量
+    # AccessKey 配置（推荐使用环境变量，更安全）
+    # 方式1：通过环境变量设置（推荐）
+    #   在系统环境变量或 .env 文件中设置：
+    #   export ALIBABA_CLOUD_ACCESS_KEY_ID="your_access_key_id"
+    #   export ALIBABA_CLOUD_ACCESS_KEY_SECRET="your_access_key_secret"
+    # 方式2：直接在配置文件中设置（不推荐，密钥会暴露在配置文件中）
+    #   access_key_id: "your_access_key_id"
+    #   access_key_secret: "your_access_key_secret"
+    # 如果都不设置，翻译功能将被禁用
   
   # 过滤器链：用于整体筛选需要保留的论文（替代原来的 keywords）
   filters:
