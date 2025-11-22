@@ -1,7 +1,12 @@
 storage:
   base_path: "data"
   date_format: "%Y-%m-%d"
-  output_format: "org"  # 输出格式：'org' 或 'json' 或 'both'
+  # 输出格式配置（支持多种方式）：
+  # - 单个格式：'org', 'markdown', 'json'
+  # - 组合格式：'both' (org+markdown), 'all' (org+markdown+json)
+  # - 列表格式：['org', 'markdown'], ['org', 'json'] 等
+  # - 逗号分隔：'org,markdown', 'org,json' 等
+  output_format: "both"  # 默认同时导出 org 和 markdown
   
 logging:
   level: "INFO"

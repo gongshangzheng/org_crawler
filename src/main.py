@@ -79,9 +79,67 @@ def run_crawl(crawler, path_manager, org_exporter, index_manager,
                     date=result.crawl_time
                 )
                 
-                # 保存 JSON（可选，使用新的路径格式）
-                output_format = storage_config.get('output_format', 'org')
-                if output_format in ['json', 'both']:
+                # 解析输出格式配置
+                # 支持多种格式：
+                # - 字符串：'org', 'markdown', 'json', 'both' (org+markdown), 'all' (org+markdown+json)
+                # - 列表：['org', 'markdown'], ['org', 'json'] 等
+                # - 逗号分隔字符串：'org,markdown', 'org,json' 等
+                output_format_raw = storage_config.get('output_format', 'org')
+                
+                # 标准化为列表格式
+                if isinstance(output_format_raw, str):
+                    # 处理特殊值
+                    if output_format_raw.lower() == 'both':
+                        output_formats = ['org', 'markdown']
+                    elif output_format_raw.lower() == 'all':
+                        output_formats = ['org', 'markdown', 'json']
+                    elif ',' in output_format_raw:
+                        # 逗号分隔字符串
+                        output_formats = [f.strip().lower() for f in output_format_raw.split(',')]
+                    else:
+                        # 单个格式
+                        output_formats = [output_format_raw.lower()]
+                elif isinstance(output_format_raw, list):
+                    output_formats = [f.lower() if isinstance(f, str) else str(f).lower() for f in output_format_raw]
+                else:
+                    # 默认值
+                    output_formats = ['org']
+                
+                # 如果启用了分类，先进行分类（避免重复计算）
+                categorized_items = None
+                if org_exporter.keyword_classifier and result.items_count > 0:
+                    categorized_items = org_exporter.keyword_classifier.classify_items(result.items)
+                
+                # 保存 Org-mode
+                if 'org' in output_formats:
+                    org_exporter.export(result, org_path)
+                    
+                    # 如果启用了分类，显示每个类别的文件路径
+                    if categorized_items:
+                        for category, items in categorized_items.items():
+                            category_folder = org_exporter.category_folders.get(category, category)
+                            category_path = org_path.parent / category_folder / org_path.name
+                            logger.info(f"已保存 {category} 类别 Org-mode 文件: {category_path} ({len(items)} 个条目)")
+                    else:
+                        logger.info(f"已保存 Org-mode 文件: {org_path}")
+                
+                # 保存 Markdown
+                if 'markdown' in output_formats:
+                    # 使用相同的路径，但扩展名为 .md
+                    md_path = org_path.with_suffix('.md')
+                    org_exporter.export_markdown(result, md_path)
+                    
+                    # 如果启用了分类，显示每个类别的文件路径
+                    if categorized_items:
+                        for category, items in categorized_items.items():
+                            category_folder = org_exporter.category_folders.get(category, category)
+                            category_path = md_path.parent / category_folder / md_path.name
+                            logger.info(f"已保存 {category} 类别 Markdown 文件: {category_path} ({len(items)} 个条目)")
+                    else:
+                        logger.info(f"已保存 Markdown 文件: {md_path}")
+                
+                # 保存 JSON
+                if 'json' in output_formats:
                     # 使用与 org 文件相同的路径，但扩展名为 .json
                     json_path = org_path.with_suffix('.json')
                     json_path.parent.mkdir(parents=True, exist_ok=True)
@@ -98,24 +156,6 @@ def run_crawl(crawler, path_manager, org_exporter, index_manager,
                         json.dump(data, f, ensure_ascii=False, indent=2)
                     logger.info(f"已保存 JSON 文件: {json_path}")
                 
-                # 如果启用了分类，先进行分类（避免重复计算）
-                categorized_items = None
-                if org_exporter.keyword_classifier and result.items_count > 0:
-                    categorized_items = org_exporter.keyword_classifier.classify_items(result.items)
-                
-                # 保存 Org-mode
-                if output_format in ['org', 'both']:
-                    org_exporter.export(result, org_path)
-                    
-                    # 如果启用了分类，显示每个类别的文件路径
-                    if categorized_items:
-                        for category, items in categorized_items.items():
-                            category_folder = org_exporter.category_folders.get(category, category)
-                            category_path = org_path.parent / category_folder / org_path.name
-                            logger.info(f"已保存 {category} 类别 Org-mode 文件: {category_path} ({len(items)} 个条目)")
-                    else:
-                        logger.info(f"已保存 Org-mode 文件: {org_path}")
-                
                 # 更新索引文件
                 if index_manager:
                     index_manager.update_index(
@@ -130,7 +170,7 @@ def run_crawl(crawler, path_manager, org_exporter, index_manager,
                 
                 # 更新元数据
                 json_path_for_metadata = None
-                if output_format in ['json', 'both']:
+                if 'json' in output_formats:
                     json_path_for_metadata = org_path.with_suffix('.json')
                 file_manager.update_metadata(result, json_path=json_path_for_metadata)
                 logger.info("已更新元数据")
