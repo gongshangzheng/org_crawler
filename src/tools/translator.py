@@ -1,6 +1,5 @@
 """翻译器模块：使用阿里云翻译 API 实现自动翻译"""
 
-from typing import Optional
 from ..utils.logger import get_logger
 
 
@@ -12,8 +11,8 @@ class Translator:
         enabled: bool = True, 
         source_lang: str = "en", 
         target_lang: str = "zh",
-        access_key_id: Optional[str] = None,
-        access_key_secret: Optional[str] = None
+        access_key_id: str | None = None,
+        access_key_secret: str | None = None
     ):
         """
         初始化翻译器
@@ -73,7 +72,7 @@ class Translator:
             self.enabled = False
             self._client = None
     
-    def translate(self, text: str) -> Optional[str]:
+    def translate(self, text: str) -> str | None:
         """
         翻译文本
         
@@ -118,7 +117,7 @@ class Translator:
             self.logger.warning(f"翻译失败: {e}，返回 None")
             return None
     
-    def translate_title(self, title: str) -> Optional[str]:
+    def translate_title(self, title: str) -> str | None:
         """
         翻译标题
         
@@ -136,7 +135,7 @@ class Translator:
             self.logger.debug(f"标题翻译: {title[:50]}... -> {translated[:50]}...")
         return translated
     
-    def translate_summary(self, summary: str) -> Optional[str]:
+    def translate_summary(self, summary: str) -> str | None:
         """
         翻译摘要
         

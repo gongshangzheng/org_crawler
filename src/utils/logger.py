@@ -3,15 +3,14 @@
 import logging
 import sys
 from pathlib import Path
-from typing import Optional
 
 
-_logger: Optional[logging.Logger] = None
+_logger: logging.Logger | None = None
 
 
 def setup_logger(
     level: str = "INFO",
-    log_file: Optional[str] = None,
+    log_file: str | None = None,
     max_size_mb: int = 10
 ) -> logging.Logger:
     """

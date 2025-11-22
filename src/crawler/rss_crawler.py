@@ -2,7 +2,7 @@
 
 import feedparser
 from datetime import datetime, timedelta
-from typing import Dict, Optional, List
+from typing import Any
 
 from .base import BaseCrawler
 from ..models.crawl_result import CrawlResult
@@ -121,7 +121,7 @@ class BaseRSSCrawler(BaseCrawler):
             
             # 如果配置了时间过滤器，跳过初步时间过滤，让时间过滤器处理
             # 否则使用 update_frequency 进行初步过滤
-            items = []
+            items: list[CrawlItem] = []
             if has_time_filter:
                 logger.info("[RSS 抓取] 检测到时间过滤器，跳过初步时间过滤，由时间过滤器处理")
                 # 提取所有条目，让时间过滤器来处理
@@ -156,14 +156,16 @@ class BaseRSSCrawler(BaseCrawler):
                 # 输出前几个原始条目供参考
                 logger.info("[RSS 抓取] 前几个原始条目预览（供参考）:")
                 preview_count = min(3, entries_count)
-                for i, entry in enumerate(feed.entries[:preview_count], 1):
-                    title = entry.get('title', '无标题')
-                    link = entry.get('link', '')
-                    pub_time = self.extract_published_time(entry)
-                    pub_str = pub_time.strftime('%Y-%m-%d %H:%M:%S') if pub_time else '无法解析'
-                    logger.info(f"  {i}. [{title[:50]}{'...' if len(title) > 50 else ''}]")
-                    logger.info(f"     发布时间: {pub_str}")
-                    logger.info(f"     链接: {link}")
+                if feed.entries:
+                    for i, entry in enumerate(feed.entries[:preview_count], 1):
+                        title = entry.get('title', '无标题') or '无标题'
+                        link = entry.get('link', '')
+                        pub_time = self.extract_published_time(entry)
+                        pub_str = pub_time.strftime('%Y-%m-%d %H:%M:%S') if pub_time else '无法解析'
+                        title_preview = title[:50] if len(title) > 50 else title
+                        logger.info(f"  {i}. [{title_preview}{'...' if len(title) > 50 else ''}]")
+                        logger.info(f"     发布时间: {pub_str}")
+                        logger.info(f"     链接: {link}")
                 return CrawlResult(
                     site_name=self.site_config.name,
                     crawl_time=crawl_time,
@@ -237,18 +239,19 @@ class BaseRSSCrawler(BaseCrawler):
                 error_message=f"爬取失败: {str(e)}"
             )
     
-    def extract_published_time(self, entry: Dict) -> Optional[datetime]:
+    def extract_published_time(self, entry: Any) -> datetime | None:
         """
         提取发布时间（RSS 通用方法）
         
         Args:
-            entry: RSS 条目
+            entry: RSS 条目（feedparser.FeedParserDict 类型，支持属性和字典访问）
             
         Returns:
             datetime 对象，如果解析失败返回 None
         """
         try:
             # feedparser 通常会将发布时间解析为 time.struct_time
+            # FeedParserDict 支持属性访问和字典访问
             if hasattr(entry, 'published_parsed') and entry.published_parsed:
                 return datetime(*entry.published_parsed[:6])
             elif hasattr(entry, 'published'):
@@ -265,36 +268,36 @@ class BaseRSSCrawler(BaseCrawler):
         
         return None
     
-    def extract_title(self, entry: Dict) -> str:
+    def extract_title(self, entry: Any) -> str:
         """
         提取标题
         
         Args:
-            entry: RSS 条目
+            entry: RSS 条目（feedparser.FeedParserDict 类型，支持属性和字典访问）
             
         Returns:
             标题字符串
         """
         return entry.get('title', '').strip()
     
-    def extract_link(self, entry: Dict) -> str:
+    def extract_link(self, entry: Any) -> str:
         """
         提取链接
         
         Args:
-            entry: RSS 条目
+            entry: RSS 条目（feedparser.FeedParserDict 类型，支持属性和字典访问）
             
         Returns:
             链接字符串
         """
         return entry.get('link', '')
     
-    def extract_other_info(self, entry: Dict) -> Dict:
+    def extract_other_info(self, entry: Any) -> dict:
         """
         提取其他信息（摘要、作者、分类等）
         
         Args:
-            entry: RSS 条目
+            entry: RSS 条目（feedparser.FeedParserDict 类型，支持属性和字典访问）
             
         Returns:
             其他信息的字典

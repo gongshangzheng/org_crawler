@@ -1,7 +1,6 @@
 """智源社区专用的 Org-mode 格式导出器"""
 
 from datetime import datetime
-from typing import List, Dict, Optional
 from pathlib import Path
 
 from .base_exporter import BaseOrgExporter
@@ -10,7 +9,7 @@ from .base_exporter import BaseOrgExporter
 class ZhiyuanOrgExporter(BaseOrgExporter):
     """智源社区专用的 Org-mode 格式导出器"""
     
-    def _format_item_detailed(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
+    def _format_item_detailed(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> list[str]:
         """详细格式：包含所有信息（智源社区特定）"""
         lines = []
         
@@ -85,7 +84,7 @@ class ZhiyuanOrgExporter(BaseOrgExporter):
         
         return lines
     
-    def _format_item_markdown_detailed(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
+    def _format_item_markdown_detailed(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> list[str]:
         """Markdown 详细格式：包含所有信息（智源社区特定）"""
         lines = []
         

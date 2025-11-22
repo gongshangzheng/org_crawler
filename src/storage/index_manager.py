@@ -2,7 +2,6 @@
 
 from pathlib import Path
 from datetime import datetime
-from typing import List, Dict, Optional
 
 
 class IndexManager:
@@ -10,9 +9,9 @@ class IndexManager:
     
     def __init__(self, 
                  index_path: Path,
-                 table_headers: Optional[List[str]] = None,
-                 cell_templates: Optional[Dict[str, str]] = None,
-                 header_labels: Optional[Dict[str, str]] = None):
+                 table_headers: list[str] | None = None,
+                 cell_templates: dict[str, str] | None = None,
+                 header_labels: dict[str, str] | None = None):
         """
         初始化索引管理器
         
@@ -68,10 +67,10 @@ class IndexManager:
     def update_index(self, 
                     site_name: str,
                     crawl_time: datetime,
-                    items: List[Dict],
-                    date_file_path: Optional[Path] = None,
-                    categorized_items: Optional[Dict[str, List[Dict]]] = None,
-                    category_folders: Optional[Dict[str, str]] = None):
+                    items: list[dict],
+                    date_file_path: Path | None = None,
+                    categorized_items: dict[str, list[dict]] | None = None,
+                    category_folders: dict[str, str] | None = None):
         """
         更新索引文件，在文件最前面添加新的更新记录
         
@@ -131,10 +130,10 @@ class IndexManager:
     def _generate_update_section(self,
                                  site_name: str,
                                  crawl_time: datetime,
-                                 items: List[Dict],
-                                 date_file_path: Optional[Path] = None,
-                                 categorized_items: Optional[Dict[str, List[Dict]]] = None,
-                                 category_folders: Optional[Dict[str, str]] = None) -> str:
+                                 items: list[dict],
+                                 date_file_path: Path | None = None,
+                                 categorized_items: dict[str, list[dict]] | None = None,
+                                 category_folders: dict[str, str] | None = None) -> str:
         """
         生成更新记录部分
         
@@ -193,7 +192,7 @@ class IndexManager:
         
         return "\n".join(lines)
     
-    def _generate_table(self, items: List[Dict], output_path: Optional[Path] = None) -> str:
+    def _generate_table(self, items: list[dict], output_path: Path | None = None) -> str:
         """
         生成表格内容
         
@@ -250,7 +249,7 @@ class IndexManager:
         
         return "\n".join(lines)
     
-    def _render_cell(self, template: str, item: Dict, output_path: Optional[Path] = None) -> str:
+    def _render_cell(self, template: str, item: dict, output_path: Path | None = None) -> str:
         """
         渲染单元格内容
         
@@ -352,7 +351,7 @@ class IndexManager:
                         result.append(str(value))
             return ''.join(result)
     
-    def get_all_items(self) -> List[Dict]:
+    def get_all_items(self) -> list[dict]:
         """
         从索引文件中提取所有条目（用于去重等操作）
         

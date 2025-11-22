@@ -4,12 +4,10 @@ import re
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from typing import Dict, Optional
 
 from .base import BaseCrawler
 from ..models.site_config import SiteConfig
 from ..models.crawl_result import CrawlResult
-from ..models.crawl_item import CrawlItem
 
 
 class ZhiyuanHTMLCrawler(BaseCrawler):
@@ -71,19 +69,17 @@ class ZhiyuanHTMLCrawler(BaseCrawler):
             
             logger.info(f"[HTML 抓取] 找到 {len(paper_items)} 个原始条目")
             
-            # 检查是否配置了时间过滤器
-            has_time_filter = False
+            # 检查是否配置了时间过滤器            
             if self.filters:
                 from ..filters.time_filter import TimeRangeFilter
                 for flt in self.filters:
                     if isinstance(flt, TimeRangeFilter):
-                        has_time_filter = True
+            
                         break
                     # 检查嵌套的过滤器
                     if hasattr(flt, 'filters'):
                         for sub_flt in getattr(flt, 'filters', []):
                             if isinstance(sub_flt, TimeRangeFilter):
-                                has_time_filter = True
                                 break
             
             # 解析条目
@@ -173,11 +169,11 @@ class ZhiyuanHTMLCrawler(BaseCrawler):
                 success=False,
                 error_message=f"爬取失败: {str(e)}"
             )
-    
-    def extract_published_time(self, entry: Dict) -> Optional[datetime]:
+
+    def extract_published_time(self, entry: dict) -> datetime | None:
         """
         提取发布时间
-        
+
         Args:
             entry: 包含 BeautifulSoup 元素的字典
             
@@ -213,10 +209,10 @@ class ZhiyuanHTMLCrawler(BaseCrawler):
             # 如果解析失败，返回 None
             return None
             
-        except Exception as e:
+        except Exception as _:
             return None
     
-    def extract_title(self, entry: Dict) -> str:
+    def extract_title(self, entry: dict) -> str:
         """
         提取标题
         
@@ -245,7 +241,7 @@ class ZhiyuanHTMLCrawler(BaseCrawler):
         except Exception:
             return ''
     
-    def extract_link(self, entry: Dict) -> str:
+    def extract_link(self, entry: dict) -> str:
         """
         提取链接
         
@@ -274,7 +270,7 @@ class ZhiyuanHTMLCrawler(BaseCrawler):
         except Exception:
             return ''
     
-    def extract_other_info(self, entry: Dict) -> Dict:
+    def extract_other_info(self, entry: dict) -> dict:
         """
         提取其他信息（摘要、作者、分类等）
         
@@ -332,5 +328,5 @@ class ZhiyuanHTMLCrawler(BaseCrawler):
             
             return other_info
             
-        except Exception as e:
+        except Exception as _:
             return other_info

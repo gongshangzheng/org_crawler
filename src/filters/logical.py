@@ -1,6 +1,5 @@
 """逻辑组合过滤器：AND / OR / NOT"""
 
-from typing import List, Optional
 
 from .base import BaseFilter
 from ..models.crawl_item import CrawlItem
@@ -9,7 +8,7 @@ from ..models.crawl_item import CrawlItem
 class LogicalFilter(BaseFilter):
     """将多个过滤器通过 AND / OR 组合"""
 
-    def __init__(self, operator: str, filters: List[BaseFilter], negate: bool = False, description: Optional[str] = None):
+    def __init__(self, operator: str, filters: list[BaseFilter], negate: bool = False, description: str | None = None):
         """
         Args:
             operator: 'and' 或 'or'
@@ -37,7 +36,7 @@ class LogicalFilter(BaseFilter):
 class NotFilter(BaseFilter):
     """单个过滤器的逻辑非：NOT"""
 
-    def __init__(self, flt: BaseFilter, negate: bool = False, description: Optional[str] = None):
+    def __init__(self, flt: BaseFilter, negate: bool = False, description: str | None = None):
         # 注意：BaseFilter 自己也有 negate，会在最终结果再反一次
         super().__init__(negate=negate, description=description)
         self.flt = flt

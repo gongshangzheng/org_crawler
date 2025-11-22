@@ -1,6 +1,6 @@
 """过滤器管理器：根据配置创建过滤器链"""
 
-from typing import List, Dict, Any
+from typing import Any
 
 from .base import BaseFilter
 from .text_filters import TitleFilter, SummaryFilter, AuthorFilter
@@ -20,7 +20,7 @@ class FilterManager:
     }
 
     @classmethod
-    def _create_single_filter(cls, cfg: Dict[str, Any]) -> BaseFilter | None:
+    def _create_single_filter(cls, cfg: dict[str, Any]) -> BaseFilter | None:
         if not isinstance(cfg, dict):
             return None
         f_type = cfg.get("type")
@@ -87,8 +87,8 @@ class FilterManager:
         return None
 
     @classmethod
-    def create_filters(cls, configs: List[Dict[str, Any]]) -> List[BaseFilter]:
-        filters: List[BaseFilter] = []
+    def create_filters(cls, configs: list[dict[str, Any]]) -> list[BaseFilter]:
+        filters: list[BaseFilter] = []
         if not configs:
             return filters
 

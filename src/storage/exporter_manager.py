@@ -1,19 +1,18 @@
 """Exporter 管理器"""
 
-from typing import Optional, Dict, Type
-from pathlib import Path
+from typing import Type
 
 from .base_exporter import BaseOrgExporter
 from .arxiv_exporter import ArXivOrgExporter
 from .zhiyuan_exporter import ZhiyuanOrgExporter
-from ..utils.keyword_classifier import KeywordClassifier
+from ..utils.keyword_classifier import ItemClassifier
 
 
 class ExporterManager:
     """Exporter 管理器，负责创建和管理不同的 Exporter 实例"""
     
     # Exporter 注册表
-    _exporter_registry: Dict[str, Type[BaseOrgExporter]] = {
+    _exporter_registry: dict[str, Type[BaseOrgExporter]] = {
         'BaseOrgExporter': BaseOrgExporter,
         'ArXivOrgExporter': ArXivOrgExporter,
         'ZhiyuanOrgExporter': ZhiyuanOrgExporter,
@@ -32,10 +31,10 @@ class ExporterManager:
     
     @classmethod
     def create_exporter(cls,
-                       exporter_config: Dict,
-                       keyword_classifier: Optional[KeywordClassifier] = None,
-                       category_folders: Optional[Dict[str, str]] = None,
-                       title_template: Optional[str] = None) -> BaseOrgExporter:
+                       exporter_config: dict,
+                       keyword_classifier: ItemClassifier | None = None,
+                       category_folders: dict[str, str] | None = None,
+                       title_template: str | None = None) -> BaseOrgExporter:
         """
         根据配置创建 Exporter 实例
         
@@ -75,7 +74,7 @@ class ExporterManager:
         return exporter
     
     @classmethod
-    def list_registered_exporters(cls) -> Dict[str, str]:
+    def list_registered_exporters(cls) -> dict[str, str]:
         """
         列出所有已注册的 Exporter
         

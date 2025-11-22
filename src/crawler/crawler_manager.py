@@ -1,6 +1,6 @@
 """爬虫管理器"""
 
-from typing import Dict, Type, Optional
+from typing import Type
 from ..models.site_config import SiteConfig
 from .base import BaseCrawler
 from .rss_crawler import BaseRSSCrawler
@@ -12,13 +12,13 @@ class CrawlerManager:
     """爬虫管理器，负责选择和创建对应的爬虫实例"""
     
     # 爬虫注册表：网站名称 -> 爬虫类
-    _crawler_registry: Dict[str, Type[BaseCrawler]] = {
+    _crawler_registry: dict[str, Type[BaseCrawler]] = {
         'arxiv': ArXivRSSCrawler,
         'zhiyuan': ZhiyuanHTMLCrawler,
     }
     
     # 默认爬虫（根据类型）
-    _default_crawlers: Dict[str, Type[BaseCrawler]] = {
+    _default_crawlers: dict[str, Type[BaseCrawler]] = {
         'rss': BaseRSSCrawler,
     }
     
@@ -67,7 +67,7 @@ class CrawlerManager:
         return BaseRSSCrawler(site_config, translator=translator)
     
     @classmethod
-    def list_registered_crawlers(cls) -> Dict[str, str]:
+    def list_registered_crawlers(cls) -> dict[str, str]:
         """
         列出所有已注册的爬虫
         

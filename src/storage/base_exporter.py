@@ -2,11 +2,10 @@
 
 from pathlib import Path
 from datetime import datetime
-from typing import List, Dict, Optional
 from abc import ABC, abstractmethod
 
 from ..models.crawl_result import CrawlResult
-from ..utils.keyword_classifier import KeywordClassifier
+from ..utils.keyword_classifier import ItemClassifier
 
 
 class BaseOrgExporter(ABC):
@@ -20,9 +19,9 @@ class BaseOrgExporter(ABC):
     
     def __init__(self, 
                  format_type: str = FORMAT_DETAILED,
-                 keyword_classifier: Optional[KeywordClassifier] = None,
-                 category_folders: Optional[Dict[str, str]] = None,
-                 title_template: Optional[str] = None):
+                 keyword_classifier: ItemClassifier | None = None,
+                 category_folders: dict[str, str] | None = None,
+                 title_template: str | None = None):
         """
         初始化导出器
         
@@ -39,7 +38,7 @@ class BaseOrgExporter(ABC):
         self.category_folders = category_folders or {}
         self.title_template = title_template
     
-    def _render_title(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> str:
+    def _render_title(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> str:
         """
         渲染标题模板
         
@@ -137,13 +136,13 @@ class BaseOrgExporter(ABC):
         # 渲染模板
         try:
             return self.title_template.format(**variables)
-        except KeyError as e:
+        except KeyError as _:
             # 如果模板中有未定义的变量，使用空字符串或变量名作为占位符
             # 使用 SafeFormatter 的方式：对于未定义的变量，返回空字符串
             import string
             formatter = string.Formatter()
             result = []
-            for literal_text, field_name, format_spec, conversion in formatter.parse(self.title_template):
+            for literal_text, field_name, format_spec, _ in formatter.parse(self.title_template):
                 if literal_text:
                     result.append(literal_text)
                 if field_name:
@@ -242,7 +241,7 @@ class BaseOrgExporter(ABC):
             # 直接覆盖文件
             output_path.write_text(md_content, encoding='utf-8')
     
-    def _generate_org_content(self, result: CrawlResult, category: Optional[str] = None, output_path: Optional[Path] = None) -> str:
+    def _generate_org_content(self, result: CrawlResult, category: str | None = None, output_path: Path | None = None) -> str:
         """
         生成 org-mode 内容
         
@@ -286,7 +285,7 @@ class BaseOrgExporter(ABC):
         
         return "\n".join(lines)
     
-    def _generate_markdown_content(self, result: CrawlResult, category: Optional[str] = None, output_path: Optional[Path] = None) -> str:
+    def _generate_markdown_content(self, result: CrawlResult, category: str | None = None, output_path: Path | None = None) -> str:
         """
         生成 Markdown 内容
         
@@ -332,7 +331,7 @@ class BaseOrgExporter(ABC):
         
         return "\n".join(lines)
     
-    def _format_item(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
+    def _format_item(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> list[str]:
         """
         格式化单个条目（子类可以重写）
         
@@ -356,11 +355,11 @@ class BaseOrgExporter(ABC):
             return self._format_item_detailed(item, index, crawl_time, output_path)
     
     @abstractmethod
-    def _format_item_detailed(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
+    def _format_item_detailed(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> list[str]:
         """详细格式：包含所有信息（子类必须实现）"""
         pass
     
-    def _format_item_markdown(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
+    def _format_item_markdown(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> list[str]:
         """
         格式化单个条目为 Markdown 格式（子类可以重写）
         
@@ -384,11 +383,11 @@ class BaseOrgExporter(ABC):
             return self._format_item_markdown_detailed(item, index, crawl_time, output_path)
     
     @abstractmethod
-    def _format_item_markdown_detailed(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
+    def _format_item_markdown_detailed(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> list[str]:
         """Markdown 详细格式：包含所有信息（子类必须实现）"""
         pass
     
-    def _format_item_markdown_compact(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
+    def _format_item_markdown_compact(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> list[str]:
         """Markdown 紧凑格式：只包含关键信息"""
         lines = []
         
@@ -415,7 +414,7 @@ class BaseOrgExporter(ABC):
         
         return lines
     
-    def _format_item_markdown_card(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
+    def _format_item_markdown_card(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> list[str]:
         """Markdown 卡片格式：类似卡片布局"""
         lines = []
         
@@ -454,7 +453,7 @@ class BaseOrgExporter(ABC):
         
         return lines
     
-    def _format_item_markdown_minimal(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
+    def _format_item_markdown_minimal(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> list[str]:
         """Markdown 极简格式：最少信息"""
         lines = []
         
@@ -465,7 +464,7 @@ class BaseOrgExporter(ABC):
         
         return lines
     
-    def _render_title_markdown(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> str:
+    def _render_title_markdown(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> str:
         """
         渲染标题模板（Markdown 格式）
         
@@ -569,7 +568,7 @@ class BaseOrgExporter(ABC):
             formatter = string.Formatter()
             result = []
             template = self.title_template.replace('[[{link}][', '[').replace(']]', ']({link})')
-            for literal_text, field_name, format_spec, conversion in formatter.parse(template):
+            for literal_text, field_name, format_spec, _ in formatter.parse(template):
                 if literal_text:
                     result.append(literal_text)
                 if field_name:
@@ -583,7 +582,7 @@ class BaseOrgExporter(ABC):
                 formatted = f"## {formatted}"
             return formatted
     
-    def _format_item_compact(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
+    def _format_item_compact(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> list[str]:
         """紧凑格式：只包含关键信息"""
         lines = []
         
@@ -617,7 +616,7 @@ class BaseOrgExporter(ABC):
         
         return lines
     
-    def _format_item_card(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
+    def _format_item_card(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> list[str]:
         """卡片格式：类似卡片布局"""
         lines = []
         
@@ -659,7 +658,7 @@ class BaseOrgExporter(ABC):
         
         return lines
     
-    def _format_item_minimal(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
+    def _format_item_minimal(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> list[str]:
         """极简格式：最少信息"""
         lines = []
         

@@ -1,7 +1,7 @@
 """爬取条目数据模型"""
 
 from dataclasses import dataclass, field
-from typing import Dict, Optional, Any
+from typing import Any
 from datetime import datetime
 
 
@@ -12,7 +12,7 @@ class CrawlItem:
     title: str                    # 标题
     link: str                     # 链接
     published_time: datetime      # 发布时间
-    other_info: Dict[str, Any] = field(default_factory=dict)  # 其他信息（摘要、作者、分类等）
+    other_info: dict[str, Any] = field(default_factory=dict)  # 其他信息（摘要、作者、分类等）
     
     def __post_init__(self):
         """初始化后处理"""
@@ -21,7 +21,7 @@ class CrawlItem:
             self.other_info = {}
     
     @property
-    def summary(self) -> Optional[str]:
+    def summary(self) -> str | None:
         """获取摘要"""
         return self.other_info.get('summary', '')
     
@@ -50,7 +50,7 @@ class CrawlItem:
         """设置分类列表"""
         self.other_info['categories'] = value
     
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """转换为字典"""
         return {
             'title': self.title,
@@ -61,7 +61,7 @@ class CrawlItem:
         }
     
     @classmethod
-    def from_dict(cls, data: Dict) -> 'CrawlItem':
+    def from_dict(cls, data: dict) -> 'CrawlItem':
         """从字典创建"""
         # 解析发布时间
         published_time = data.get('published_time')

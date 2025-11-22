@@ -1,7 +1,6 @@
 """按时间范围过滤"""
 
 from datetime import datetime, timedelta
-from typing import Optional, List
 
 from .base import BaseFilter
 from ..models.crawl_item import CrawlItem
@@ -24,16 +23,16 @@ class TimeRangeFilter(BaseFilter):
 
     def __init__(
         self,
-        start: Optional[str] = None,
-        end: Optional[str] = None,
-        relative_days_start: Optional[int] = None,
-        relative_days_end: Optional[int] = None,
-        relative_hours_start: Optional[int] = None,
-        relative_hours_end: Optional[int] = None,
+        start: str | None = None,
+        end: str | None = None,
+        relative_days_start: int | None = None,
+        relative_days_end: int | None = None,
+        relative_hours_start: int | None = None,
+        relative_hours_end: int | None = None,
         yesterday: bool = False,
         date_only: bool = False,
         negate: bool = False,
-        description: Optional[str] = None,
+        description: str | None = None,
     ):
         super().__init__(negate=negate, description=description)
         self.start_str = start
@@ -45,7 +44,7 @@ class TimeRangeFilter(BaseFilter):
         self.yesterday = yesterday
         self.date_only = date_only
 
-    def _parse_datetime(self, value: str) -> Optional[datetime]:
+    def _parse_datetime(self, value: str) -> datetime | None:
         """尽量解析多种常见的时间格式"""
         for fmt in ("%Y-%m-%d", "%Y-%m-%d %H:%M:%S"):
             try:
@@ -58,7 +57,7 @@ class TimeRangeFilter(BaseFilter):
         """将时间标准化为当天的 00:00:00（用于日期比较）"""
         return datetime.combine(dt.date(), datetime.min.time())
 
-    def _get_range(self) -> (Optional[datetime], Optional[datetime]):
+    def _get_range(self) -> tuple[datetime | None, datetime | None]:
         now = datetime.now()
         today_start = self._normalize_to_date(now)
 
@@ -160,13 +159,13 @@ class TimeRangeFilter(BaseFilter):
             return False
         return True
     
-    def apply(self, items: List[CrawlItem]) -> List[CrawlItem]:
+    def apply(self, items: list[CrawlItem]) -> list[CrawlItem]:
         """对一组条目应用过滤器，并输出调试信息"""
         from ..utils.logger import get_logger
         logger = get_logger()
         
         start_dt, end_dt = self._get_range()
-        result: List[CrawlItem] = []
+        result: list[CrawlItem] = []
         sample_count = 0
         max_samples = 3  # 只输出前3个不匹配的条目作为示例
         

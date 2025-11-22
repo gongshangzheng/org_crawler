@@ -1,7 +1,6 @@
 """基础爬虫类"""
 
 from abc import ABC, abstractmethod
-from typing import List, Dict, Optional
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -24,7 +23,7 @@ class BaseCrawler(ABC):
         """
         self.site_config = site_config
         # 过滤器链，在主程序中注入
-        self.filters: List["BaseFilter"] = []
+        self.filters: list["BaseFilter"] = []
     
     @abstractmethod
     def crawl(self) -> CrawlResult:
@@ -37,7 +36,7 @@ class BaseCrawler(ABC):
         pass
     
     @abstractmethod
-    def extract_published_time(self, entry: Dict) -> Optional[datetime]:
+    def extract_published_time(self, entry: dict) -> datetime | None:
         """
         提取发布时间（每个爬虫需要实现自己的方法）
         
@@ -50,7 +49,7 @@ class BaseCrawler(ABC):
         pass
     
     @abstractmethod
-    def extract_title(self, entry: Dict) -> str:
+    def extract_title(self, entry: dict) -> str:
         """
         提取标题
         
@@ -63,7 +62,7 @@ class BaseCrawler(ABC):
         pass
     
     @abstractmethod
-    def extract_link(self, entry: Dict) -> str:
+    def extract_link(self, entry: dict) -> str:
         """
         提取链接
         
@@ -76,7 +75,7 @@ class BaseCrawler(ABC):
         pass
     
     @abstractmethod
-    def extract_other_info(self, entry: Dict) -> Dict:
+    def extract_other_info(self, entry: dict) -> dict:
         """
         提取其他信息（摘要、作者、分类等）
         
@@ -88,7 +87,7 @@ class BaseCrawler(ABC):
         """
         pass
     
-    def parse_entry(self, entry: Dict) -> Optional[CrawlItem]:
+    def parse_entry(self, entry: dict) -> CrawlItem | None:
         """
         解析条目为 CrawlItem（通用方法，调用各个提取方法）
         
@@ -116,11 +115,11 @@ class BaseCrawler(ABC):
         except Exception:
             return None
     
-    def set_filters(self, filters: List["BaseFilter"]) -> None:
+    def set_filters(self, filters: list["BaseFilter"]) -> None:
         """设置过滤器链"""
         self.filters = filters or []
 
-    def apply_filters(self, items: List[CrawlItem]) -> List[CrawlItem]:
+    def apply_filters(self, items: list[CrawlItem]) -> list[CrawlItem]:
         """
         按顺序应用过滤器链；如果未配置过滤器，则回退到旧的关键词过滤逻辑。
         """
@@ -157,7 +156,7 @@ class BaseCrawler(ABC):
         # 没有配置过滤器，使用旧的关键词过滤以保持向后兼容
         return self._filter_by_keywords_legacy(items)
 
-    def _filter_by_keywords_legacy(self, items: List[CrawlItem]) -> List[CrawlItem]:
+    def _filter_by_keywords_legacy(self, items: list[CrawlItem]) -> list[CrawlItem]:
         """旧的关键词过滤逻辑（用于向后兼容），未来可以逐步弃用。"""
         if not self.site_config.keywords:
             return items
@@ -166,7 +165,7 @@ class BaseCrawler(ABC):
         for item in items:
             # 检查标题和摘要中是否包含关键词
             title = item.title.lower()
-            summary = item.summary.lower()
+            summary = item.summary.lower() if item.summary else ''
             content = f"{title} {summary}"
             
             # 找出所有匹配的关键词

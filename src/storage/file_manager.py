@@ -4,7 +4,6 @@ import os
 import json
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, Optional
 
 from ..models.crawl_result import CrawlResult
 
@@ -24,7 +23,7 @@ class FileManager:
         self.date_format = date_format
         self.base_path.mkdir(parents=True, exist_ok=True)
     
-    def get_storage_path(self, site_name: str, date: Optional[datetime] = None) -> Path:
+    def get_storage_path(self, site_name: str, date: datetime | None = None) -> Path:
         """
         获取存储路径（已废弃，保留用于向后兼容）
         
@@ -44,7 +43,7 @@ class FileManager:
         storage_path = self.base_path / site_name / date_str
         return storage_path
     
-    def load_metadata(self, site_name: str) -> Dict:
+    def load_metadata(self, site_name: str) -> dict:
         """
         加载元数据
         
@@ -70,7 +69,7 @@ class FileManager:
             "enabled": True
         }
     
-    def save_metadata(self, site_name: str, metadata: Dict):
+    def save_metadata(self, site_name: str, metadata: dict):
         """
         保存元数据
         
@@ -124,7 +123,7 @@ class FileManager:
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
     
-    def update_metadata(self, result: CrawlResult, json_path: Optional[Path] = None):
+    def update_metadata(self, result: CrawlResult, json_path: Path | None = None):
         """
         更新元数据
         

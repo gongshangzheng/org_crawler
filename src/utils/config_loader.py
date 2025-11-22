@@ -3,7 +3,7 @@
 import yaml
 import os
 from pathlib import Path
-from typing import Dict, List
+from typing import Any
 from dotenv import load_dotenv
 
 from ..models.site_config import SiteConfig
@@ -13,7 +13,7 @@ from ..models.site_config import SiteConfig
 load_dotenv()
 
 
-def load_global_config(config_path: str = "config/global_config.yaml") -> Dict:
+def load_global_config(config_path: str = "config/global_config.yaml") -> dict:
     """
     加载全局配置
     
@@ -45,15 +45,21 @@ def load_global_config(config_path: str = "config/global_config.yaml") -> Dict:
         }
     
     with open(config_file, 'r', encoding='utf-8') as f:
-        config = yaml.safe_load(f)
+        config_raw = yaml.safe_load(f)
     
     # 替换环境变量
-    config = _replace_env_vars(config)
+    config_processed = _replace_env_vars(config_raw)
+    
+    # 确保 config 是字典类型
+    if not isinstance(config_processed, dict):
+        raise ValueError(f"全局配置文件格式错误: {config_path}，期望字典类型，但得到 {type(config_processed)}")
+    
+    config: dict[str, Any] = config_processed
     
     return config
 
 
-def load_rule_config(rule_path: str, global_config: Dict = None) -> SiteConfig:
+def load_rule_config(rule_path: str, global_config: dict | None = None) -> SiteConfig:
     """
     加载规则配置
     
@@ -70,10 +76,16 @@ def load_rule_config(rule_path: str, global_config: Dict = None) -> SiteConfig:
         raise FileNotFoundError(f"规则文件不存在: {rule_path}")
     
     with open(rule_file, 'r', encoding='utf-8') as f:
-        rule_data = yaml.safe_load(f)
+        rule_data_raw = yaml.safe_load(f)
     
     # 替换环境变量
-    rule_data = _replace_env_vars(rule_data)
+    rule_data_processed = _replace_env_vars(rule_data_raw)
+    
+    # 确保 rule_data 是字典类型
+    if not isinstance(rule_data_processed, dict):
+        raise ValueError(f"规则文件格式错误: {rule_path}，期望字典类型，但得到 {type(rule_data_processed)}")
+    
+    rule_data: dict[str, Any] = rule_data_processed
     
     # 更新频率优先级：规则文件 > 全局配置默认值
     # 只有当规则文件中没有指定 update_frequency 时，才使用全局配置的默认值
@@ -91,7 +103,7 @@ def load_rule_config(rule_path: str, global_config: Dict = None) -> SiteConfig:
     return SiteConfig.from_dict(rule_data)
 
 
-def load_all_rules(rules_dir: str = "rules", global_config: Dict = None) -> List[SiteConfig]:
+def load_all_rules(rules_dir: str = "rules", global_config: dict | None = None) -> list[SiteConfig]:
     """
     加载所有规则配置
     
@@ -122,7 +134,7 @@ def load_all_rules(rules_dir: str = "rules", global_config: Dict = None) -> List
     return configs
 
 
-def _replace_env_vars(data):
+def _replace_env_vars(data: Any) -> Any:
     """
     递归替换配置中的环境变量
     

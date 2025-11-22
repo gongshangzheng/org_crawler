@@ -1,7 +1,6 @@
 """网站配置数据模型"""
 
 from dataclasses import dataclass, field
-from typing import List, Dict, Optional
 from datetime import datetime
 
 
@@ -14,9 +13,9 @@ class SiteConfig:
     update_frequency: int       # 更新频率（分钟）
     storage_path: str           # 存储路径（相对于 data/）
     enabled: bool               # 是否启用
-    keywords: List[str] = field(default_factory=list)  # 关键词列表（用于过滤）
-    custom_config: Dict = field(default_factory=dict)  # 自定义配置
-    last_crawl_time: Optional[datetime] = None  # 最后爬取时间
+    keywords: list[str] = field(default_factory=list)  # 关键词列表（用于过滤）
+    custom_config: dict = field(default_factory=dict)  # 自定义配置
+    last_crawl_time: datetime | None = None  # 最后爬取时间
     
     @classmethod
     def from_dict(cls, data: dict) -> 'SiteConfig':

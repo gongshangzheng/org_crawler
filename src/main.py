@@ -1,12 +1,11 @@
 """主程序入口"""
 
-import sys
 import time
 import signal
 from pathlib import Path
 from datetime import datetime, timedelta
 
-from typing import Optional
+from typing import Any
 import argparse
 from .utils.logger import setup_logger, get_logger
 from .utils.config_loader import load_global_config, load_rule_config
@@ -220,13 +219,13 @@ def setup_runtime(global_config, logger, rule_file: str):
         logger.info(f"  关键词: {', '.join(site_config.keywords)}")
 
     # 从规则配置中读取自定义配置
-    custom_config = site_config.custom_config or {}
+    custom_config: dict[str, Any] = site_config.custom_config or {}
 
     # 初始化分类器（使用基于过滤器的 category_mapping）
     keyword_classifier = None
     category_folders: dict[str, str] = {}
 
-    category_mapping_cfg = custom_config.get('category_mapping', {})
+    category_mapping_cfg: dict[str, Any] = custom_config.get('category_mapping', {}) or {}
     if category_mapping_cfg:
         category_classifier = CategoryRuleClassifier.from_config(category_mapping_cfg)
         keyword_classifier = category_classifier  # 作为 BaseOrgExporter 的分类器传入
@@ -367,7 +366,7 @@ def setup_runtime(global_config, logger, rule_file: str):
     )
 
 
-def run_once(rule_files: Optional[list[str]] = None):
+def run_once(rule_files: list[str] | None = None):
     """
     只运行一次的函数：执行所有规则文件后退出，不进入循环
     
@@ -411,8 +410,8 @@ def run_once(rule_files: Optional[list[str]] = None):
             logger.info("=" * 60)
 
             (
-                site_config,
-                custom_config,
+                _site_config,
+                _custom_config,
                 storage_config_site,
                 path_manager,
                 org_exporter,
@@ -443,7 +442,7 @@ def run_once(rule_files: Optional[list[str]] = None):
     logger.info("=" * 60)
 
 
-def run_continuous(rule_files: Optional[list[str]] = None):
+def run_continuous(rule_files: list[str] | None = None):
     """
     主函数（持续运行模式）
     
@@ -602,7 +601,7 @@ def run_continuous(rule_files: Optional[list[str]] = None):
     logger.info("程序已停止")
     logger.info("=" * 60)
 
-def main(continuous: bool = True, repair: bool = False, rule_files: Optional[list[str]] = None):
+def main(continuous: bool = True, repair: bool = False, rule_files: list[str] | None = None):
     """
     主函数
     

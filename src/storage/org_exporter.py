@@ -1,7 +1,6 @@
 """Org-mode 格式导出器（向后兼容）"""
 
 from datetime import datetime
-from typing import List, Dict, Optional
 from pathlib import Path
 
 from .base_exporter import BaseOrgExporter
@@ -11,7 +10,7 @@ from ..utils.keyword_classifier import KeywordClassifier
 class OrgExporter(BaseOrgExporter):
     """Org-mode 格式导出器（向后兼容，继承自BaseOrgExporter）"""
     
-    def _format_item_detailed(self, item: Dict, index: int, crawl_time: datetime, output_path: Optional[Path] = None) -> List[str]:
+    def _format_item_detailed(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> list[str]:
         """详细格式：包含所有信息（默认实现）"""
         lines = []
         

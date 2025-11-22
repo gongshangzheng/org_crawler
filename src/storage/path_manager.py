@@ -2,7 +2,7 @@
 
 from pathlib import Path
 from datetime import datetime
-from typing import Optional, Union
+from typing import Union
 
 
 class PathManager:
@@ -11,7 +11,7 @@ class PathManager:
     def __init__(self, 
                  base_path: Union[str, Path] = "data",
                  path_type: str = "relative",
-                 path_template: Optional[str] = None):
+                 path_template: str | None = None):
         """
         初始化路径管理器
         
@@ -27,8 +27,8 @@ class PathManager:
     
     def get_output_path(self, 
                        site_name: str, 
-                       date: Optional[datetime] = None,
-                       filename: Optional[str] = None) -> Path:
+                       date: datetime | None = None,
+                       filename: str | None = None) -> Path:
         """
         获取输出文件路径
         

@@ -1,14 +1,30 @@
 """关键词分类器"""
 
 import re
-from typing import Dict, List, Optional, Set
+from typing import Set, Protocol
 from collections import defaultdict
+
+
+class ItemClassifier(Protocol):
+    """分类器协议，定义了分类器的接口"""
+    
+    def classify_items(self, items: list[dict]) -> dict[str, list[dict]]:
+        """
+        批量分类条目
+        
+        Args:
+            items: 条目列表
+            
+        Returns:
+            按类别分组的字典，格式为 {类别名: [条目列表]}
+        """
+        ...
 
 
 class KeywordClassifier:
     """关键词分类器，用于将关键词映射到类别"""
     
-    def __init__(self, category_mapping: Dict[str, List[str]]):
+    def __init__(self, category_mapping: dict[str, list[str]]):
         """
         初始化关键词分类器
         
@@ -19,9 +35,9 @@ class KeywordClassifier:
         """
         self.category_mapping = category_mapping
         # 构建反向映射：关键词 -> 类别
-        self.keyword_to_category: Dict[str, str] = {}
+        self.keyword_to_category: dict[str, str] = {}
         # 构建正则表达式映射：用于模糊匹配
-        self.category_patterns: Dict[str, List[re.Pattern]] = defaultdict(list)
+        self.category_patterns: dict[str, list[re.Pattern]] = defaultdict(list)
         
         for category, keywords in category_mapping.items():
             for keyword in keywords:
@@ -34,7 +50,7 @@ class KeywordClassifier:
                 pattern = re.compile(r'\b' + re.escape(keyword_lower) + r'\b', re.IGNORECASE)
                 self.category_patterns[category].append(pattern)
     
-    def classify_keyword(self, keyword: str) -> Optional[str]:
+    def classify_keyword(self, keyword: str) -> str | None:
         """
         分类单个关键词
         
@@ -58,7 +74,7 @@ class KeywordClassifier:
         
         return None
     
-    def classify_item(self, item: Dict) -> List[str]:
+    def classify_item(self, item: dict) -> list[str]:
         """
         分类一个条目，返回该条目所属的所有类别
         
@@ -88,7 +104,7 @@ class KeywordClassifier:
         
         return sorted(list(categories))
     
-    def classify_items(self, items: List[Dict]) -> Dict[str, List[Dict]]:
+    def classify_items(self, items: list[dict]) -> dict[str, list[dict]]:
         """
         批量分类条目
         
@@ -98,7 +114,7 @@ class KeywordClassifier:
         Returns:
             按类别分组的字典，格式为 {类别名: [条目列表]}
         """
-        categorized: Dict[str, List[Dict]] = defaultdict(list)
+        categorized: dict[str, list[dict]] = defaultdict(list)
         
         for item in items:
             categories = self.classify_item(item)
@@ -108,7 +124,7 @@ class KeywordClassifier:
         
         return dict(categorized)
     
-    def get_all_categories(self) -> List[str]:
+    def get_all_categories(self) -> list[str]:
         """
         获取所有类别名称
         

@@ -1,7 +1,7 @@
 """基于过滤器的分类规则，用于替代关键词 category_mapping。"""
 
 from dataclasses import dataclass
-from typing import List, Dict, Any
+from typing import Any
 
 from .base import BaseFilter
 from .manager import FilterManager
@@ -20,11 +20,11 @@ class CategoryRuleClassifier:
     提供 classify_items(items) -> {category: [items]}。
     """
 
-    def __init__(self, rules: List[CategoryRule]):
+    def __init__(self, rules: list[CategoryRule]):
         self.rules = rules or []
 
     @classmethod
-    def from_config(cls, category_cfg: Dict[str, Any]) -> "CategoryRuleClassifier":
+    def from_config(cls, category_cfg: dict[str, Any]) -> "CategoryRuleClassifier":
         """
         从配置构建分类规则。
         配置格式（推荐）：
@@ -41,7 +41,7 @@ class CategoryRuleClassifier:
 
         向后兼容旧格式（value 为关键字列表），会自动转为 title+summary OR 过滤器。
         """
-        rules: List[CategoryRule] = []
+        rules: list[CategoryRule] = []
         if not category_cfg:
             return cls(rules)
 
@@ -69,7 +69,7 @@ class CategoryRuleClassifier:
 
         return cls(rules)
 
-    def classify_items(self, items: List[dict]) -> Dict[str, List[dict]]:
+    def classify_items(self, items: list[dict]) -> dict[str, list[dict]]:
         """
         对条目进行分类，同时将命中的分类写入 item['categories']。
         注意：items 为 dict 列表（CrawlResult.items），而非 CrawlItem；
@@ -79,7 +79,7 @@ class CategoryRuleClassifier:
         """
         from ..models.crawl_item import CrawlItem
 
-        result: Dict[str, List[dict]] = {}
+        result: dict[str, list[dict]] = {}
 
         for item in items:
             # 构造临时 CrawlItem 以复用过滤器逻辑
@@ -94,7 +94,7 @@ class CategoryRuleClassifier:
                 },
             )
 
-            matched_categories: List[str] = []
+            matched_categories: list[str] = []
             for rule in self.rules:
                 if rule.filter.match(tmp):
                     matched_categories.append(rule.name)

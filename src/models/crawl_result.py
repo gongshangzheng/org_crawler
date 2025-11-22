@@ -1,7 +1,6 @@
 """爬取结果数据模型"""
 
 from dataclasses import dataclass, field
-from typing import List, Dict, Optional
 from datetime import datetime
 
 
@@ -11,9 +10,9 @@ class CrawlResult:
     site_name: str
     crawl_time: datetime
     items_count: int
-    items: List[Dict] = field(default_factory=list)  # 爬取到的条目列表
+    items: list[dict] = field(default_factory=list)  # 爬取到的条目列表
     success: bool = True
-    error_message: Optional[str] = None
+    error_message: str | None = None
     
     def to_dict(self) -> dict:
         """转换为字典"""
