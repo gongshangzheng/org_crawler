@@ -5,6 +5,7 @@ from ..models.site_config import SiteConfig
 from .base import BaseCrawler
 from .rss_crawler import BaseRSSCrawler
 from .arxiv_crawler import ArXivRSSCrawler
+from .zhiyuan_crawler import ZhiyuanHTMLCrawler
 
 
 class CrawlerManager:
@@ -13,6 +14,7 @@ class CrawlerManager:
     # 爬虫注册表：网站名称 -> 爬虫类
     _crawler_registry: Dict[str, Type[BaseCrawler]] = {
         'arxiv': ArXivRSSCrawler,
+        'zhiyuan': ZhiyuanHTMLCrawler,
     }
     
     # 默认爬虫（根据类型）

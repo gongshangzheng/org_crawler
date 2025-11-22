@@ -1,0 +1,106 @@
+# 智源社区 HTML 爬取规则配置
+# 用于爬取智源社区的论文（通过解析HTML页面）
+
+name: "zhiyuan"
+url: "https://hub.baai.ac.cn/papers?label=cv&model=newest"  # 智源社区计算机视觉最新论文
+crawl_type: "html"
+update_frequency: 1440  # 更新频率（分钟），1440分钟=24小时
+storage_path: "zhiyuan"
+enabled: true
+
+# 自定义配置
+custom_config:
+  # RSS 爬虫的额外配置
+  max_items: 100  # 最大条目数（可选，用于限制）
+  
+  # 定时爬取时间（可选），格式：HH:MM（24小时制），例如 "00:00" 表示每天0点
+  crawl_time: "00:00"
+  include_abstract: true  # 包含摘要
+  
+  # 翻译器配置（可选）
+  translator:
+    enabled: false  # 默认不开启翻译
+    source_lang: "zh"  # 源语言代码（默认：zh）
+    target_lang: "en"  # 目标语言代码（默认：en）
+    # AccessKey 配置（可选，也可通过环境变量 ALIBABA_CLOUD_ACCESS_KEY_ID 和 ALIBABA_CLOUD_ACCESS_KEY_SECRET 设置）
+    # access_key_id: ""
+    # access_key_secret: ""
+  
+  # 过滤器链：用于整体筛选需要保留的论文
+  # 默认不设过滤器，全部接收
+  filters:
+    # 时间过滤器：抓取前24个小时的内容
+    - type: "time"
+      relative_hours_start: 24
+      relative_hours_end: 0
+      date_only: false
+      description: "时间过滤：抓取前24个小时的内容"
+  
+  # 领域配置（可以扩展支持多个分类）
+  categories:
+    - "cv"  # 计算机视觉
+  
+  # 分类映射（基于过滤器的分类规则，用于得到不同的 category）
+  # 默认不设置分类映射，所有条目存储在同一目录
+  # category_mapping:
+  #   cv:
+  #     folder: "cv"
+  #     filter:
+  #       type: "or"
+  #       filters:
+  #         - type: "title"
+  #           keywords:
+  #             - "computer vision"
+  #             - "CV"
+  
+  # Org格式类型：detailed（详细）、compact（紧凑）、card（卡片）、minimal（极简）
+  org_format: "detailed"
+  
+  # Exporter配置
+  exporter:
+    # Exporter类名：BaseOrgExporter, ZhiyuanOrgExporter
+    class: "ZhiyuanOrgExporter"
+    
+    # 标题模板，支持变量：{title}, {link}, {published_time}, {crawl_time}, {index}, {id}, {authors}, {first_author}, {categories}, {output_path}, {output_file}, {output_dir}, {output_path_rel}
+    # 注意：统一使用 {id} 字段，不再使用特定站点的ID字段（如 {zhiyuan_id}）
+    title_template: "* [[{link}][{first_author} --- {title}]]"
+    
+    # 路径配置
+    path:
+      # 路径类型：relative（相对路径）或 absolute（绝对路径）
+      type: "relative"
+      # 基础路径（相对路径的基准或绝对路径的根）
+      base_path: "data"
+      # 路径模板，支持变量：{site_name}, {date}, {base_path}
+      # 默认：data/{site_name}/{date}.org
+      template: "data/{site_name}/{date}.org"
+    
+    # 索引文件配置
+    index:
+      # 是否启用索引文件
+      enabled: true
+      # 索引文件路径（相对于base_path），如果为None则使用默认路径
+      # 默认：data/{site_name}/index.org
+      path: null
+      
+      # 表头列表（使用变量格式，定义表格的列）
+      table_headers:
+        - "{link}"
+        - "{title}"
+        - "{first_author}"
+      
+      # 单元格模板（定义每个变量对应的内容模板）
+      # key为变量名（不含{}），支持变量：{title}, {link}, {first_author}, {authors}, {published_time}, {id}, {categories}, {output_path}, {output_file}, {output_dir}, {output_path_rel}
+      # 注意：统一使用 {id} 字段，不再使用特定站点的ID字段（如 {zhiyuan_id}）
+      cell_templates:
+        link: "[[{link}][查看]]"
+        title: "[[{output_path_rel}][{title}]]"
+        first_author: "{first_author}"
+      
+      # 表头标签映射（将变量名转换为中文显示名称，可选）
+      # key为变量名（不含{}），value为在索引文件中显示的中文名称
+      header_labels:
+        title: "标题"
+        first_author: "第一作者"
+        link: "链接"
+

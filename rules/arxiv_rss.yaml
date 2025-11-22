@@ -211,7 +211,8 @@ custom_config:
     # Exporter类名：BaseOrgExporter, ArXivOrgExporter
     class: "ArXivOrgExporter"
     
-    # 标题模板，支持变量：{title}, {link}, {published_time}, {crawl_time}, {index}, {arxiv_id}, {authors}, {first_author}, {categories}, {output_path}, {output_file}, {output_dir}, {output_path_rel}
+    # 标题模板，支持变量：{title}, {link}, {published_time}, {crawl_time}, {index}, {id}, {authors}, {first_author}, {categories}, {output_path}, {output_file}, {output_dir}, {output_path_rel}
+    # 注意：统一使用 {id} 字段，不再使用特定站点的ID字段（如 {arxiv_id}）
     # 示例：* [[{link}][{title}]] 或 * {title} [{published_time}] 或 * [[{output_path_rel}][{title}]]
     title_template: "* [[{link}][{first_author} --- {title}]]"
     
@@ -240,7 +241,8 @@ custom_config:
         - "{first_author}"
       
       # 单元格模板（定义每个变量对应的内容模板）
-      # key为变量名（不含{}），支持变量：{title}, {link}, {first_author}, {authors}, {published_time}, {arxiv_id}, {categories}, {output_path}, {output_file}, {output_dir}, {output_path_rel}
+      # key为变量名（不含{}），支持变量：{title}, {link}, {first_author}, {authors}, {published_time}, {id}, {categories}, {output_path}, {output_file}, {output_dir}, {output_path_rel}
+      # 注意：统一使用 {id} 字段，不再使用特定站点的ID字段（如 {arxiv_id}）
       cell_templates:
         link: "[[{link}][查看]]"
         title: "[[{output_path_rel}][{title}]]"

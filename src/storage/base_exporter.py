@@ -32,7 +32,7 @@ class BaseOrgExporter(ABC):
             category_folders: 类别文件夹映射，格式为 {类别名: 文件夹路径}
                              如果为None，则使用类别名作为文件夹名
             title_template: 标题模板，支持变量：{title}, {link}, {published_time}, 
-                           {crawl_time}, {index}, {arxiv_id} 等
+                           {crawl_time}, {index}, {id} 等
         """
         self.format_type = format_type
         self.keyword_classifier = keyword_classifier
@@ -59,14 +59,17 @@ class BaseOrgExporter(ABC):
             return f"* 条目 {index}: {title} [{published_time}]"
         
         # 准备变量字典
+        # 统一使用 id 字段，如果子类需要特殊ID字段，可以在自己的实现中处理
+        # 为了向后兼容，尝试从多个可能的字段获取ID
+        item_id = item.get('id', '') or item.get('arxiv_id', '') or item.get('zhiyuan_id', '')
+        
         variables = {
             'title': item.get('title', '无标题'),
             'link': item.get('link', ''),
             'published_time': item.get('published_time', item.get('published_time_str', '')),
             'crawl_time': crawl_time.strftime('%Y-%m-%d %H:%M:%S'),
             'index': str(index),
-            'arxiv_id': item.get('arxiv_id', ''),
-            'id': item.get('id', ''),
+            'id': item_id,
         }
         
         # 添加作者信息（如果有）
@@ -276,8 +279,10 @@ class BaseOrgExporter(ABC):
         
         # Properties（简化版）
         lines.append(":PROPERTIES:")
-        if item.get('arxiv_id'):
-            lines.append(f":ARXIV_ID: {item['arxiv_id']}")
+        # 统一使用 id 字段
+        item_id = item.get('id', '') or item.get('arxiv_id', '') or item.get('zhiyuan_id', '')
+        if item_id:
+            lines.append(f":ID: {item_id}")
         lines.append(":END:")
         lines.append("")
         
@@ -322,8 +327,10 @@ class BaseOrgExporter(ABC):
         link = item.get('link', '')
         if link:
             lines.append(f"| 链接 | [[{link}][查看]] |")
-        if item.get('arxiv_id'):
-            lines.append(f"| ArXiv ID | {item['arxiv_id']} |")
+        # 统一使用 id 字段
+        item_id = item.get('id', '') or item.get('arxiv_id', '') or item.get('zhiyuan_id', '')
+        if item_id:
+            lines.append(f"| ID | {item_id} |")
         if item.get('categories'):
             categories_str = ", ".join(item['categories'])
             lines.append(f"| 分类 | {categories_str} |")
