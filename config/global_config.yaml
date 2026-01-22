@@ -1,5 +1,5 @@
 storage:
-  base_path: "data"
+  base_path: "~/org/roam/articles"
   date_format: "%Y-%m-%d"
   # 输出格式配置（支持多种方式）：
   # - 单个格式：'org', 'markdown', 'json'

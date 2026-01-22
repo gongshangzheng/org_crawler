@@ -227,10 +227,10 @@ custom_config:
       # 路径类型：relative（相对路径）或 absolute（绝对路径）
       type: "relative"
       # 基础路径（相对路径的基准或绝对路径的根）
-      base_path: "data"
+      base_path: "~/org/roam/articles"
       # 路径模板，支持变量：{site_name}, {date}, {base_path}
       # 默认：data/{site_name}/{date}.org
-      template: "data/{site_name}/{date}.org"
+      template: "{base_path}/{site_name}/{date}.org"
     
     # 索引文件配置
     index:
