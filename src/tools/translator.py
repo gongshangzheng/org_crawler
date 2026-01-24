@@ -31,9 +31,10 @@ class Translator:
         self._client = None
         
         # 获取 AccessKey（优先使用参数，其次从环境变量读取）
+        # 支持多种环境变量名称（向后兼容）
         import os
-        self.access_key_id = access_key_id or os.getenv('ALIBABA_CLOUD_ACCESS_KEY_ID')
-        self.access_key_secret = access_key_secret or os.getenv('ALIBABA_CLOUD_ACCESS_KEY_SECRET')
+        self.access_key_id = access_key_id or os.getenv('ALIBABA_CLOUD_ACCESS_KEY_ID') or os.getenv('ALI_ACCESS_KEY_ID')
+        self.access_key_secret = access_key_secret or os.getenv('ALIBABA_CLOUD_ACCESS_KEY_SECRET') or os.getenv('ALI_ACCESS_KEY_SECRET')
         
         if self.enabled:
             self._init_aliyun_client()
