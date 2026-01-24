@@ -2,6 +2,7 @@
 
 import time
 import signal
+import json
 from pathlib import Path
 from datetime import datetime, timedelta
 
@@ -9,6 +10,8 @@ from typing import Any
 import argparse
 from .utils.logger import setup_logger, get_logger
 from .utils.config_loader import load_global_config, load_rule_config
+from .utils.output_format import parse_output_format, should_export_org, should_export_markdown, should_export_json
+from .utils.constants import DEFAULT_ITEM_PREVIEW_COUNT
 from .crawler.crawler_manager import CrawlerManager
 from .storage.file_manager import FileManager
 from .storage.exporter_manager import ExporterManager
@@ -33,6 +36,76 @@ def signal_handler(signum, frame):
     logger = get_logger()
     logger.info("收到退出信号，正在停止...")
     running = False
+
+
+def _log_category_export(logger, category, items, category_folders, base_path, format_name):
+    """记录分类导出信息"""
+    category_folder = category_folders.get(category, category)
+    category_path = base_path.parent / category_folder / base_path.name
+    logger.info(f"已保存 {category} 类别 {format_name} 文件: {category_path} ({len(items)} 个条目)")
+
+
+def _log_single_export(logger, path, format_name):
+    """记录单个文件导出信息"""
+    logger.info(f"已保存 {format_name} 文件: {path}")
+
+
+def _export_org_format(result, org_exporter, org_path, categorized_items, logger):
+    """导出 Org 格式"""
+    org_exporter.export(result, org_path)
+
+    if categorized_items:
+        for category, items in categorized_items.items():
+            _log_category_export(logger, category, items, org_exporter.category_folders, org_path, "Org-mode")
+    else:
+        _log_single_export(logger, org_path, "Org-mode")
+
+
+def _export_markdown_format(result, org_exporter, md_path, categorized_items, logger):
+    """导出 Markdown 格式"""
+    org_exporter.export_markdown(result, md_path)
+
+    if categorized_items:
+        for category, items in categorized_items.items():
+            _log_category_export(logger, category, items, org_exporter.category_folders, md_path, "Markdown")
+    else:
+        _log_single_export(logger, md_path, "Markdown")
+
+
+def _export_json_format(result, json_path, logger):
+    """导出 JSON 格式"""
+    json_path.parent.mkdir(parents=True, exist_ok=True)
+
+    data = {
+        'site_name': result.site_name,
+        'crawl_time': result.crawl_time.isoformat(),
+        'items_count': result.items_count,
+        'items': result.items
+    }
+    with open(json_path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    _log_single_export(logger, json_path, "JSON")
+
+
+def _log_category_statistics(logger, categorized_items):
+    """记录分类统计信息"""
+    logger.info("=" * 60)
+    logger.info("各分类论文数量统计:")
+    logger.info("-" * 60)
+    for category in sorted(categorized_items.keys()):
+        count = len(categorized_items[category])
+        logger.info(f"  {category}: {count} 篇")
+    logger.info("-" * 60)
+    total_categorized = sum(len(items) for items in categorized_items.values())
+    logger.info(f"  总计: {total_categorized} 篇（可能有重复分类）")
+    logger.info("=" * 60)
+
+
+def _log_item_preview(logger, items, count=DEFAULT_ITEM_PREVIEW_COUNT):
+    """记录条目预览"""
+    logger.info("前几个条目:")
+    for i, item in enumerate(items[:count], 1):
+        logger.info(f"  {i}. {item.get('title', '无标题')[:60]}...")
 
 
 def run_crawl(crawler, path_manager, org_exporter, index_manager,
@@ -68,83 +141,26 @@ def run_crawl(crawler, path_manager, org_exporter, index_manager,
                     site_name=result.site_name,
                     date=result.crawl_time
                 )
-                
+
                 # 解析输出格式配置
-                # 支持多种格式：
-                # - 字符串：'org', 'markdown', 'json', 'both' (org+markdown), 'all' (org+markdown+json)
-                # - 列表：['org', 'markdown'], ['org', 'json'] 等
-                # - 逗号分隔字符串：'org,markdown', 'org,json' 等
-                output_format_raw = storage_config.get('output_format', 'org')
-                
-                # 标准化为列表格式
-                if isinstance(output_format_raw, str):
-                    # 处理特殊值
-                    if output_format_raw.lower() == 'both':
-                        output_formats = ['org', 'markdown']
-                    elif output_format_raw.lower() == 'all':
-                        output_formats = ['org', 'markdown', 'json']
-                    elif ',' in output_format_raw:
-                        # 逗号分隔字符串
-                        output_formats = [f.strip().lower() for f in output_format_raw.split(',')]
-                    else:
-                        # 单个格式
-                        output_formats = [output_format_raw.lower()]
-                elif isinstance(output_format_raw, list):
-                    output_formats = [f.lower() if isinstance(f, str) else str(f).lower() for f in output_format_raw]
-                else:
-                    # 默认值
-                    output_formats = ['org']
-                
+                output_formats = parse_output_format(storage_config.get('output_format', 'org'))
+
                 # 如果启用了分类，先进行分类（避免重复计算）
                 categorized_items = None
                 if org_exporter.keyword_classifier and result.items_count > 0:
                     categorized_items = org_exporter.keyword_classifier.classify_items(result.items)
-                
-                # 保存 Org-mode
-                if 'org' in output_formats:
-                    org_exporter.export(result, org_path)
-                    
-                    # 如果启用了分类，显示每个类别的文件路径
-                    if categorized_items:
-                        for category, items in categorized_items.items():
-                            category_folder = org_exporter.category_folders.get(category, category)
-                            category_path = org_path.parent / category_folder / org_path.name
-                            logger.info(f"已保存 {category} 类别 Org-mode 文件: {category_path} ({len(items)} 个条目)")
-                    else:
-                        logger.info(f"已保存 Org-mode 文件: {org_path}")
-                
-                # 保存 Markdown
-                if 'markdown' in output_formats:
-                    # 使用相同的路径，但扩展名为 .md
+
+                # 导出各种格式
+                if should_export_org(output_formats):
+                    _export_org_format(result, org_exporter, org_path, categorized_items, logger)
+
+                if should_export_markdown(output_formats):
                     md_path = org_path.with_suffix('.md')
-                    org_exporter.export_markdown(result, md_path)
-                    
-                    # 如果启用了分类，显示每个类别的文件路径
-                    if categorized_items:
-                        for category, items in categorized_items.items():
-                            category_folder = org_exporter.category_folders.get(category, category)
-                            category_path = md_path.parent / category_folder / md_path.name
-                            logger.info(f"已保存 {category} 类别 Markdown 文件: {category_path} ({len(items)} 个条目)")
-                    else:
-                        logger.info(f"已保存 Markdown 文件: {md_path}")
-                
-                # 保存 JSON
-                if 'json' in output_formats:
-                    # 使用与 org 文件相同的路径，但扩展名为 .json
+                    _export_markdown_format(result, org_exporter, md_path, categorized_items, logger)
+
+                if should_export_json(output_formats):
                     json_path = org_path.with_suffix('.json')
-                    json_path.parent.mkdir(parents=True, exist_ok=True)
-                    
-                    # 保存 JSON 数据
-                    import json
-                    data = {
-                        'site_name': result.site_name,
-                        'crawl_time': result.crawl_time.isoformat(),
-                        'items_count': result.items_count,
-                        'items': result.items
-                    }
-                    with open(json_path, 'w', encoding='utf-8') as f:
-                        json.dump(data, f, ensure_ascii=False, indent=2)
-                    logger.info(f"已保存 JSON 文件: {json_path}")
+                    _export_json_format(result, json_path, logger)
                 
                 # 更新索引文件
                 if index_manager:
@@ -160,29 +176,17 @@ def run_crawl(crawler, path_manager, org_exporter, index_manager,
                 
                 # 更新元数据
                 json_path_for_metadata = None
-                if 'json' in output_formats:
+                if should_export_json(output_formats):
                     json_path_for_metadata = org_path.with_suffix('.json')
                 file_manager.update_metadata(result, json_path=json_path_for_metadata)
                 logger.info("已更新元数据")
-                
+
                 # 如果启用了分类，显示每个类别的论文数量汇总
                 if categorized_items:
-                    logger.info("=" * 60)
-                    logger.info("各分类论文数量统计:")
-                    logger.info("-" * 60)
-                    # 按类别名称排序输出
-                    for category in sorted(categorized_items.keys()):
-                        count = len(categorized_items[category])
-                        logger.info(f"  {category}: {count} 篇")
-                    logger.info("-" * 60)
-                    total_categorized = sum(len(items) for items in categorized_items.values())
-                    logger.info(f"  总计: {total_categorized} 篇（可能有重复分类）")
-                    logger.info("=" * 60)
-                
+                    _log_category_statistics(logger, categorized_items)
+
                 # 显示前几个条目
-                logger.info("前几个条目:")
-                for i, item in enumerate(result.items[:3], 1):
-                    logger.info(f"  {i}. {item.get('title', '无标题')[:60]}...")
+                _log_item_preview(logger, result.items)
             else:
                 logger.info("本次爬取没有新条目")
         else:

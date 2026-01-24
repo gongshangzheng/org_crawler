@@ -6,6 +6,8 @@ from abc import ABC, abstractmethod
 
 from ..models.crawl_result import CrawlResult
 from ..utils.keyword_classifier import ItemClassifier
+from ..utils.author_utils import normalize_authors, format_authors_list
+from ..utils.constants import DEFAULT_AUTHOR_DISPLAY_COUNT, DEFAULT_SUMMARY_TRUNCATE_LENGTH
 
 
 class BaseOrgExporter(ABC):
@@ -38,6 +40,68 @@ class BaseOrgExporter(ABC):
         self.category_folders = category_folders or {}
         self.title_template = title_template
     
+    def _prepare_template_variables(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> dict:
+        """
+        Prepare template variables for rendering.
+
+        Args:
+            item: 条目字典
+            index: 条目索引
+            crawl_time: 爬取时间
+            output_path: 输出文件路径（可选）
+
+        Returns:
+            Dictionary of template variables
+        """
+        # 统一使用 id 字段，如果子类需要特殊ID字段，可以在自己的实现中处理
+        # 为了向后兼容，尝试从多个可能的字段获取ID
+        item_id = item.get('id', '') or item.get('arxiv_id', '') or item.get('zhiyuan_id', '')
+
+        variables = {
+            'title': item.get('title', '无标题'),
+            'link': item.get('link', ''),
+            'published_time': item.get('published_time', item.get('published_time_str', '')),
+            'crawl_time': crawl_time.strftime('%Y-%m-%d %H:%M:%S'),
+            'index': str(index),
+            'id': item_id,
+        }
+
+        # 添加作者信息（如果有）
+        authors = normalize_authors(item.get('authors', []))
+        if authors and len(authors) > 0:
+            variables['authors'] = ', '.join(authors)
+            variables['first_author'] = authors[0].strip()
+        else:
+            variables['authors'] = ''
+            variables['first_author'] = ''
+
+        # 添加分类信息（如果有）
+        categories = item.get('categories', [])
+        if categories:
+            variables['categories'] = ', '.join(categories)
+        else:
+            variables['categories'] = ''
+
+        # 添加输出路径信息
+        if output_path:
+            variables['output_path'] = str(output_path)
+            variables['output_file'] = output_path.name
+            variables['output_dir'] = str(output_path.parent)
+            # 相对路径（相对于当前工作目录）
+            try:
+                cwd = Path.cwd()
+                rel_path = output_path.relative_to(cwd)
+                variables['output_path_rel'] = './' + str(rel_path)
+            except ValueError:
+                variables['output_path_rel'] = str(output_path)
+        else:
+            variables['output_path'] = ''
+            variables['output_file'] = ''
+            variables['output_dir'] = ''
+            variables['output_path_rel'] = ''
+
+        return variables
+
     def _render_title(self, item: dict, index: int, crawl_time: datetime, output_path: Path | None = None) -> str:
         """
         渲染标题模板
@@ -56,82 +120,9 @@ class BaseOrgExporter(ABC):
             title = item.get('title', '无标题')
             published_time = item.get('published_time', '')
             return f"* 条目 {index}: {title} [{published_time}]"
-        
-        # 准备变量字典
-        # 统一使用 id 字段，如果子类需要特殊ID字段，可以在自己的实现中处理
-        # 为了向后兼容，尝试从多个可能的字段获取ID
-        item_id = item.get('id', '') or item.get('arxiv_id', '') or item.get('zhiyuan_id', '')
-        
-        variables = {
-            'title': item.get('title', '无标题'),
-            'link': item.get('link', ''),
-            'published_time': item.get('published_time', item.get('published_time_str', '')),
-            'crawl_time': crawl_time.strftime('%Y-%m-%d %H:%M:%S'),
-            'index': str(index),
-            'id': item_id,
-        }
-        
-        # 添加作者信息（如果有）
-        authors = item.get('authors', [])
-        # 确保 authors 是列表格式，并处理嵌套的逗号分隔字符串
-        if not isinstance(authors, list):
-            if isinstance(authors, str):
-                # 如果是字符串，可能是逗号分隔的，需要分割
-                if ',' in authors:
-                    authors = [a.strip() for a in authors.split(',') if a.strip()]
-                else:
-                    authors = [authors] if authors.strip() else []
-            else:
-                authors = []
-        else:
-            # 如果已经是列表，检查列表中的元素是否包含逗号分隔的字符串
-            expanded_authors = []
-            for author in authors:
-                if isinstance(author, str):
-                    # 如果列表元素是字符串且包含逗号，需要分割
-                    if ',' in author:
-                        expanded_authors.extend([a.strip() for a in author.split(',') if a.strip()])
-                    else:
-                        if author.strip():
-                            expanded_authors.append(author.strip())
-                else:
-                    # 如果不是字符串，转换为字符串
-                    author_str = str(author).strip()
-                    if author_str:
-                        expanded_authors.append(author_str)
-            authors = expanded_authors
-        
-        if authors and len(authors) > 0:
-            variables['authors'] = ', '.join(authors)
-            variables['first_author'] = authors[0].strip()  # 只取第一个作者，并去除空格
-        else:
-            variables['authors'] = ''
-            variables['first_author'] = ''
-        
-        # 添加分类信息（如果有）
-        categories = item.get('categories', [])
-        if categories:
-            variables['categories'] = ', '.join(categories)
-        else:
-            variables['categories'] = ''
-        
-        # 添加输出路径信息
-        if output_path:
-            variables['output_path'] = str(output_path)
-            variables['output_file'] = output_path.name
-            variables['output_dir'] = str(output_path.parent)
-            # 相对路径（相对于当前工作目录）
-            try:
-                cwd = Path.cwd()
-                rel_path = output_path.relative_to(cwd)
-                variables['output_path_rel'] = './' + str(rel_path)
-            except ValueError:
-                variables['output_path_rel'] = str(output_path)
-        else:
-            variables['output_path'] = ''
-            variables['output_file'] = ''
-            variables['output_dir'] = ''
-            variables['output_path_rel'] = ''
+
+        # 使用共享的变量准备方法
+        variables = self._prepare_template_variables(item, index, crawl_time, output_path)
         
         # 渲染模板
         try:
@@ -397,18 +388,17 @@ class BaseOrgExporter(ABC):
         lines.append("")
         
         # 元数据（简化版）
-        if item.get('authors'):
-            authors_str = ", ".join(item['authors'][:3])
-            if len(item['authors']) > 3:
-                authors_str += " et al."
+        authors = normalize_authors(item.get('authors', []))
+        if authors:
+            authors_str = format_authors_list(authors, DEFAULT_AUTHOR_DISPLAY_COUNT)
             lines.append(f"**作者**: {authors_str}")
             lines.append("")
-        
-        # 摘要（截断到200字符）
+
+        # 摘要（截断）
         if item.get('summary'):
             summary = item['summary'].replace('\n', ' ').strip()
-            if len(summary) > 200:
-                summary = summary[:200] + "..."
+            if len(summary) > DEFAULT_SUMMARY_TRUNCATE_LENGTH:
+                summary = summary[:DEFAULT_SUMMARY_TRUNCATE_LENGTH] + "..."
             lines.append(summary)
             lines.append("")
         
@@ -427,10 +417,10 @@ class BaseOrgExporter(ABC):
         if item.get('published_time', item.get('published_time_str')):
             published_time = item.get('published_time', item.get('published_time_str', ''))
             lines.append(f"- **发布时间**: {published_time}")
-        if item.get('authors'):
-            authors_str = ", ".join(item['authors'][:5])
-            if len(item['authors']) > 5:
-                authors_str += f" 等{len(item['authors'])}人"
+
+        authors = normalize_authors(item.get('authors', []))
+        if authors:
+            authors_str = format_authors_list(authors, max_count=5, et_al=False)
             lines.append(f"- **作者**: {authors_str}")
         link = item.get('link', '')
         if link:
@@ -482,74 +472,9 @@ class BaseOrgExporter(ABC):
             title = item.get('title', '无标题')
             published_time = item.get('published_time', item.get('published_time_str', ''))
             return f"## {index}. {title} [{published_time}]"
-        
-        # 准备变量字典（与 _render_title 相同的逻辑）
-        item_id = item.get('id', '') or item.get('arxiv_id', '') or item.get('zhiyuan_id', '')
-        
-        variables = {
-            'title': item.get('title', '无标题'),
-            'link': item.get('link', ''),
-            'published_time': item.get('published_time', item.get('published_time_str', '')),
-            'crawl_time': crawl_time.strftime('%Y-%m-%d %H:%M:%S'),
-            'index': str(index),
-            'id': item_id,
-        }
-        
-        # 添加作者信息
-        authors = item.get('authors', [])
-        if not isinstance(authors, list):
-            if isinstance(authors, str):
-                if ',' in authors:
-                    authors = [a.strip() for a in authors.split(',') if a.strip()]
-                else:
-                    authors = [authors] if authors.strip() else []
-            else:
-                authors = []
-        else:
-            expanded_authors = []
-            for author in authors:
-                if isinstance(author, str):
-                    if ',' in author:
-                        expanded_authors.extend([a.strip() for a in author.split(',') if a.strip()])
-                    else:
-                        if author.strip():
-                            expanded_authors.append(author.strip())
-                else:
-                    author_str = str(author).strip()
-                    if author_str:
-                        expanded_authors.append(author_str)
-            authors = expanded_authors
-        
-        if authors and len(authors) > 0:
-            variables['authors'] = ', '.join(authors)
-            variables['first_author'] = authors[0].strip()
-        else:
-            variables['authors'] = ''
-            variables['first_author'] = ''
-        
-        # 添加分类信息
-        categories = item.get('categories', [])
-        if categories:
-            variables['categories'] = ', '.join(categories)
-        else:
-            variables['categories'] = ''
-        
-        # 添加输出路径信息
-        if output_path:
-            variables['output_path'] = str(output_path)
-            variables['output_file'] = output_path.name
-            variables['output_dir'] = str(output_path.parent)
-            try:
-                cwd = Path.cwd()
-                rel_path = output_path.relative_to(cwd)
-                variables['output_path_rel'] = './' + str(rel_path)
-            except ValueError:
-                variables['output_path_rel'] = str(output_path)
-        else:
-            variables['output_path'] = ''
-            variables['output_file'] = ''
-            variables['output_dir'] = ''
-            variables['output_path_rel'] = ''
+
+        # 使用共享的变量准备方法
+        variables = self._prepare_template_variables(item, index, crawl_time, output_path)
         
         # 渲染模板（将 Org-mode 格式转换为 Markdown）
         try:
@@ -599,18 +524,17 @@ class BaseOrgExporter(ABC):
         lines.append("")
         
         # 作者（如果有）
-        if item.get('authors'):
-            authors_str = ", ".join(item['authors'][:3])  # 只显示前3个作者
-            if len(item['authors']) > 3:
-                authors_str += " et al."
+        authors = normalize_authors(item.get('authors', []))
+        if authors:
+            authors_str = format_authors_list(authors, DEFAULT_AUTHOR_DISPLAY_COUNT)
             lines.append(f"作者: {authors_str}")
             lines.append("")
-        
-        # 摘要（截断到200字符）
+
+        # 摘要（截断）
         if item.get('summary'):
             summary = item['summary'].replace('\n', ' ').strip()
-            if len(summary) > 200:
-                summary = summary[:200] + "..."
+            if len(summary) > DEFAULT_SUMMARY_TRUNCATE_LENGTH:
+                summary = summary[:DEFAULT_SUMMARY_TRUNCATE_LENGTH] + "..."
             lines.append(summary)
             lines.append("")
         
@@ -631,10 +555,10 @@ class BaseOrgExporter(ABC):
         published_time = item.get('published_time', item.get('published_time_str', ''))
         if published_time:
             lines.append(f"| 发布时间 | {published_time} |")
-        if item.get('authors'):
-            authors_str = ", ".join(item['authors'][:5])
-            if len(item['authors']) > 5:
-                authors_str += f" 等{len(item['authors'])}人"
+
+        authors = normalize_authors(item.get('authors', []))
+        if authors:
+            authors_str = format_authors_list(authors, max_count=5, et_al=False)
             lines.append(f"| 作者 | {authors_str} |")
         link = item.get('link', '')
         if link:
