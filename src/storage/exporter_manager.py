@@ -4,7 +4,6 @@ from typing import Type
 
 from .base_exporter import BaseOrgExporter
 from .arxiv_exporter import ArXivOrgExporter
-from .zhiyuan_exporter import ZhiyuanOrgExporter
 from ..utils.keyword_classifier import ItemClassifier
 
 
@@ -15,7 +14,6 @@ class ExporterManager:
     _exporter_registry: dict[str, Type[BaseOrgExporter]] = {
         'BaseOrgExporter': BaseOrgExporter,
         'ArXivOrgExporter': ArXivOrgExporter,
-        'ZhiyuanOrgExporter': ZhiyuanOrgExporter,
     }
     
     @classmethod
