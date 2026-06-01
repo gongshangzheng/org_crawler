@@ -12,7 +12,7 @@ class DigestPipelineTests(unittest.TestCase):
                 item={"title":"Visual Autoregressive Tokenizer","title_zh":"视觉自回归分词器","link":"https://arxiv.org/abs/2605.00001","id":"oai:arXiv.org:2605.00001v1","authors":["Ada Lovelace","Alan Turing"],"categories":["cs.CV","autoregressive"],"published_time":"2026-05-21T04:00:00","summary":"arXiv:2605.00001v1 Announce Type: new Abstract: Test abstract.","summary_zh":"测试摘要。"}
                 persist_raw_batches(blog/"data"/"daily-papers","2026-05-21",{"autoregressive":[item]},datetime(2026,5,21))
                 out=run_digest("2026-05-21",build=False); text=out.read_text(encoding="utf-8")
-                self.assertEqual(out.suffix,".html"); self.assertIn("created_at: 2026-05-21T10:00:00",text); self.assertIn("updated_at: 2026-05-21T10:00:00",text); self.assertIn("subcategory: ArXiv Digest",text); self.assertIn('<div class="paper-card">',text)
+                self.assertEqual(out.suffix,".html"); self.assertIn("created_at: 2026-05-21T10:00:00",text); self.assertIn("updated_at: 2026-05-21T10:00:00",text); self.assertIn("subcategory: 论文每日摘要",text); self.assertIn('<div class="paper-card">',text)
             finally:
                 os.environ.pop("ARXIV_DIGEST_BLOG_DIR",None); os.environ.pop("ARXIV_DIGEST_BUILD",None)
     def test_default_config_points_to_html_source(self):

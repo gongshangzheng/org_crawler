@@ -14,17 +14,18 @@ class CrawlerPipeline:
     def set_logger(self,logger:Any): self.logger=logger; self.output_writer.logger=logger
     def log(self,msg:str,level:str="info"):
         if self.logger: getattr(self.logger,level)(msg)
-    def build_runtime(self,rule_file:str)->RuleRuntime: return self.runtime_builder.build(rule_file)
+    def build_runtime(self,rule_file:str,target_date:str|None=None)->RuleRuntime: return self.runtime_builder.build(rule_file,target_date=target_date)
     def run_rule(self,runtime:RuleRuntime)->bool:
         result:CrawlResult=runtime.crawler.crawl()
         if not result.success: self.log(f"爬取失败: {result.error_message}","error"); return False
         self.log(f"爬取成功，获取到 {result.items_count} 个条目")
         if result.items_count<=0: self.file_manager.update_metadata(result); return True
         return self.output_writer.write(runtime,result)
-    def run_once(self,*,render_digest:bool=True)->None:
+    def run_once(self,*,render_digest:bool=True,target_date:str|None=None)->None:
         if not self.rule_files: raise ValueError("rule_files 为空，没有可运行的规则文件")
+        digest_date = target_date or datetime.now().strftime('%Y-%m-%d')
         for rf in self.rule_files:
-            rt=self.build_runtime(rf); self.auto_digest_enabled=self.auto_digest_enabled or bool(rt.custom_config.get("auto_digest",False)); self.run_rule(rt)
-        if render_digest and self.auto_digest_enabled: self.log(f"Digest 执行成功: {run_digest(datetime.now().strftime('%Y-%m-%d'),build=True,publish=False)}")
+            rt=self.build_runtime(rf,target_date=target_date); self.auto_digest_enabled=self.auto_digest_enabled or bool(rt.custom_config.get("auto_digest",False)); self.run_rule(rt)
+        if render_digest and self.auto_digest_enabled: self.log(f"Digest 执行成功: {run_digest(digest_date,build=True,publish=False)}")
     @staticmethod
     def normalize_output_formats(value:Any)->list[str]: return normalize_output_formats(value)

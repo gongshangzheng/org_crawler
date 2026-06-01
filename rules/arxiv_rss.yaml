@@ -3,6 +3,11 @@
 
 name: "arxiv"
 url: "https://rss.arxiv.org/rss/cs.AI"
+sources:
+  - name: "arxiv-ai"
+    url: "https://rss.arxiv.org/rss/cs.AI"
+  - name: "arxiv-cv"
+    url: "https://rss.arxiv.org/rss/cs.CV"
 crawl_type: "rss"
 update_frequency: 1440
 storage_path: "daily-papers"
@@ -21,10 +26,9 @@ custom_config:
 
   filters:
     - type: "time"
-      relative_hours_start: 24
-      relative_hours_end: 0
-      date_only: false
-      description: "时间过滤：爬取24小时内的论文"
+      target_days_before: 1
+      target_days_after: 0
+      description: "时间过滤：爬取目标日期前一天的论文（00:00 ~ 24:00 固定窗口）"
     - type: "and"
       description: "关键词过滤：保留 diffusion、autoregressive、image compression、1D visual tokenizer 或 diffusion visual encoder 相关论文，排除 weather 相关"
       filters:
@@ -38,6 +42,10 @@ custom_config:
                 - "autoregression"
                 - "image compression"
                 - "image rescaling"
+                - "learned image compression"
+                - "neural image compression"
+                - "distributed image compression"
+                - "image codec"
                 - "1D visual tokenizer"
                 - "1-D visual tokenizer"
                 - "visual tokenizer"
@@ -49,6 +57,26 @@ custom_config:
                 - "continuous visual tokenizer"
             - type: "summary"
               keywords: *keywords
+            - type: "and"
+              filters:
+                - type: "title"
+                  keywords: ["image"]
+                - type: "or"
+                  filters:
+                    - type: "title"
+                      keywords: ["compression", "codec", "bitrate", "bpp", "rate-distortion", "entropy model"]
+                    - type: "summary"
+                      keywords: ["compression", "codec", "bitrate", "bpp", "rate-distortion", "entropy model"]
+            - type: "and"
+              filters:
+                - type: "summary"
+                  keywords: ["image"]
+                - type: "or"
+                  filters:
+                    - type: "title"
+                      keywords: ["compression", "codec", "bitrate", "bpp", "rate-distortion", "entropy model"]
+                    - type: "summary"
+                      keywords: ["compression", "codec", "bitrate", "bpp", "rate-distortion", "entropy model"]
         - type: "not"
           filter:
             type: "or"
@@ -57,6 +85,10 @@ custom_config:
                 keywords: ["weather", "forecasting", "meteorology", "precipitation", "rainfall"]
               - type: "summary"
                 keywords: ["weather", "forecasting", "meteorology", "precipitation", "rainfall"]
+              - type: "title"
+                keywords: ["medical", "clinical", "clinic", "diagnosis", "diagnostic", "pathology", "pathological", "radiology", "patient", "patients", "hospital", "disease", "therapy", "therapeutic", "biomedical", "healthcare", "health care", "health", "medical report", "mimic-cxr", "chexpert", "cxr", "colonoscopy", "colposcopy"]
+              - type: "summary"
+                keywords: ["medical", "clinical", "clinic", "diagnosis", "diagnostic", "pathology", "pathological", "radiology", "patient", "patients", "hospital", "disease", "therapy", "therapeutic", "biomedical", "healthcare", "health care", "health", "medical report", "mimic-cxr", "chexpert", "cxr", "colonoscopy", "colposcopy"]
 
   category_mapping:
     diffusion:
@@ -83,9 +115,29 @@ custom_config:
         type: "or"
         filters:
           - type: "title"
-            keywords: ["image compression", "image rescaling"]
+            keywords: ["image compression", "image rescaling", "learned image compression", "neural image compression", "distributed image compression", "image codec"]
           - type: "summary"
-            keywords: ["image compression", "image rescaling"]
+            keywords: ["image compression", "image rescaling", "learned image compression", "neural image compression", "distributed image compression", "image codec"]
+          - type: "and"
+            filters:
+              - type: "title"
+                keywords: ["image"]
+              - type: "or"
+                filters:
+                  - type: "title"
+                    keywords: ["compression", "codec", "bitrate", "bpp", "rate-distortion", "entropy model"]
+                  - type: "summary"
+                    keywords: ["compression", "codec", "bitrate", "bpp", "rate-distortion", "entropy model"]
+          - type: "and"
+            filters:
+              - type: "summary"
+                keywords: ["image"]
+              - type: "or"
+                filters:
+                  - type: "title"
+                    keywords: ["compression", "codec", "bitrate", "bpp", "rate-distortion", "entropy model"]
+                  - type: "summary"
+                    keywords: ["compression", "codec", "bitrate", "bpp", "rate-distortion", "entropy model"]
     visual_tokenizer_1d:
       folder: "visual_tokenizer_1d"
       filter:

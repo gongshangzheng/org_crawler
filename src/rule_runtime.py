@@ -10,7 +10,7 @@ class RuleRuntime:
     rule_file:str; site_config:Any; custom_config:dict[str,Any]; storage_config:dict[str,Any]; path_manager:PathManager; exporter:Any; index_manager:IndexManager|None; crawler:Any
 class RuntimeBuilder:
     def __init__(self,global_config:dict[str,Any]): self.global_config=global_config
-    def build(self,rule_file:str)->RuleRuntime:
+    def build(self,rule_file:str,target_date:str|None=None)->RuleRuntime:
         from .crawler.crawler_manager import CrawlerManager
         from .filters import CategoryRuleClassifier, FilterManager
         from .storage.exporter_manager import ExporterManager
@@ -33,6 +33,6 @@ class RuntimeBuilder:
         filters_cfg=[]
         if isinstance(self.global_config.get("filters",[]),list): filters_cfg.extend(self.global_config.get("filters",[]))
         if isinstance(custom.get("filters",[]),list): filters_cfg.extend(custom.get("filters",[]))
-        filters=FilterManager.create_filters(filters_cfg)
+        filters=FilterManager.create_filters(filters_cfg, target_date=target_date)
         if filters: crawler.set_filters(filters)
         return RuleRuntime(rule_file,site,custom,storage,pm,exporter,idx,crawler)

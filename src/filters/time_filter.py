@@ -13,6 +13,10 @@ class TimeRangeFilter(BaseFilter):
     - 支持相对时间范围：
       * relative_days_start / relative_days_end：相对于今天的日期范围（基于 00:00:00）
       * relative_hours_start / relative_hours_end：相对于当前时间的精确范围（精确到时分秒）
+    - 支持 target_date 模式：基于目标日期计算固定窗口，而非相对于当前时刻
+      * target_date: "2026-05-28" 格式字符串
+      * target_days_before: 目标日期前 N 天（默认 1）
+      * target_days_after: 目标日期后 N 天（默认 0）
     - 支持 date_only 模式：只比较日期部分（忽略时分秒），适用于 ArXiv 等只有日期的时间
     - 支持 yesterday 快捷选项：自动设置为昨天的 00:00:00 到今天的 00:00:00
     
@@ -29,6 +33,9 @@ class TimeRangeFilter(BaseFilter):
         relative_days_end: int | None = None,
         relative_hours_start: int | None = None,
         relative_hours_end: int | None = None,
+        target_date: str | None = None,
+        target_days_before: int = 1,
+        target_days_after: int = 0,
         yesterday: bool = False,
         date_only: bool = False,
         negate: bool = False,
@@ -41,6 +48,9 @@ class TimeRangeFilter(BaseFilter):
         self.relative_days_end = relative_days_end
         self.relative_hours_start = relative_hours_start
         self.relative_hours_end = relative_hours_end
+        self.target_date_str = target_date
+        self.target_days_before = target_days_before
+        self.target_days_after = target_days_after
         self.yesterday = yesterday
         self.date_only = date_only
 
@@ -63,6 +73,16 @@ class TimeRangeFilter(BaseFilter):
 
         start_dt = None
         end_dt = None
+
+        # target_date 模式：基于目标日期计算固定窗口
+        # 例如 target_date="2026-05-28", target_days_before=1 → [2026-05-27 00:00, 2026-05-28 00:00)
+        if self.target_date_str:
+            target_dt = self._parse_datetime(self.target_date_str)
+            if target_dt:
+                target_start = self._normalize_to_date(target_dt)
+                start_dt = target_start - timedelta(days=self.target_days_before)
+                end_dt = target_start + timedelta(days=self.target_days_after)
+                return start_dt, end_dt
 
         # yesterday 快捷选项：昨天的 00:00:00 到今天的 00:00:00
         if self.yesterday:

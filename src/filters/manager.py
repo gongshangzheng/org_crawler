@@ -20,7 +20,7 @@ class FilterManager:
     }
 
     @classmethod
-    def _create_single_filter(cls, cfg: dict[str, Any]) -> BaseFilter | None:
+    def _create_single_filter(cls, cfg: dict[str, Any], target_date: str | None = None) -> BaseFilter | None:
         if not isinstance(cfg, dict):
             return None
         f_type = cfg.get("type")
@@ -33,7 +33,7 @@ class FilterManager:
         # 逻辑组合过滤器 AND / OR
         if f_type in ("and", "or"):
             sub_cfgs = cfg.get("filters", [])
-            sub_filters = cls.create_filters(sub_cfgs)
+            sub_filters = cls.create_filters(sub_cfgs, target_date=target_date)
             if not sub_filters:
                 return None
             description = cfg.get("description")
@@ -51,7 +51,7 @@ class FilterManager:
                     sub_cfg = sub_list[0]
             if not sub_cfg:
                 return None
-            sub_filters = cls.create_filters([sub_cfg])
+            sub_filters = cls.create_filters([sub_cfg], target_date=target_date)
             if not sub_filters:
                 return None
             description = cfg.get("description")
@@ -77,6 +77,9 @@ class FilterManager:
                 relative_days_end=cfg.get("relative_days_end"),
                 relative_hours_start=cfg.get("relative_hours_start"),
                 relative_hours_end=cfg.get("relative_hours_end"),
+                target_date=target_date or cfg.get("target_date"),
+                target_days_before=cfg.get("target_days_before", 1),
+                target_days_after=cfg.get("target_days_after", 0),
                 yesterday=cfg.get("yesterday", False),
                 date_only=cfg.get("date_only", False),
                 negate=negate,
@@ -87,13 +90,13 @@ class FilterManager:
         return None
 
     @classmethod
-    def create_filters(cls, configs: list[dict[str, Any]]) -> list[BaseFilter]:
+    def create_filters(cls, configs: list[dict[str, Any]], target_date: str | None = None) -> list[BaseFilter]:
         filters: list[BaseFilter] = []
         if not configs:
             return filters
 
         for cfg in configs:
-            flt = cls._create_single_filter(cfg)
+            flt = cls._create_single_filter(cfg, target_date=target_date)
             if flt is not None:
                 filters.append(flt)
 

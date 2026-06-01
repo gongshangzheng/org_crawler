@@ -1,6 +1,7 @@
 """RSS 爬虫基类实现"""
 
 import feedparser
+from collections import OrderedDict
 from datetime import datetime, timedelta
 from typing import Any
 
@@ -25,6 +26,42 @@ class BaseRSSCrawler(BaseCrawler):
         self.update_frequency_hours = site_config.update_frequency / 60  # 转换为小时
         self.translator = translator
     
+    def _has_time_filter(self) -> bool:
+        def has_time_filter_recursive(filters_list):
+            from ..filters.time_filter import TimeRangeFilter
+            for flt in filters_list:
+                if isinstance(flt, TimeRangeFilter):
+                    return True
+                if hasattr(flt, 'filters') and has_time_filter_recursive(getattr(flt, 'filters', [])):
+                    return True
+                if hasattr(flt, 'flt') and isinstance(getattr(flt, 'flt', None), TimeRangeFilter):
+                    return True
+            return False
+        return has_time_filter_recursive(self.filters) if self.filters else False
+
+    def _collect_items_from_entries(self, entries: list[Any], crawl_time: datetime, logger: Any, source_label: str) -> list[CrawlItem]:
+        has_time_filter = self._has_time_filter()
+        items: list[CrawlItem] = []
+        if has_time_filter:
+            logger.info(f"[RSS 抓取] {source_label} 检测到时间过滤器，跳过初步时间过滤，由时间过滤器处理")
+            for entry in entries:
+                published_time = self.extract_published_time(entry)
+                if published_time:
+                    item = self.parse_entry(entry)
+                    if item:
+                        items.append(item)
+        else:
+            time_threshold = crawl_time - timedelta(hours=self.update_frequency_hours)
+            logger.info(f"[RSS 抓取] {source_label} 时间阈值: {time_threshold.strftime('%Y-%m-%d %H:%M:%S')} (过去 {self.update_frequency_hours} 小时)")
+            for entry in entries:
+                published_time = self.extract_published_time(entry)
+                if published_time and published_time >= time_threshold:
+                    item = self.parse_entry(entry)
+                    if item:
+                        items.append(item)
+        logger.info(f"[RSS 抓取] {source_label} 初步处理后剩余 {len(items)} 个条目")
+        return items
+
     def crawl(self) -> CrawlResult:
         """
         执行 RSS 爬取
@@ -37,135 +74,44 @@ class BaseRSSCrawler(BaseCrawler):
         logger = get_logger()
         
         try:
-            # 开始抓取，立即输出信息
-            logger.info(f"[RSS 抓取] 开始抓取 RSS feed: {self.site_config.url}")
-            logger.info(f"[RSS 抓取] 站点: {self.site_config.name}")
-            
-            # 解析 RSS feed
-            # feedparser 完全支持标准的 RSS 2.0 格式（包含 <channel> 标签）
-            # RSS 2.0 标准结构：<rss><channel><item>...</item></channel></rss>
-            # feedparser 会自动解析 <channel> 中的 <item> 元素到 feed.entries
-            feed = feedparser.parse(self.site_config.url)
-            
-            if feed.bozo:
-                error_msg = f"RSS 解析错误: {feed.bozo_exception if hasattr(feed, 'bozo_exception') else '未知错误'}"
-                logger.error(f"[RSS 抓取] {error_msg}")
-                return CrawlResult(
-                    site_name=self.site_config.name,
-                    crawl_time=crawl_time,
-                    items_count=0,
-                    success=False,
-                    error_message=error_msg
-                )
-            
-            logger.info("[RSS 抓取] RSS feed 解析成功")
-            
-            # 验证 feed 结构
-            # feedparser 解析标准 RSS 2.0 格式（包含 <channel> 标签）后的结构：
-            # - feed.entries: 包含所有 <channel><item> 元素的列表
-            #   * 每个 entry 对应一个 <item> 元素
-            #   * entry.title, entry.link, entry.description 等对应 <item> 的子元素
-            # - feed.feed: 包含 <channel> 的元信息（title, link, description 等）
-            # 
-            # RSS 2.0 标准结构：
-            # <rss>
-            #   <channel>
-            #     <title>...</title>
-            #     <item>
-            #       <title>...</title>
-            #       <link>...</link>
-            #       ...
-            #     </item>
-            #     <item>...</item>
-            #   </channel>
-            # </rss>
-            #
-            # feedparser 会自动：
-            # 1. 解析 <channel> 标签（存储到 feed.feed）
-            # 2. 提取所有 <item> 标签（存储到 feed.entries）
-            # 3. 解析每个 <item> 的子元素（title, link, description, pubDate 等）
-            
-            if not hasattr(feed, 'entries') or len(feed.entries) == 0:
-                logger.warning("[RSS 抓取] RSS feed 中没有找到条目")
-                return CrawlResult(
-                    site_name=self.site_config.name,
-                    crawl_time=crawl_time,
-                    items_count=0,
-                    success=True,
-                    error_message="RSS feed 中没有找到条目"
-                )
-            
-            entries_count = len(feed.entries)
-            logger.info(f"[RSS 抓取] 找到 {entries_count} 个原始条目")
-            
-            # 检查是否配置了时间过滤器（递归检查嵌套的过滤器）
-            def has_time_filter_recursive(filters_list):
-                """递归检查过滤器中是否包含时间过滤器"""
-                from ..filters.time_filter import TimeRangeFilter
-                for flt in filters_list:
-                    if isinstance(flt, TimeRangeFilter):
-                        return True
-                    # 检查嵌套的过滤器（如 OR/AND/NOT 中的时间过滤器）
-                    if hasattr(flt, 'filters'):
-                        if has_time_filter_recursive(getattr(flt, 'filters', [])):
-                            return True
-                    # 检查 NOT 过滤器中的子过滤器
-                    if hasattr(flt, 'flt'):
-                        if isinstance(getattr(flt, 'flt', None), TimeRangeFilter):
-                            return True
-                return False
-            
-            has_time_filter = False
-            if self.filters:
-                has_time_filter = has_time_filter_recursive(self.filters)
-            
-            # 如果配置了时间过滤器，跳过初步时间过滤，让时间过滤器处理
-            # 否则使用 update_frequency 进行初步过滤
-            items: list[CrawlItem] = []
-            if has_time_filter:
-                logger.info("[RSS 抓取] 检测到时间过滤器，跳过初步时间过滤，由时间过滤器处理")
-                # 提取所有条目，让时间过滤器来处理
-                for entry in feed.entries:
-                    published_time = self.extract_published_time(entry)
-                    if published_time:  # 只要有发布时间就保留，让过滤器处理
-                        item = self.parse_entry(entry)
-                        if item:
-                            items.append(item)
-            else:
-                # 计算时间范围（过去 N 小时）
-                time_threshold = crawl_time - timedelta(hours=self.update_frequency_hours)
-                logger.info(f"[RSS 抓取] 时间阈值: {time_threshold.strftime('%Y-%m-%d %H:%M:%S')} (过去 {self.update_frequency_hours} 小时)")
-                
-                # 提取条目
-                # feed.entries 包含所有 <channel> 中的 <item> 元素
-                for entry in feed.entries:
-                    # 解析发布时间
-                    published_time = self.extract_published_time(entry)
-                    
-                    # 只保留时间范围内的条目
-                    if published_time and published_time >= time_threshold:
-                        item = self.parse_entry(entry)
-                        if item:
-                            items.append(item)
-            
-            logger.info(f"[RSS 抓取] 初步处理后剩余 {len(items)} 个条目")
+            sources = self.site_config.sources or [{"name": self.site_config.name, "url": self.site_config.url}]
+            merged: OrderedDict[str, CrawlItem] = OrderedDict()
+            total_entries_count = 0
+            for idx, source in enumerate(sources, 1):
+                source_name = source.get('name') or f"{self.site_config.name}-{idx}"
+                source_url = source.get('url') or self.site_config.url
+                source_label = f"[{source_name}]"
+                logger.info(f"[RSS 抓取] 开始抓取 RSS feed: {source_url}")
+                logger.info(f"[RSS 抓取] 站点: {source_name}")
+                feed = feedparser.parse(source_url)
+                if feed.bozo:
+                    error_msg = f"RSS 解析错误: {feed.bozo_exception if hasattr(feed, 'bozo_exception') else '未知错误'}"
+                    logger.error(f"[RSS 抓取] {source_label} {error_msg}")
+                    return CrawlResult(
+                        site_name=self.site_config.name,
+                        crawl_time=crawl_time,
+                        items_count=0,
+                        success=False,
+                        error_message=error_msg
+                    )
+                logger.info(f"[RSS 抓取] {source_label} RSS feed 解析成功")
+                if not hasattr(feed, 'entries') or len(feed.entries) == 0:
+                    logger.warning(f"[RSS 抓取] {source_label} RSS feed 中没有找到条目")
+                    continue
+                entries_count = len(feed.entries)
+                total_entries_count += entries_count
+                logger.info(f"[RSS 抓取] {source_label} 找到 {entries_count} 个原始条目")
+                items = self._collect_items_from_entries(feed.entries, crawl_time, logger, source_label)
+                for item in items:
+                    key = item.other_info.get('arxiv_id') or item.link or item.title
+                    if key and key not in merged:
+                        merged[key] = item
+            items = list(merged.values())
+            logger.info(f"[RSS 抓取] 多源合并后共保留 {len(items)} 个去重条目（原始条目总数 {total_entries_count}）")
             
             # 如果初步处理后没有条目（可能是所有条目都没有发布时间），提前输出并返回
             if len(items) == 0:
                 logger.warning(f"[RSS 抓取] 初步处理后没有符合条件的条目（可能所有条目都没有发布时间）")
-                # 输出前几个原始条目供参考
-                logger.info("[RSS 抓取] 前几个原始条目预览（供参考）:")
-                preview_count = min(3, entries_count)
-                if feed.entries:
-                    for i, entry in enumerate(feed.entries[:preview_count], 1):
-                        title = entry.get('title', '无标题') or '无标题'
-                        link = entry.get('link', '')
-                        pub_time = self.extract_published_time(entry)
-                        pub_str = pub_time.strftime('%Y-%m-%d %H:%M:%S') if pub_time else '无法解析'
-                        title_preview = title[:50] if len(title) > 50 else title
-                        logger.info(f"  {i}. [{title_preview}{'...' if len(title) > 50 else ''}]")
-                        logger.info(f"     发布时间: {pub_str}")
-                        logger.info(f"     链接: {link}")
                 return CrawlResult(
                     site_name=self.site_config.name,
                     crawl_time=crawl_time,
@@ -211,7 +157,8 @@ class BaseRSSCrawler(BaseCrawler):
                     logger.info(f"     发布时间: {published_time_str}")
             else:
                 # 如果没有爬取到，报错
-                error_msg = f"爬取失败：未能获取到任何条目（站点: {self.site_config.name}, URL: {self.site_config.url}）"
+                source_urls = ', '.join(self.site_config.urls) if self.site_config.urls else self.site_config.url
+                error_msg = f"爬取失败：未能获取到任何条目（站点: {self.site_config.name}, URL: {source_urls}）"
                 logger.error(f"[RSS 抓取] ✗ {error_msg}")
                 return CrawlResult(
                     site_name=self.site_config.name,
