@@ -6,7 +6,7 @@
 
 - **RSS 爬取**：定时抓取 `cs.AI` / `cs.CV` 的 arXiv RSS feed
 - **智能分类**：按关键词将论文归入 `diffusion`、`autoregressive`、`image_compression`、`visual_tokenizer_1d`、`diffusion_visual_encoder` 五个方向
-- **自动翻译**：摘要自动翻译为中文（DeepL / 阿里云翻译）
+- **自动翻译**：标题和摘要使用 LLM（MiniMax 等 OpenAI 兼容接口）自动翻译为中文
 - **HTML 简报**：生成静态博客页面，包含分类统计和论文卡片
 - **关键词搜索**：内置 arXiv API 查询构建器，支持布尔组合、时间范围、分类过滤
 - **可配置输出**：数据路径和博客目录通过配置文件或环境变量自定义
@@ -78,13 +78,13 @@ logging:
 | `ARXIV_DIGEST_BUILD` | 生成后是否执行 `node build.js` | `1` |
 | `ARXIV_DIGEST_PUSH` | 生成后是否 `git push` | `0` |
 | `ARXIV_DIGEST_EMAIL` | 生成后是否发送邮件 | `0` |
+| `LLM_API_KEY` | LLM API Key，翻译与每日总览共用 | 空 |
+| `LLM_API_URL` | OpenAI 兼容 Chat Completions 端点，例如 MiniMax | `https://api.minimax.chat/v1/chat/completions` |
+| `LLM_MODEL` | LLM 模型名，例如 MiniMax-M1 | 空 |
 
 ### 爬取规则：`rules/*.yaml`
 
-每条规则定义一个 RSS 源，包含 URL、关键词过滤、分类映射、翻译开关等。当前有两条规则：
-
-- `rules/arxiv_rss.yaml`：`cs.AI` 源
-- `rules/arxiv_cv_rss.yaml`：`cs.CV` 源
+每条规则定义 RSS 源、关键词过滤、分类映射、翻译开关等。当前默认使用 `rules/arxiv_rss.yaml`，其中同时声明 `cs.AI` 与 `cs.CV` 两个 RSS feed，运行时统一抓取、去重、过滤、分类、翻译和输出。
 
 ## 关键词搜索
 

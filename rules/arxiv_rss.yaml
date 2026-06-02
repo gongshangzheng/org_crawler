@@ -23,6 +23,7 @@ custom_config:
     enabled: true
     source_lang: "en"
     target_lang: "zh"
+    # LLM 翻译使用环境变量配置：LLM_API_KEY / LLM_API_URL / LLM_MODEL
 
   filters:
     - type: "time"

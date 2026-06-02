@@ -1,10 +1,15 @@
 """Daily arXiv digest renderer for html-blog."""
 from __future__ import annotations
-import html, json, os, re, subprocess, sys, urllib.request
+import html, json, os, re, subprocess, sys
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+try:
+    from .tools.llm_client import call_llm
+except ImportError:  # 兼容直接执行：python src/html_blog_digest.py
+    from tools.llm_client import call_llm
 
 CATEGORY_DISPLAY={"diffusion":"Diffusion","autoregressive":"Autoregressive","image_compression":"Image Compression","visual_tokenizer_1d":"1D Visual Tokenizer","diffusion_visual_encoder":"Diffusion Visual Encoder"}
 CATEGORY_ORDER=["autoregressive","diffusion","image_compression","visual_tokenizer_1d","diffusion_visual_encoder"]
@@ -58,39 +63,6 @@ def persist_raw_batches(base_dir:Path,date:str,categorized_items:dict[str,list[d
     return written
 
 def paper_list_for_prompt(items:list[dict[str,Any]])->str: return "\n".join(f"- {i.get('title','')} ({i.get('link','')})" for i in items)
-def _extract_text(resp:dict)->str|None:
-    """从 LLM 响应中提取文本，兼容 OpenAI 和 Anthropic 两种格式。"""
-    # OpenAI 格式: choices[0].message.content
-    if "choices" in resp:
-        try: return resp["choices"][0]["message"]["content"].strip()
-        except (KeyError,IndexError): pass
-    # Anthropic 格式: content[0].text
-    if "content" in resp and isinstance(resp["content"],list):
-        try:
-            for block in resp["content"]:
-                if isinstance(block,dict) and block.get("type")=="text": return block["text"].strip()
-        except (KeyError,IndexError): pass
-    return None
-
-def call_llm(prompt:str)->str|None:
-    api_key=os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("OPENAI_API_KEY"); api_url=os.environ.get("ANTHROPIC_API_URL") or os.environ.get("LLM_API_URL"); model=os.environ.get("ANTHROPIC_MODEL") or os.environ.get("LLM_MODEL")
-    if not(api_key and api_url and model): return None
-    # 检测 API 风格：URL 包含 /anthropic 则用 Anthropic 格式，否则用 OpenAI 格式
-    is_anthropic = "/anthropic" in api_url.lower()
-    if is_anthropic:
-        endpoint = api_url.rstrip("/") + "/v1/messages"
-        headers = {"Content-Type":"application/json","x-api-key":api_key,"anthropic-version":"2023-06-01"}
-        payload = json.dumps({"model":model,"messages":[{"role":"user","content":prompt}],"max_tokens":4000})
-    else:
-        endpoint = api_url
-        headers = {"Content-Type":"application/json","Authorization":f"Bearer {api_key}"}
-        payload = json.dumps({"model":model,"messages":[{"role":"user","content":prompt}],"temperature":0.7,"max_tokens":4000})
-    req = urllib.request.Request(endpoint, data=payload.encode(), headers=headers, method="POST")
-    try:
-        with urllib.request.urlopen(req,timeout=120) as r:
-            resp = json.loads(r.read().decode())
-            return _extract_text(resp)
-    except Exception: return None
 
 def fallback_overview(cat:str,n:int)->str: return f"<p>今日 {display_name(cat)} 方向共追踪到 {n} 篇论文。简报保留原始摘要、中文摘要、作者和链接，适合先快速筛选，再挑出值得深读的论文进入 org-roam。</p>"
 

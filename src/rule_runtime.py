@@ -28,7 +28,7 @@ class RuntimeBuilder:
         if idx_cfg.get("enabled",False):
             base=path_cfg.get("base_path",storage.get("base_path","data")); ip=Path(base)/site.name/idx_cfg["path"] if idx_cfg.get("path") else pm.get_index_path(site.name)
             idx=IndexManager(index_path=ip,table_headers=idx_cfg.get("table_headers",["{title}","{first_author}","{link}"]),cell_templates=idx_cfg.get("cell_templates",{"title":"{title}","first_author":"{first_author}","link":"[[{link}][查看]]"}),header_labels=idx_cfg.get("header_labels",{"title":"标题","first_author":"第一作者","link":"链接"}))
-        tr_cfg=custom.get("translator",{}); translator=Translator(enabled=True,source_lang=tr_cfg.get("source_lang","en"),target_lang=tr_cfg.get("target_lang","zh"),access_key_id=tr_cfg.get("access_key_id"),access_key_secret=tr_cfg.get("access_key_secret")) if tr_cfg.get("enabled",False) else None
+        tr_cfg=custom.get("translator",{}); translator=Translator(enabled=True,source_lang=tr_cfg.get("source_lang","en"),target_lang=tr_cfg.get("target_lang","zh")) if tr_cfg.get("enabled",False) else None
         crawler=CrawlerManager.get_crawler(site,translator=translator)
         filters_cfg=[]
         if isinstance(self.global_config.get("filters",[]),list): filters_cfg.extend(self.global_config.get("filters",[]))

@@ -6,7 +6,7 @@ A daily arXiv paper tracking and search tool. A complete Python pipeline from RS
 
 - **RSS Crawling**: Scheduled fetching of `cs.AI` / `cs.CV` arXiv RSS feeds
 - **Smart Classification**: Categorizes papers into `diffusion`, `autoregressive`, `image_compression`, `visual_tokenizer_1d`, `diffusion_visual_encoder`
-- **Auto Translation**: Abstracts automatically translated to Chinese (DeepL / Alibaba Cloud)
+- **Auto Translation**: Titles and abstracts automatically translated to Chinese using an LLM (MiniMax or any OpenAI-compatible endpoint)
 - **HTML Digest**: Generates static blog pages with category stats and paper cards
 - **Keyword Search**: Built-in arXiv API query builder with boolean组合, date ranges, category filters
 - **Configurable Output**: Data paths and blog directory customizable via config file or environment variables
@@ -78,13 +78,13 @@ logging:
 | `ARXIV_DIGEST_BUILD` | Run `node build.js` after generation | `1` |
 | `ARXIV_DIGEST_PUSH` | `git push` after generation | `0` |
 | `ARXIV_DIGEST_EMAIL` | Send email after generation | `0` |
+| `LLM_API_KEY` | LLM API key shared by translation and daily overview | empty |
+| `LLM_API_URL` | OpenAI-compatible Chat Completions endpoint, e.g. MiniMax | `https://api.minimax.chat/v1/chat/completions` |
+| `LLM_MODEL` | LLM model name, e.g. MiniMax-M1 | empty |
 
 ### Crawl Rules: `rules/*.yaml`
 
-Each rule defines an RSS source including URL, keyword filters, category mappings, translation toggle, etc. Currently two rules exist:
-
-- `rules/arxiv_rss.yaml`: `cs.AI` source
-- `rules/arxiv_cv_rss.yaml`: `cs.CV` source
+Each rule defines RSS sources, keyword filters, category mapping, translation settings, etc. The default rule is `rules/arxiv_rss.yaml`, which declares both `cs.AI` and `cs.CV` RSS feeds. The pipeline fetches both feeds, then deduplicates, filters, categorizes, translates, and writes outputs in one pass.
 
 ## Keyword Search
 
